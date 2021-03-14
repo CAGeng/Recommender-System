@@ -34,6 +34,13 @@ def load_movies():
     conn.close()	
     return df
 
+#加载ratings
+def load_ratings():
+    conn = connect(host='localhost', port=3306,database='movie_rec_system',user='root',password='sft080090',charset='utf8')
+    ratings = pd.read_sql('select * from rating' ,conn)
+    conn.close()
+    return ratings
+
 #这是一个基于统计的推荐，简单的按照平均评分排序，并使用了IMDB formula提高热门影片的评分
 #与用户和电影相关度无关，适用于新用户
 #这个函数会将按评分排出的顺序保存下来，如果没有添加新的电影，就不需要多次调用这个函数，直接使用下面的推荐
@@ -171,10 +178,8 @@ def content_filtering(movie_df):
 #collaborative filtering
 
 #下面的函数会保存训练的模型，如非必要（添加了一定数量的新的评价记录），不需要重新训练，可以直接加载模型用于预测评分。
-def collaborative_filtering():
+def collaborative_filtering(ratings):
     reader = Reader()
-    conn = connect(host='localhost', port=3306,database='movie_rec_system',user='root',password='sft080090',charset='utf8')
-    ratings = pd.read_sql('select * from rating',conn)
     data = Dataset.load_from_df(ratings[['userId', 'movieId', 'rating']], reader)
 
     svd = SVDpp()
@@ -182,11 +187,13 @@ def collaborative_filtering():
 
     surprise.dump.dump("./recommend_model/SVD_model",algo=svd)
     
-    conn.close()
 
 #下面的推荐模型用于对已经”稳定“在推荐系统中的用户和电影进行推荐，对于特定的用户，他会按照一定的权重考虑每个电影在
 #上面三种推荐策略中的评分，最终根据总评顺序获得最终的推荐。
-def get_recommendation(movie_df,userid,title_list):
+def get_recommendation(userid,title_list):
+
+    movie_df = pd.read_csv("./recommend_model/movie.csv")
+
     def get_score_1(x,title_list,cosine_sim,indices): #content based
         score = 0
         idx0 = x
@@ -309,11 +316,9 @@ def do_svd(A,k=3):
     np.savetxt("./recommend_model/U.txt",U_1)
 
 #下面的函数调用前面两个函数，将上述的W和U保存起来，用于之后的推荐。
-def create_svd_matrix(number_user,number_movie,movie_df):
-    conn = connect(host='localhost', port=3306,database='movie_rec_system',user='root',password='sft080090',charset='utf8')
-    ratings = pd.read_sql('select * from rating',conn)
+def create_svd_matrix(number_user,number_movie,movie_df, ratings):
+    
     data = ratings[['userId', 'movieId', 'rating']]
-    conn.close()
 
     indices = pd.Series(movie_df.index, index=movie_df['id'])
 
@@ -331,12 +336,16 @@ def create_svd_matrix(number_user,number_movie,movie_df):
     do_svd(A_1)
 
 #”过渡“期基于相似度的推荐算法
-def get_recommend_svdsim(uid,movie_num,movie_df):
+def get_recommend_svdsim(uid):
     conn = connect(host='localhost', port=3306,database='movie_rec_system',user='root',password='sft080090',charset='utf8')
     ratings = pd.read_sql('select * from rating \
                             where userId = {}'.format(uid),conn)
     conn.close()
     data = ratings[['movieId', 'rating']]
+
+    movie_df = pd.read_csv("./recommend_model/movie.csv")
+    movie_num = movie_df.shape[0]
+
     R = [np.nan for i in range(0,movie_num)] #行向量
     indices = pd.Series(movie_df.index, index=movie_df['id'])
 
@@ -365,27 +374,47 @@ def get_recommend_svdsim(uid,movie_num,movie_df):
 
     U_new = dot_ignore_nan(R,W,movie_num)
     cos_sim = np.dot(U,U_new.T)
+    print(cos_sim)
 
     index_set = range(0,movie_num)
     index_set = sorted(index_set, key=lambda x: cos_sim[x], reverse=True)
 
     most_sim = movie_df['id'][index_set[0:2]]
-    print(most_sim)
     return(most_sim)
 
+
+def train():
+    #加载数据
+    movie_df = load_movies()
+    movie_df.to_csv("./recommend_model/movie.csv",index=False,sep=',')
+    ratings = load_ratings()
+
+    demographic_filtering(movie_df)# 重新获得model
+    content_filtering(movie_df)#重新获得model
+    collaborative_filtering(ratings)#重新获得model
+    create_svd_matrix(number_user=3 ,number_movie=movie_df.shape[0], movie_df=movie_df, ratings=ratings)
+
+def get_result(user_id):
+    if 1:   #用户处于稳定阶段
+        #获得看过的电影列表：waiting to finish
+        return get_recommendation(user_id,['Hi!Li Huanying'])
+    else : #过渡阶段
+        return get_recommend_svdsim(user_id)
 
 #测试程序
 if __name__ == '__main__':
     # movie_df = load_pretrain()
-    movie_df = load_movies()
+    # movie_df = load_movies()
+    # movie_df.to_csv("./recommend_model/movie.csv",index=False,sep=',')
     # demographic_filtering(movie_df)# 重新获得model
     # # print(get_rec_demographic())
     # content_filtering(movie_df)#重新获得model
     # # print(get_recommendations_mul(['Hi!Li Huanying'],movie_df=movie_df))
     # collaborative_filtering()#重新获得model
-    # print(get_recommendation(movie_df,1,['Hi!Li Huanying']))
-    create_svd_matrix(3,3,movie_df)
-    get_recommend_svdsim(2,3,movie_df)
-    get_recommend_svdsim(3,3,movie_df)
-    get_recommend_svdsim(4,3,movie_df)
-    
+    # print(get_recommendation(1,['Hi!Li Huanying']))
+    # create_svd_matrix(3,3,movie_df)
+    # get_recommend_svdsim(2,3,movie_df)
+    # get_recommend_svdsim(3,3,movie_df)
+    # get_recommend_svdsim(4,3,movie_df)
+    train()
+    print(get_result(1))
