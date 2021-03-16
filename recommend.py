@@ -216,7 +216,7 @@ def get_recommendation(userid,title_list):
     indices = pd.Series(movie_df.index, index=movie_df['title'])
     cosine_sim = np.loadtxt("./recommend_model/cosine_sim.txt")
 
-    a = 10
+    a = 20
     b = 0.5
     c = 1
     def get_score_final(x,userid,title_list,cosine_sim,indices,a,b,c,movie_df):
@@ -406,7 +406,7 @@ def train():
 def get_result(user_id):
     if 1:   #用户处于稳定阶段
         #获得看过的电影列表：waiting to finish
-        return get_recommendation(user_id,[])
+        return get_recommendation(user_id,['Spider-Man 3','Superman Returns','Iron Man 2'])
     else : #过渡阶段
         return get_recommend_svdsim(user_id)
 
@@ -428,12 +428,12 @@ if __name__ == '__main__':
     # collaborative_filtering()#重新获得model
     # print(get_recommendation(1,['Hi!Li Huanying']))
     # create_svd_matrix(3,3,movie_df)
-    train()
-    print(get_recommend_svdsim(1))
-    # get_recommend_svdsim(3,3,movie_df)
-    # get_recommend_svdsim(4,3,movie_df)
 
 
     # train()
-    #print(get_result(1))
+    # print(get_recommend_svdsim(1))
+
+
+    train()
+    print(get_result(1))
     
