@@ -48,9 +48,9 @@ def load_ratings():
 def demographic_filtering(movie_df):
     C = movie_df['vote_average'].mean()
     # m = movie_df['vote_count'].quantile(0.9)
-    m = 10000
+    m = 1000
     #筛选movies
-    q_movies = movie_df.copy().loc[movie_df['vote_count'] >= m]
+    q_movies = movie_df#.copy().loc[movie_df['vote_count'] >= m]
     def weighted_rating(x, m = m, C = C):
         v = x['vote_count']
         R = x['vote_average']
@@ -203,13 +203,14 @@ def get_recommendation(userid,title_list):
         return score
 
 
-    def get_score_2(x):  #demographic
+    def get_score_2(mid):  #demographic
         rating = pd.read_csv("./recommend_model/demographic_rec.csv")
-        return rating['score'][x]
+        temp = rating[rating['id'] == mid]['score']
+        return temp.iloc[0]
 
-    def get_score_3(x,user):  # svd based
+    def get_score_3(mid,user):  # svd based
         (_,algo) = surprise.dump.load("./recommend_model/SVD_model")
-        rating = (algo.predict(user,x)).est
+        rating = (algo.predict(user,mid)).est
         return rating
 
     indices = pd.Series(movie_df.index, index=movie_df['title'])
@@ -218,10 +219,12 @@ def get_recommendation(userid,title_list):
     a = 10
     b = 0.5
     c = 1
-    def get_score_final(x,userid,title_list,cosine_sim,indices,a,b,c):
+    def get_score_final(x,userid,title_list,cosine_sim,indices,a,b,c,movie_df):
         score1 = get_score_1(x,title_list,cosine_sim,indices)
-        score2 = get_score_2(x)
-        score3 = get_score_3(x,userid)
+        mid = movie_df.loc[x,'id']
+        # print('mid:',mid)
+        score2 = get_score_2(mid)
+        score3 = get_score_3(mid,userid)
         # print(x)
         # print('----')
         # print(score1)
@@ -232,8 +235,13 @@ def get_recommendation(userid,title_list):
         return score
 
     size = len(cosine_sim[0])
+
+    scores = [0 for i in range(size)]
+    for i in range(size):
+        scores[i] = get_score_final(i,userid,title_list,cosine_sim,indices,a,b,c,movie_df)
+
     sim_scores = range(0,size)
-    sim_scores = sorted(sim_scores, key=lambda x: get_score_final(x,userid,title_list,cosine_sim,indices,a,b,c), reverse=True)
+    sim_scores = sorted(sim_scores, key=lambda x: scores[x], reverse=True)
 
     # Get the movie indices
     movie_indices = []
@@ -242,6 +250,7 @@ def get_recommendation(userid,title_list):
         if movie_df['title'].iloc[sim_scores[i]] in title_list:
             continue
         movie_indices.append(sim_scores[i])
+        print(scores[sim_scores[i]])
         siz += 1
         if siz >= 10:
             break
@@ -258,7 +267,7 @@ def get_recommendation(userid,title_list):
 2.A' = PQ为评分预测矩阵，对他进行奇异值分解得到A' = USV，可推知A'V(转制)S(逆) = U
 3.令W = V(转制)S(逆),则有A'W = U，其中A'为评分矩阵（m*n），W为特征提取矩阵（n*k），U为用户特征矩阵（m*k）
 4.转而对于新用户，当知道了他对一系列电影的评分（1*n矩阵）后，将它乘以W可以提取其特征，并与U比较，可以获得和他相关度高的老用户
-5.因此我们只需要保证W（n*k）和U（m*k），就可以完成对新用户的相关用户搜索，每次只需要进行一次矩阵乘法和cos_similarity计算就可以了
+5.因此我们只需要保存W（n*k）和U（m*k），就可以完成对新用户的相关用户搜索，每次只需要进行一次矩阵乘法和cos_similarity计算就可以了
 6.相比于整张评分表的（m*n）大小，此方案从时间和存储空间上都大大节省。
 '''
 #这种推荐将被主要用作冷启动用户到”稳定“用户的过渡阶段（在新的SVD++模型训练之前）。
@@ -273,7 +282,7 @@ def subt_with_none(m,m_est):#对未统计的评分不计算平方误差的减法
                 m[i][j] = m_est[i][j]
     return m - m_est
 
-def LFM_ed2(D, k=3, iter_times=1000, alpha=0.01, learn_rate=0.01):
+def LFM_ed2(D, k=3, iter_times=1000, alpha=0.01, learn_rate=0.0001):
     '''
     此函数实现的是最简单的 LFM 功能
     :param D: 表示需要分解的评价矩阵, type = np.ndarray
@@ -316,7 +325,7 @@ def do_svd(A,k=3):
     np.savetxt("./recommend_model/U.txt",U_1)
 
 #下面的函数调用前面两个函数，将上述的W和U保存起来，用于之后的推荐。
-def create_svd_matrix(number_user,number_movie,movie_df, ratings):
+def create_svd_matrix(number_user,number_movie,movie_df, ratings,k=3):
     
     data = ratings[['userId', 'movieId', 'rating']]
 
@@ -330,10 +339,10 @@ def create_svd_matrix(number_user,number_movie,movie_df, ratings):
         rating = data['rating'][i]
         A[u][m] = rating
 
-    (P,Q,_) = LFM_ed2(A)
+    (P,Q,_) = LFM_ed2(A,k=k)
     A_1 = np.dot(P,Q)
 
-    do_svd(A_1)
+    do_svd(A_1,k=k)
 
 #”过渡“期基于相似度的推荐算法
 def get_recommend_svdsim(uid):
@@ -361,7 +370,7 @@ def get_recommend_svdsim(uid):
             #Not finish
             return
        
-        ans = [0.0 for i in range(0,n)]
+        ans = [0.0 for i in range(0,k)]
         ans = np.array(ans)
         for i in range(0,k):
             sumd = 0
@@ -371,16 +380,13 @@ def get_recommend_svdsim(uid):
             ans[i] = sumd
         return ans
     
-
-    U_new = dot_ignore_nan(R,W,movie_num)
+    U_new = dot_ignore_nan(R,W,movie_num,k=U.shape[1])
     cos_sim = np.dot(U,U_new.T)
-    print(cos_sim)
 
     index_set = range(0,movie_num)
     index_set = sorted(index_set, key=lambda x: cos_sim[x], reverse=True)
 
-    most_sim = movie_df['id'][index_set[0:2]]
-    return(most_sim)
+    return index_set
 
 
 def train():
@@ -389,17 +395,26 @@ def train():
     movie_df.to_csv("./recommend_model/movie.csv",index=False,sep=',')
     ratings = load_ratings()
 
+    print('movie:', movie_df.shape)
+    print('rating:', ratings.shape)
+
     demographic_filtering(movie_df)# 重新获得model
     content_filtering(movie_df)#重新获得model
     collaborative_filtering(ratings)#重新获得model
-    create_svd_matrix(number_user=3 ,number_movie=movie_df.shape[0], movie_df=movie_df, ratings=ratings)
+    create_svd_matrix(number_user=99 ,number_movie=movie_df.shape[0], movie_df=movie_df, ratings=ratings,k=3)
 
 def get_result(user_id):
     if 1:   #用户处于稳定阶段
         #获得看过的电影列表：waiting to finish
-        return get_recommendation(user_id,['Hi!Li Huanying'])
+        return get_recommendation(user_id,[])
     else : #过渡阶段
         return get_recommend_svdsim(user_id)
+
+# def train_pretraindata():
+#     movie_df = load_pretrain()
+
+#     demographic_filtering(movie_df)# 重新获得model
+#     content_filtering(movie_df)#重新获得model
 
 #测试程序
 if __name__ == '__main__':
@@ -413,8 +428,12 @@ if __name__ == '__main__':
     # collaborative_filtering()#重新获得model
     # print(get_recommendation(1,['Hi!Li Huanying']))
     # create_svd_matrix(3,3,movie_df)
-    # get_recommend_svdsim(2,3,movie_df)
+    train()
+    print(get_recommend_svdsim(1))
     # get_recommend_svdsim(3,3,movie_df)
     # get_recommend_svdsim(4,3,movie_df)
-    train()
-    print(get_result(1))
+
+
+    # train()
+    #print(get_result(1))
+    
