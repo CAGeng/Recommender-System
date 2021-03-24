@@ -1,4 +1,4 @@
-id,title,cast,crew,keywords,genres,vote_count,vote_average
+id,title,cast,crew,genres,keywords,vote_count,vote_average
 58,Pirates of the Caribbean: Dead Man's Chest,"['Johnny Depp', 'Orlando Bloom', 'Keira Knightley']",Director:Gore Verbinski,"['witch', 'fortune teller', 'bondage']","['Adventure', 'Fantasy', 'Action']",5246,7.0
 155,The Dark Knight,"['Christian Bale', 'Heath Ledger', 'Aaron Eckhart']",Director:Christopher Nolan,"['dc comics', 'crime fighter', 'secret identity']","['Drama', 'Action', 'Crime']",12002,8.2
 217,Indiana Jones and the Kingdom of the Crystal Skull,"['Harrison Ford', 'Cate Blanchett', 'Shia LaBeouf']",Director:Steven Spielberg,"['saving the world', 'riddle', 'whip']","['Adventure', 'Action']",2495,5.7

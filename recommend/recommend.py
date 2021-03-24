@@ -9,15 +9,26 @@ from surprise import SVDpp
 import surprise
 from pymysql import *
 
+
+# from database import *
+basepath = './recommend/'
+# 连接参数
+host = 'localhost'
+port = 3306
+user = 'root'
+password = 'sft080090'
+database = 'movie2'
+charset = 'utf8'
+
 #这是加载一些用于预训练和测试的英文电影数据集，最终不会使用到
-def load_pretrain():
-    #data for pretraining
-    df1 = pd.read_csv('./input/tmdb_5000_credits.csv')
-    df2 = pd.read_csv('./input/tmdb_5000_movies.csv')
-    df1.columns = ['id','tittle','cast','crew']
-    df2= df2.merge(df1,on='id')
-    movie_df = df2  # movie set
-    return movie_df
+# def load_pretrain():
+#     #data for pretraining
+#     df1 = pd.read_csv('./input/tmdb_5000_credits.csv')
+#     df2 = pd.read_csv('./input/tmdb_5000_movies.csv')
+#     df1.columns = ['id','tittle','cast','crew']
+#     df2= df2.merge(df1,on='id')
+#     movie_df = df2  # movie set
+#     return movie_df
 
 #从mysql加载电影的相关数据，包括：
 #  --id  编号（key）
@@ -29,17 +40,21 @@ def load_pretrain():
 #  --keywords  关键词列表
 #  --genres  题材，可以多于1个
 def load_movies():
-    conn = connect(host='localhost', port=3306,database='movie_rec_system',user='root',password='sft080090',charset='utf8')
+    conn = connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
     df = pd.read_sql('select * from movie',conn)
     conn.close()	
     return df
 
+
+    
+
 #加载ratings
 def load_ratings():
-    conn = connect(host='localhost', port=3306,database='movie_rec_system',user='root',password='sft080090',charset='utf8')
-    ratings = pd.read_sql('select * from rating' ,conn)
+    conn = connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    ratings = pd.read_sql('select * from recommend' ,conn)
     conn.close()
-    return ratings
+    ratings.columns = ['movieId','userId','rating','recommend']
+    return ratings[['movieId','userId','rating']]
 
 #这是一个基于统计的推荐，简单的按照平均评分排序，并使用了IMDB formula提高热门影片的评分
 #与用户和电影相关度无关，适用于新用户
@@ -63,13 +78,13 @@ def demographic_filtering(movie_df):
 
     #save
     demographic_rec = q_movies[['id', 'score']]
-    demographic_rec.to_csv("./recommend_model/demographic_rec.csv",index=False,sep=',')
+    demographic_rec.to_csv(basepath + "recommend_model/demographic_rec.csv",index=False,sep=',')
     #Print the top 15 movies
     return demographic_rec
 
 #这个函数加载统计推荐的排序列表，并作出推荐
 def get_rec_demographic():
-    df = pd.read_csv("./recommend_model/demographic_rec.csv")
+    df = pd.read_csv(basepath + "recommend_model/demographic_rec.csv")
     return df['id']
 
 #这是基于用户之前看过的电影，依照内容相关度做出推荐（content-based,CF)
@@ -89,7 +104,7 @@ def get_recommendations_mul(title_list, cosine_sim=None,movie_df=None):
 
 
     if cosine_sim is None:
-        cosine_sim = np.loadtxt("./recommend_model/cosine_sim.txt")
+        cosine_sim = np.loadtxt(basepath + "recommend_model/cosine_sim.txt")
 
 
     def get_score(x,indices,title_list,cosine_sim):
@@ -166,7 +181,7 @@ def content_filtering(movie_df):
     count_matrix = count.fit_transform(movie_df['soup'])
 
     cosine_sim = cosine_similarity(count_matrix, count_matrix)
-    np.savetxt("./recommend_model/cosine_sim.txt",cosine_sim)
+    np.savetxt(basepath + "recommend_model/cosine_sim.txt",cosine_sim)
     
     # movie_df = movie_df.reset_index()
     return 
@@ -182,43 +197,52 @@ def collaborative_filtering(ratings):
     reader = Reader()
     data = Dataset.load_from_df(ratings[['userId', 'movieId', 'rating']], reader)
 
-    svd = SVDpp()
-    cross_validate(svd, data, measures=['RMSE', 'MAE'])
+    svd = SVDpp(lr_all=0.07,reg_all=0.002,n_epochs=20)
+    '''
+    n_factors –因素的数量。默认值为20。
+    n_epochs – SGD过程的迭代次数。默认值为 20。
+    init_mean –因子向量初始化的正态分布平均值。默认值为0。
+    init_std_dev –因子向量初始化的正态分布的标准偏差。默认值为0.1。
+    lr_all –所有参数的学习率。默认值为0.007。
+    reg_all –所有参数的正则项。默认值为 0.02。
+    '''
+    cross_validate(svd, data, measures=['RMSE', 'MAE'],verbose=True)
 
-    surprise.dump.dump("./recommend_model/SVD_model",algo=svd)
+    surprise.dump.dump(basepath + "recommend_model/SVD_model",algo=svd)
     
 
 #下面的推荐模型用于对已经”稳定“在推荐系统中的用户和电影进行推荐，对于特定的用户，他会按照一定的权重考虑每个电影在
 #上面三种推荐策略中的评分，最终根据总评顺序获得最终的推荐。
 def get_recommendation(userid,title_list):
-
-    movie_df = pd.read_csv("./recommend_model/movie.csv")
+    movie_df = pd.read_csv(basepath + "/recommend_model/movie.csv")
 
     def get_score_1(x,title_list,cosine_sim,indices): #content based
-        score = 0
+        score = 0.0
         idx0 = x
+        con = 0
         for title in title_list:
+            con += 1
             idx = indices[title]
             score += cosine_sim[idx0][idx]
-        return score
+        return score/con
 
 
     def get_score_2(mid):  #demographic
-        rating = pd.read_csv("./recommend_model/demographic_rec.csv")
+        rating = pd.read_csv(basepath + "recommend_model/demographic_rec.csv")
         temp = rating[rating['id'] == mid]['score']
         return temp.iloc[0]
 
     def get_score_3(mid,user):  # svd based
-        (_,algo) = surprise.dump.load("./recommend_model/SVD_model")
+        (_,algo) = surprise.dump.load(basepath + "recommend_model/SVD_model")
         rating = (algo.predict(user,mid)).est
         return rating
 
     indices = pd.Series(movie_df.index, index=movie_df['title'])
-    cosine_sim = np.loadtxt("./recommend_model/cosine_sim.txt")
+    cosine_sim = np.loadtxt(basepath + "recommend_model/cosine_sim.txt")
 
     a = 20
-    b = 0.5
-    c = 1
+    b = 0.33
+    c = 0.33
     def get_score_final(x,userid,title_list,cosine_sim,indices,a,b,c,movie_df):
         score1 = get_score_1(x,title_list,cosine_sim,indices)
         mid = movie_df.loc[x,'id']
@@ -321,23 +345,34 @@ def do_svd(A,k=3):
 
     W = np.dot(V_1.T, np.linalg.inv(S_1))
 
-    np.savetxt("./recommend_model/W.txt",W)
-    np.savetxt("./recommend_model/U.txt",U_1)
+    np.savetxt(basepath + "recommend_model/W.txt",W)
+    np.savetxt(basepath + "recommend_model/U.txt",U_1)
 
 #下面的函数调用前面两个函数，将上述的W和U保存起来，用于之后的推荐。
 def create_svd_matrix(number_user,number_movie,movie_df, ratings,k=3):
-    
+    name2index = {}
+    number_user = 0
     data = ratings[['userId', 'movieId', 'rating']]
+    #构造 用户名-序号 字典
+    for i in range(0,data.shape[0]):
+        u = data['userId'][i]   
+        if u not in name2index.keys():
+            name2index[u] = number_user
+            number_user += 1
+
+    np.save(basepath + "recommend_model/u_name2index.npy", name2index)
 
     indices = pd.Series(movie_df.index, index=movie_df['id'])
 
     A = [[-1 for i in range(0,number_movie)] for j in range(0,number_user)]
     A = np.array(A)
-    for i in range(0,number_user):
-        u = data['userId'][i] - 1  #waiting to finish
+    for i in range(0,data.shape[0]):
+        u = data['userId'][i]  #这里是用户名
+        uid = name2index[u]
+            
         m = indices[data['movieId'][i]]
         rating = data['rating'][i]
-        A[u][m] = rating
+        A[uid][m] = rating
 
     (P,Q,_) = LFM_ed2(A,k=k)
     A_1 = np.dot(P,Q)
@@ -345,14 +380,16 @@ def create_svd_matrix(number_user,number_movie,movie_df, ratings,k=3):
     do_svd(A_1,k=k)
 
 #”过渡“期基于相似度的推荐算法
-def get_recommend_svdsim(uid):
-    conn = connect(host='localhost', port=3306,database='movie_rec_system',user='root',password='sft080090',charset='utf8')
-    ratings = pd.read_sql('select * from rating \
-                            where userId = {}'.format(uid),conn)
+def get_recommend_svdsim(user_name):
+    conn = connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    ratings = pd.read_sql('select * from recommend \
+                            where name = "{}"'.format(user_name),conn)
     conn.close()
+
+    ratings.columns = ['movieId','userId','rating','recommend']
     data = ratings[['movieId', 'rating']]
 
-    movie_df = pd.read_csv("./recommend_model/movie.csv")
+    movie_df = pd.read_csv(basepath + "recommend_model/movie.csv")
     movie_num = movie_df.shape[0]
 
     R = [np.nan for i in range(0,movie_num)] #行向量
@@ -362,8 +399,8 @@ def get_recommend_svdsim(uid):
         ind = indices[data['movieId'][i]]
         R[ind] = data['rating'][i]
     
-    U = np.loadtxt("./recommend_model/U.txt")
-    W = np.loadtxt("./recommend_model/W.txt")
+    U = np.loadtxt(basepath + "recommend_model/U.txt")
+    W = np.loadtxt(basepath + "recommend_model/W.txt")
 
     def dot_ignore_nan(A,B,n,k=3,m=1):
         if m !=1:
@@ -383,16 +420,22 @@ def get_recommend_svdsim(uid):
     U_new = dot_ignore_nan(R,W,movie_num,k=U.shape[1])
     cos_sim = np.dot(U,U_new.T)
 
-    index_set = range(0,movie_num)
+    index_set = range(0,U.shape[0])
     index_set = sorted(index_set, key=lambda x: cos_sim[x], reverse=True)
 
-    return index_set
+    name2index = np.load(basepath + "recommend_model/u_name2index.npy",allow_pickle=True).item()
+    index2name = {} 
+    for x in name2index.items():
+        index2name[x[1]] = x[0] 
+    name_list = [index2name[x] for x in index_set]
+    return name_list
 
 
 def train():
     #加载数据
     movie_df = load_movies()
-    movie_df.to_csv("./recommend_model/movie.csv",index=False,sep=',')
+    movie_df.to_csv(basepath + "recommend_model/movie.csv",index=False,sep=',')
+    
     ratings = load_ratings()
 
     print('movie:', movie_df.shape)
@@ -406,7 +449,7 @@ def train():
 def get_result(user_id):
     if 1:   #用户处于稳定阶段
         #获得看过的电影列表：waiting to finish
-        return get_recommendation(user_id,['Spider-Man 3','Superman Returns','Iron Man 2'])
+        return get_recommendation(user_id,['Transformers: Age of Extinction'])
     else : #过渡阶段
         return get_recommend_svdsim(user_id)
 
@@ -434,6 +477,10 @@ if __name__ == '__main__':
     # print(get_recommend_svdsim(1))
 
 
-    train()
-    print(get_result(1))
+    # train()
+    print(get_result('a'))
+    print(get_result('b'))
+    print(get_result('c'))
+    print(get_result('d'))
+    print(get_result('e'))
     
