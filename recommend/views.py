@@ -82,7 +82,7 @@ def get_moviedic_list(id_list):
         info_list.append(info_dic)
     return info_list
     
-#getm 的api相应，返回前端电影信息列表
+#getm 的api响应，返回前端电影信息列表
 def get_movies(request):
     '''
     para:
@@ -134,17 +134,18 @@ def login(request):
         name = 'sadfd'
         key = 'asdfdas'
 
-    if database.login(name,key) == 0:
+    err = database.login(name,key)
+    if err == 0:
         dic = {
             'status':'success',
             'info': ''
         }
-    elif database.login(name,key) == 1:
+    elif err == 1:
         dic = {
             'status':'fail',
             'info': 'wrong key'
         }
-    elif database.login(name,key) == 2:
+    elif err == 2:
         dic = {
             'status':'fail',
             'info': 'wrong name'
@@ -207,7 +208,7 @@ def get_movies_sim(request):
     
     return JsonResponse(info_list,safe=False)
 
-#将图片以字节流发送到前端
+#将图片以字节流发送到前端  #暂时没有用到，目前只传送url
 def read_img(request):
     try:
         with open("C:/Users/sft/Desktop/数据集/电影推荐 - 副本/picture/58.jfif", 'rb') as f:
@@ -216,4 +217,145 @@ def read_img(request):
     except Exception as e:
         print(e)
         return HttpResponse(str(e))
+
+#regist的函数api, 用户注册
+def regist(request):
+    '''
+    para:
+        request:包含
+            name: 用户名
+            email: 邮箱
+            key:密码
+    output:
+        若注册成功，返回
+            status: success
+            info: 空
+        若用户名冲突，返回
+            status: fail
+            info: conflict 
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        name = data['name']
+        email = data['email']
+        key = data['key']
+
+    else:#debug
+        name = 'aaaaa'
+        email = '1@1.com'
+        key = '1'
+    
+    err = database.add_user(name,key,email)
+    if err == 0:
+        res = {
+            'status' : 'success',
+            'info' : ''
+        }
+    elif err == 1:
+        res = {
+            'status' : 'fail',
+            'info' : 'conflict'
+        }
+
+    return JsonResponse(res,safe=False)
+
+
+#addrec的函数api，用于添加一条评分记录
+def add_rec(request):
+    '''
+    para:
+        request:包含
+            name: 用户名
+            mid : 电影id
+            rating：评分
+            recommend：评论
+    output:
+        若添加成功，返回
+            status: success
+            info: 空
+        若该用户已经评价过此电影，自动修改评分和评语，视作成功，返回
+            status: success
+            info: modify successfully
+        若添加失败，返回
+            status: fail
+            info:失败原因 
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        name = data['name']
+        mid = data['mid']
+        rating = data['rating']
+        recom_txt = data['recommend']
+
+    else:#debug
+        name = 'aa'
+        mid = 597
+        rating = 3
+        recom_txt = 'Good'
+
+    err = database.add_recommend(mid, name, rating, recom_txt)
+    if err == 0:
+        res = {
+            'status' : 'success',
+            'info' : ''
+        }
+    elif err == 1:
+        res = {
+            'status' : 'fail',
+            'info' : 'movie not exists'
+        }
+    elif err == 2:
+        res = {
+            'status' : 'fail',
+            'info' : 'user not exists'
+        }
+    elif err == 3:
+        res = {
+            'status' : 'success',
+            'info' : 'modify successfully'
+        }
+    return JsonResponse(res,safe=False)
+
+
+#addbrowse的函数api，用于添加浏览记录
+#目前的方法是无缓存的直接添加进入数据库
+def add_browse(request):
+    '''
+    para:
+        request:包含
+            name: 用户名
+            mid: 电影id
+    output:
+        若添加成功，返回
+            status: success
+            info: 空
+        若添加失败，返回
+            status: fail
+            info:失败原因 
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        name = data['name']
+        mid = data['mid']
+
+    else:#debug
+        name = 'adfasdf'
+        mid = 597
+
+    err = database.add_browse_record(name,[mid])
+    if err == 0:
+        res = {
+           'status' : 'success',
+            'info' : '' 
+        }
+    elif err == 1:
+        res = {
+            'status' : 'fail',
+            'info' : 'user not exists'
+        }
+
+    return JsonResponse(res,safe=False)
 

@@ -464,6 +464,9 @@ def get_browse_list(name):
     cursor.close()
     conn.close()
 
+    if data == None:
+        return []
+
     from ast import literal_eval
     data = data[0]
     data = literal_eval(data)
@@ -517,7 +520,8 @@ if __name__ == '__main__':
 
 
     # train()
-    print(get_result_sim('a'))
+    print(get_result_sim('aaaaa'))
+    print(get_result('aaaaa'))
     # print(get_result('b'))
     # print(get_result('c'))
     # print(get_result('d'))

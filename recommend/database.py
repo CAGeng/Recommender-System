@@ -137,7 +137,7 @@ def find_user(name):
 def add_user(name, key, email):
     if find_user(name):
         print('user name exists!')
-        return
+        return 1
     
     conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
     cursor = conn.cursor()
@@ -147,6 +147,7 @@ def add_user(name, key, email):
 
     cursor.close()
     conn.close()
+    return 0
 
 # 登录（用户名，密码）
 def login(name, key):
@@ -165,7 +166,7 @@ def login(name, key):
         return 2
 
 '''
-# sft: 下面4个不会用到，评分在recommend中用专门的方式读取
+# 
 '''
 # 查找是否存在评分
 def find_recommend(id, name):
@@ -199,16 +200,25 @@ def find_recommend_name(name):
 # 添加推荐
 def add_recommend(id, name, rating, comment):
     if find_recommend(id, name):
+        #如果存在，则提供修改功能
         print('recommend exists!')
-        return
+        conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+        cursor = conn.cursor()
+
+        cursor.execute('UPDATE recommend set rating={},comment="{}" where id = {} and name = "{}"'.format(rating, comment,id, name))
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+        return 3
     
     if not find_movie_id(id).shape[0] > 0:
         print('movie does not exist!')
-        return
+        return 1
     
     if not find_user(name):
         print('user does not exist!')
-        return
+        return 2
     
     conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
     cursor = conn.cursor()
@@ -218,6 +228,7 @@ def add_recommend(id, name, rating, comment):
 
     cursor.close()
     conn.close()
+    return 0
     
 '''
 #####################################   扩展   #########################################################
@@ -284,17 +295,17 @@ def get_browse_list(name):
     return data
 
 #用户检查的装饰器
-def user_check(f):
+def user_check_decorator(f):
     @wraps(f)
     def check_and_f(name,mlist):
         if not find_user(name):
             print('user does not exist!')
-            return
-        f(name,mlist)
+            return 1
+        return f(name,mlist)
 
     return check_and_f
 
-@user_check
+@user_check_decorator
 def add_browse_record(name, mlist):
     data = get_browse_list(name)
     #合并
@@ -317,6 +328,7 @@ def add_browse_record(name, mlist):
 
     cursor.close()
     conn.close()
+    return 0
 
 ##############################################################################################
 ##############################################################################################
