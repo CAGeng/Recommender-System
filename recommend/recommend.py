@@ -489,6 +489,9 @@ def get_result(user_id):
     else : #过渡阶段
         return get_recommend_svdsim(user_id)
 
+def get_result_sim(user_id):
+    return get_recommend_svdsim(user_id)
+
 # def train_pretraindata():
 #     movie_df = load_pretrain()
 
@@ -514,7 +517,7 @@ if __name__ == '__main__':
 
 
     # train()
-    print(get_result('a'))
+    print(get_result_sim('a'))
     # print(get_result('b'))
     # print(get_result('c'))
     # print(get_result('d'))

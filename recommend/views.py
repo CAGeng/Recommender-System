@@ -44,27 +44,52 @@ def get_introduce(df):
         intro += 'is stared by '
         for i in range(0,min(5,len(cast_list))):
             intro += cast_list[i] + ','
-        intro += '. '
+        intro = intro[:-1] + '. '
     else :
-        intro += '. '
+        intro = intro[:-1] + '. '
     
     if isinstance(genres_list,list) and len(genres_list) > 0:
         intro += 'The movie tells about '
         for i in range(0,min(5,len(genres_list))):
             intro += genres_list[i] + ','
-        intro += '. '
+        intro = intro[:-1] + '. '
     
     if isinstance(keywords_list,list) and len(keywords_list) > 0:
         intro += 'Its keywords contains: '
         for i in range(0,min(5,len(keywords_list))):
             intro += keywords_list[i] + ','
-        intro += '. '
-    print(intro)
+        intro = intro[:-1] + '. '
+    # print(intro)
     return intro
 
+#根据id获得一个电影的信息字典
+def get_movdic(mid):
+    mov = database.find_movie_id(mid)
+    # print(mov['id'].iloc[0])
+    info_dic = {
+        'id':str(mov['id'].iloc[0]),
+        'title':str( mov['title'].iloc[0]),
+        'introduce' : str(get_introduce(mov)),
+        'urls': "http://127.0.0.1:8000/static/" + str(mov['id'].iloc[0]) + ".jpg"
+    }
+    return info_dic
+
+# 根据id列表获得信息字典列表
+def get_moviedic_list(id_list): 
+    info_list = []
+    for mid in id_list:
+        info_dic = get_movdic(mid)
+        info_list.append(info_dic)
+    return info_list
     
 #getm 的api相应，返回前端电影信息列表
 def get_movies(request):
+    '''
+    para:
+        request:包含
+            uid: 用户名
+    output:信息列表
+    '''
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
         
@@ -79,19 +104,6 @@ def get_movies(request):
         mid = df['id'].iloc[i]
         movie_id_list.append(mid)
     
-    def get_moviedic_list(id_list): # 根据id列表获得信息字典
-        info_list = []
-        for mid in id_list:
-            mov = database.find_movie_id(mid)
-            print(mov['id'].iloc[0])
-            info_dic = {
-                'id':str(mov['id'].iloc[0]),
-                'title':str( mov['title'].iloc[0]),
-                'introduce' : str(get_introduce(mov)),
-                'urls': "http://127.0.0.1:8000/static/" + str(mov['id'].iloc[0]) + ".jpg"
-            }
-            info_list.append(info_dic)
-        return info_list
 
     info_list = get_moviedic_list(movie_id_list)
     
@@ -140,8 +152,60 @@ def login(request):
 
     return JsonResponse(dic,safe=False)
 
+#getm_info的函数api，用于展示一页具体的电影
+def getm_info(request):
+    '''
+    para:
+        request:包含
+            mid: 电影id
+    output:
+        电影信息
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        mid = data['mid']
+    else:#debug
+        mid = 597 #Titanic
 
+    dic = get_movdic(mid)
+    return JsonResponse(dic,safe=False)
 
+#getm_sim的函数api，用于过渡时期推荐
+def get_movies_sim(request):
+    '''
+    para:
+        request:包含
+            uid: 用户名
+    output:推荐信息列表（字典表）
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        name = data['uid']
+    else:#debug
+        name = 'a'
+
+    #name 保存了前端请求的用户名
+    sim_names = recommend.get_result_sim(name)
+    res_list = []
+    con = 0
+    #获得“相似的用户还喜欢看”
+    for sim_name in sim_names:
+        movs = database.get_rec_list(sim_name)
+        for mov in movs:
+            if mov not in res_list:
+                res_list.append(mov)
+                con += 1
+                if con >= 10:
+                    break
+        if con >= 10:
+            break
+
+    #res_list保存了推荐电影的id列表
+    info_list = get_moviedic_list(res_list)
+    
+    return JsonResponse(info_list,safe=False)
 
 #将图片以字节流发送到前端
 def read_img(request):
