@@ -2,6 +2,8 @@ from pymysql import *
 import pymysql
 import pandas as pd
 
+from functools import wraps
+
 # 连接参数
 host = 'localhost'
 port = 3306
@@ -45,11 +47,13 @@ def create_tables():
                         name varchar(15) not null,\
                         password varchar(15) not null,\
                         email varchar(100) not null,\
+                        browse_record varchar(3000) default "[]",\
                         primary key(name));')
     conn.commit()
     # debug
     print('Success create user table!')
-    # create recommend table
+    # create recommend table 
+    #评分表
     cursor.execute('create table recommend(\
                         id int not null,\
                         name varchar(25) not null,\
@@ -94,7 +98,7 @@ def find_movie_title(title):
 
 # 添加电影
 def add_movie(id, title, cast, crew, genres, keywords, vote_count, vote_average):
-    if find_movie_id(id):
+    if find_movie_id(id).shape[0] > 0:
         print('movie exists!')
         return
 
@@ -160,7 +164,10 @@ def login(name, key):
         print('Username does not exist!')
         return 2
 
-# 查找是否存在推荐
+'''
+# sft: 下面4个不会用到，评分在recommend中用专门的方式读取
+'''
+# 查找是否存在评分
 def find_recommend(id, name):
     conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
     cursor = conn.cursor()
@@ -173,7 +180,7 @@ def find_recommend(id, name):
 
     return data
 
-# 查找推荐（id）
+# 查找评分（id）
 def find_recommend_id(id):
     db = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
 
@@ -195,7 +202,7 @@ def add_recommend(id, name, rating, comment):
         print('recommend exists!')
         return
     
-    if not find_movie_id(id):
+    if not find_movie_id(id).shape[0] > 0:
         print('movie does not exist!')
         return
     
@@ -211,9 +218,14 @@ def add_recommend(id, name, rating, comment):
 
     cursor.close()
     conn.close()
-
-
+    
+'''
+#####################################   扩展   #########################################################
+'''
+#推荐列表相关的
+# 向推荐列表（类似歌单的形式）中添加一个条目(name,mlist)，不会合并
 def add_rec_list(name,mlist):
+
     rec = ""
     fl = 1
     for x in mlist:
@@ -254,6 +266,58 @@ def get_rec_list(name):
                 return target
     return target
 
+#用户浏览历史记录相关
+def get_browse_list(name):
+    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    cursor = conn.cursor()
+
+    cursor.execute('select browse_record from user where name = "{}"'.format( name))
+    data = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    from ast import literal_eval
+    data = data[0]
+    data = literal_eval(data)
+
+    return data
+
+#用户检查的装饰器
+def user_check(f):
+    @wraps(f)
+    def check_and_f(name,mlist):
+        if not find_user(name):
+            print('user does not exist!')
+            return
+        f(name,mlist)
+
+    return check_and_f
+
+@user_check
+def add_browse_record(name, mlist):
+    data = get_browse_list(name)
+    #合并
+    for mov in mlist:
+        if mov in data:
+            continue
+        data.append(mov)
+    
+    res = '['
+    for x in data:
+        res += str(x) + ','
+    res = res[:-1] + ']'
+    
+    #写回数据库
+    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    cursor = conn.cursor()
+
+    cursor.execute('UPDATE user set browse_record = "{}" where name = "{}"'.format(res,name))
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
 ##############################################################################################
 ##############################################################################################
 ##############################################################################################
@@ -266,8 +330,9 @@ def get_rec_list(name):
 def init_tables_base():
     import pandas as pd
     #data for pretraining
-    df1 = pd.read_csv('./input/tmdb_5000_credits.csv')
-    df2 = pd.read_csv('./input/tmdb_5000_movies.csv')
+    input_path = "C:/Users/sft/Desktop/数据集/推荐/input/"
+    df1 = pd.read_csv(input_path + 'tmdb_5000_credits.csv')
+    df2 = pd.read_csv(input_path + 'tmdb_5000_movies.csv')
     df1.columns = ['id','tittle','cast','crew']
     df2= df2.merge(df1,on='id')
     # movie_df = df2  # movie set
@@ -365,4 +430,8 @@ if __name__ == '__main__':
     # init_tables_base()
     # add_rec_list('a',[254,597,2268])
     # add_rec_list('a',[102382,597,2268])
-    print(get_rec_list('a'))
+
+    # add_browse_record('sadf',[254,597,2268,8487])
+    # print(get_browse_list('a'))
+    add_browse_record('a',[58,155,217])
+    print(get_browse_list('a'))

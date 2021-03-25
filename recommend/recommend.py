@@ -8,10 +8,14 @@ from surprise.model_selection import cross_validate
 from surprise import SVDpp
 import surprise
 from pymysql import *
-
-
+import pymysql
+# from recommend import database
 # from database import *
+
+#根目录
 basepath = './recommend/'
+# basepath = './'  # debug
+
 # 连接参数
 host = 'localhost'
 port = 3306
@@ -224,6 +228,8 @@ def get_recommendation(userid,title_list):
             con += 1
             idx = indices[title]
             score += cosine_sim[idx0][idx]
+        if con == 0:
+            return 0
         return score/con
 
 
@@ -251,9 +257,9 @@ def get_recommendation(userid,title_list):
         score3 = get_score_3(mid,userid)
         # print(x)
         # print('----')
-        # print(score1)
-        # print(score2)
-        # print(score3)
+        # print(score1 * a)
+        # print(score2 * b)
+        # print(score3 * c)
         score = score1 * a + score2 * b + score3 * c
         # print(score)
         return score
@@ -446,10 +452,40 @@ def train():
     collaborative_filtering(ratings)#重新获得model
     create_svd_matrix(number_user=99 ,number_movie=movie_df.shape[0], movie_df=movie_df, ratings=ratings,k=3)
 
+#用户浏览历史记录相关
+#debug 暂时先粘贴过来
+def get_browse_list(name):
+    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    cursor = conn.cursor()
+
+    cursor.execute('select browse_record from user where name = "{}"'.format( name))
+    data = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    from ast import literal_eval
+    data = data[0]
+    data = literal_eval(data)
+
+    return data
+
+def find_movie_id(id):
+    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    df = pd.read_sql('select * from movie where id = {}'.format(id),conn)
+    return df
+####
+
+def mid_to_title(id):
+    df = find_movie_id(id)
+    return df['title'].iloc[0]
+
 def get_result(user_id):
     if 1:   #用户处于稳定阶段
         #获得看过的电影列表：waiting to finish
-        return get_recommendation(user_id,['Transformers: Age of Extinction'])
+        browse_record = get_browse_list(user_id)
+        browse_record = [mid_to_title(x) for x in browse_record]
+        return get_recommendation(user_id,browse_record)
     else : #过渡阶段
         return get_recommend_svdsim(user_id)
 
@@ -479,8 +515,8 @@ if __name__ == '__main__':
 
     # train()
     print(get_result('a'))
-    print(get_result('b'))
-    print(get_result('c'))
-    print(get_result('d'))
-    print(get_result('e'))
+    # print(get_result('b'))
+    # print(get_result('c'))
+    # print(get_result('d'))
+    # print(get_result('e'))
     
