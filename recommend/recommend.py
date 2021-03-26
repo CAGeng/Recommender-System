@@ -48,10 +48,7 @@ def load_movies():
     df = pd.read_sql('select * from movie',conn)
     conn.close()	
     return df
-
-
     
-
 #加载ratings
 def load_ratings():
     conn = connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
@@ -301,16 +298,21 @@ def get_recommendation(userid,title_list):
 6.相比于整张评分表的（m*n）大小，此方案从时间和存储空间上都大大节省。
 '''
 #这种推荐将被主要用作冷启动用户到”稳定“用户的过渡阶段（在新的SVD++模型训练之前）。
-
 #下面的两个函数采用随机梯度下降的方法完成含未知数矩阵的分解。
 def subt_with_none(m,m_est):#对未统计的评分不计算平方误差的减法
     sizx = m.shape[0]
     sizy = m.shape[1]
+    con = sizx * sizy
+    ans = [[0 for i in range(sizy)] for j in range(sizx)]
     for i in range(0,sizx):
         for j in range(0,sizy):
             if m[i][j] == -1:
-                m[i][j] = m_est[i][j]
-    return m - m_est
+                ans[i][j] = 0
+                con -= 1
+            else :
+                ans[i][j] = m[i][j] - m_est[i][j]
+    # print(con)
+    return (ans, con)
 
 def LFM_ed2(D, k=3, iter_times=1000, alpha=0.01, learn_rate=0.0001):
     '''
@@ -329,8 +331,10 @@ def LFM_ed2(D, k=3, iter_times=1000, alpha=0.01, learn_rate=0.0001):
     err_list = []
     for t in range(iter_times):
         D_est = np.matmul(U, V)
-        ERR = subt_with_none(D,D_est)  #对未统计的评分不计算平方误差
-        
+        ERR,not0_con = subt_with_none(D,D_est)  #对未统计的评分不计算平方误差
+        if not0_con == 0:
+            return 'subt_with_none error: empty matrix'
+
         U_grad = -2 * np.matmul(ERR, V.transpose()) + 2 * alpha * U
         V_grad = -2 * np.matmul(U.transpose(), ERR) + 2 * alpha * V
         U = U - learn_rate * U_grad
@@ -338,18 +342,20 @@ def LFM_ed2(D, k=3, iter_times=1000, alpha=0.01, learn_rate=0.0001):
 
         ERR2 = np.multiply(ERR, ERR)
         ERR2_sum = np.sum(np.sum(ERR2))
+        ERR2_sum /= not0_con
         err_list.append(ERR2_sum)
     return U, V, err_list
 
 #下面的函数对A'进行奇异值分解
 def do_svd(A,k=3):
     U, S, V = np.linalg.svd(A)
-
+    # print(np.dot(U,U.T))
     S_1 = np.eye(k) * S[:k]
     U_1 = U[:, :k]
     V_1 = V[:k, :] 
 
     W = np.dot(V_1.T, np.linalg.inv(S_1))
+    # print(np.diagonal(np.dot(U_1,U_1.T)))
 
     np.savetxt(basepath + "recommend_model/W.txt",W)
     np.savetxt(basepath + "recommend_model/U.txt",U_1)
@@ -380,7 +386,8 @@ def create_svd_matrix(number_user,number_movie,movie_df, ratings,k=3):
         rating = data['rating'][i]
         A[uid][m] = rating
 
-    (P,Q,_) = LFM_ed2(A,k=k)
+    (P,Q,errlist) = LFM_ed2(A,k=k,learn_rate=0.01,alpha=0.01)
+    # print(errlist)
     A_1 = np.dot(P,Q)
 
     do_svd(A_1,k=k)
@@ -519,9 +526,10 @@ if __name__ == '__main__':
     # print(get_recommend_svdsim(1))
 
 
-    train()
+    # train()
     print(get_result_sim('sft_sister'))
     print(get_result_sim('sft_brother'))
+    print(get_result_sim('sft_enemy'))
     # print(get_result('aaaaa'))
     # print(get_result('b'))
     # print(get_result('c'))

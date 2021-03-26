@@ -483,6 +483,17 @@ def create_check_rec_algo_data():
 
     add_recommend(158852, 'sft_sister', 0, '') #Tomorrowland
     
+    #sft的敌人和sft兴趣截然相反
+    add_user('sft_enemy', '080090', 'ohouhou@qq.com')
+    add_recommend(10138, 'sft_enemy',0, '') #Iron Man 2
+    add_recommend(19995, 'sft_enemy',0, '') #Avatar
+    add_recommend(36668, 'sft_enemy',0, '') #X-Men: The Last Stand
+    add_recommend(68721, 'sft_enemy',0, '') #Iron Man 3
+    add_recommend(246655, 'sft_enemy',0, '') #X-Men: Apocalypse
+
+    add_recommend(158852, 'sft_enemy',5, '') #Tomorrowland
+    add_recommend(278927, 'sft_enemy',5, '') #The Jungle Book
+    add_recommend(155, 'sft_enemy',5, '') #The Dark Knight
 
     #添加sft的推荐影单
     add_rec_list('sft',[559,1726,10138,19995,36668,127585,76757,99861])

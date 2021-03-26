@@ -211,7 +211,7 @@ def get_movies_sim(request):
         
         name = data['uid']
     else:#debug
-        name = 'sft_brother'
+        name = 'sft_sister'
 
     #name 保存了前端请求的用户名
     sim_names = recommend.get_result_sim(name)
