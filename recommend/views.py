@@ -115,6 +115,32 @@ def get_movies(request):
     
     return JsonResponse(info_list,safe=False)
 
+#searchmv的函数api，用于根据用户输入的title查找电影，支持模糊查找
+def search_movie(request):
+    '''
+    para:
+        request:
+            title: 用户输入的电影名（模糊的）
+    output:
+        电影信息的列表（字典表）
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        title = data['title']
+    else:#debug
+        title = 'iron man'
+
+    df = database.find_movie_title(title)
+    movie_id_list=[]
+    for i in range(df.shape[0]):
+        mid = df['id'].iloc[i]
+        movie_id_list.append(mid)
+
+    info_list = get_moviedic_list(movie_id_list)
+    return JsonResponse(info_list,safe=False)
+
+    
 
 #login 的api响应，接收用户名和密码
 def login(request):
@@ -404,3 +430,4 @@ def add_movie_sheet(request):
             'info' : 'empty list'
         }
     return JsonResponse(res,safe=False)
+

@@ -87,9 +87,10 @@ def find_movie_id(id):
     return df
 
 # 查找电影（title）
+#sft:根据标题的查找采取模糊查找的方式
 def find_movie_title(title):
     db = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
-    df = pd.read_sql('select * from movie where title = "{}"'.format(title), db)    
+    df = pd.read_sql('select * from movie where title LIKE "%{}%"'.format(title), db)    
     return df
 
 # 进度条
