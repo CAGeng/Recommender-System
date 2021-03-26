@@ -359,3 +359,48 @@ def add_browse(request):
 
     return JsonResponse(res,safe=False)
 
+#addmvsheet的函数api，用于添加一个用户的推荐电影单
+def add_movie_sheet(request):
+    '''
+    para:
+        request:包含
+            name: 用户名
+            mlist: 电影列表，形式为 '[1,2,3,4]'
+    output:
+        若添加成功，返回
+            status: success
+            info: 空
+        若添加失败，返回
+            status: fail
+            info:失败原因 
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        name = data['name']
+        mlist = data['mlist']
+
+    else:#debug
+        name = 'b'
+        mlist = '[597]'
+    
+    from ast import literal_eval
+    mlist = literal_eval(mlist)
+
+    err = database.add_rec_list(name, mlist)
+    if err == 0:
+        res = {
+           'status' : 'success',
+            'info' : '' 
+        }
+    elif err == 1:
+        res = {
+            'status' : 'fail',
+            'info' : 'user not exists'
+        }
+    elif err == 2:
+        res = {
+            'status' : 'fail',
+            'info' : 'empty list'
+        }
+    return JsonResponse(res,safe=False)

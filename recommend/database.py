@@ -233,8 +233,20 @@ def add_recommend(id, name, rating, comment):
 '''
 #####################################   扩展   #########################################################
 '''
+#用户检查的装饰器
+def user_check_decorator(f):
+    @wraps(f)
+    def check_and_f(name,mlist):
+        if not find_user(name):
+            print('user does not exist!')
+            return 1
+        return f(name,mlist)
+
+    return check_and_f
+
 #推荐列表相关的
 # 向推荐列表（类似歌单的形式）中添加一个条目(name,mlist)，不会合并
+@user_check_decorator
 def add_rec_list(name,mlist):
 
     rec = ""
@@ -247,7 +259,7 @@ def add_rec_list(name,mlist):
             rec += '//' + str(x)
     if rec == "":
         print('Empty list')
-        return False
+        return 2
     conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
     cursor = conn.cursor()
 
@@ -256,6 +268,7 @@ def add_rec_list(name,mlist):
 
     cursor.close()
     conn.close()
+    return 0
 
 def get_rec_list(name):
     db = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
@@ -294,16 +307,6 @@ def get_browse_list(name):
 
     return data
 
-#用户检查的装饰器
-def user_check_decorator(f):
-    @wraps(f)
-    def check_and_f(name,mlist):
-        if not find_user(name):
-            print('user does not exist!')
-            return 1
-        return f(name,mlist)
-
-    return check_and_f
 
 @user_check_decorator
 def add_browse_record(name, mlist):

@@ -20,6 +20,7 @@ urlpatterns = [
     #用户数据增长
     path('addrec/', view=views.add_rec),  #新增评分
     path('addbrowse/',view=views.add_browse), #新增浏览记录
+    path('addmvsheet/',view=views.add_movie_sheet), #新增推荐电影单
 
     path('images/', view=views.read_img), #暂时没用
 ]
