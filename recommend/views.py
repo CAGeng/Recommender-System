@@ -211,17 +211,23 @@ def get_movies_sim(request):
         
         name = data['uid']
     else:#debug
-        name = 'a'
+        name = 'sft_brother'
 
     #name 保存了前端请求的用户名
     sim_names = recommend.get_result_sim(name)
     res_list = []
+
+    #获得用户看过的电影
+    browse_list = database.get_browse_list(name)
+
     con = 0
     #获得“相似的用户还喜欢看”
     for sim_name in sim_names:
         movs = database.get_rec_list(sim_name)
         for mov in movs:
-            if mov not in res_list:
+            if mov in browse_list:  #如果该用户看过了就不再推荐了
+                continue
+            if mov not in res_list :
                 res_list.append(mov)
                 con += 1
                 if con >= 10:

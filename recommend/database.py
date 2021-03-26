@@ -93,9 +93,6 @@ def find_movie_title(title):
     df = pd.read_sql('select * from movie where title LIKE "%{}%"'.format(title), db)    
     return df
 
-# 进度条
-# count = 0
-# percent = 0
 
 # 添加电影
 def add_movie(id, title, cast, crew, genres, keywords, vote_count, vote_average):
@@ -214,7 +211,7 @@ def add_recommend(id, name, rating, comment):
         return 3
     
     if not find_movie_id(id).shape[0] > 0:
-        print('movie does not exist!')
+        print(str(id) + ': movie does not exist!')
         return 1
     
     if not find_user(name):
@@ -271,6 +268,7 @@ def add_rec_list(name,mlist):
     conn.close()
     return 0
 
+#获得一个用户的所有推荐影单，会自动合并
 def get_rec_list(name):
     db = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
 
@@ -438,16 +436,69 @@ def init_tables_base():
             # print(i,m,s)
             add_recommend(ids[m],users[i],s,'')
     
+    # return ids  #返回电影id列表
+
+#用于检验推荐算法的构造样例
+def create_check_rec_algo_data():   
+    add_user('sft', '080090', 'ohouhou@qq.com')
+    #sft比较喜欢科幻和动作电影，所以他给科幻电影都打了满分
+    add_recommend(559, 'sft', 5, '') #Spider-Man 3
+    add_recommend(1726, 'sft', 5, '') #Iron Man
+    add_recommend(10138, 'sft', 5, '') #Iron Man 2
+    add_recommend(19995, 'sft', 5, '') #Avatar
+    add_recommend(36668, 'sft', 5, '') #X-Men: The Last Stand
+    add_recommend(68721, 'sft', 5, '') #Iron Man 3
+    add_recommend(102382, 'sft', 5, '') #The Amazing Spider-Man 2
+    add_recommend(99861, 'sft', 5, '') #Avengers: Age of Ultron
+    add_recommend(127585, 'sft', 5, '') #X-Men: Days of Future Past
+    add_recommend(246655, 'sft', 5, '') #X-Men: Apocalypse
+    add_recommend(76757, 'sft', 5, '') #Jupiter Ascending
+    #sft不喜欢幼稚电影、家庭片和剧情片，所以给他们打了0分
+    add_recommend(597, 'sft', 0, '') #Titanic
+    add_recommend(150540, 'sft', 0, '') #Inside Out
+    add_recommend(158852, 'sft', 0, '') #Tomorrowland
+    add_recommend(278927, 'sft', 0, '') #The Jungle Book
+    add_recommend(155, 'sft', 0, '') #The Dark Knight
+    add_recommend(2698, 'sft', 0, '') #Evan Almighty
+    add_recommend(10192, 'sft', 0, '') #Shrek Forever After
+    
+    #sft的兄弟和sft志趣相投
+    add_user('sft_brother', '080090', 'ohouhou@qq.com')
+    add_recommend(10138, 'sft_brother', 5, '') #Iron Man 2
+    add_recommend(19995, 'sft_brother', 5, '') #Avatar
+    add_recommend(36668, 'sft_brother', 5, '') #X-Men: The Last Stand
+    add_recommend(68721, 'sft_brother', 5, '') #Iron Man 3
+    add_recommend(246655, 'sft_brother', 5, '') #X-Men: Apocalypse
+
+    add_recommend(158852, 'sft_brother', 0, '') #Tomorrowland
+    add_recommend(278927, 'sft_brother', 0, '') #The Jungle Book
+    add_recommend(155, 'sft_brother', 0, '') #The Dark Knight
+
+    #sft的姐妹和sft志趣相投
+    add_user('sft_sister', '080090', 'ohouhou@qq.com')
+    add_recommend(10138, 'sft_sister', 5, '') #Iron Man 2
+    add_recommend(246655, 'sft_sister', 5, '') #X-Men: Apocalypse
+    add_recommend(36668, 'sft_sister', 5, '') #X-Men: The Last Stand
+    add_recommend(68721, 'sft_sister', 5, '') #Iron Man 3
+
+    add_recommend(158852, 'sft_sister', 0, '') #Tomorrowland
+    
+
+    #添加sft的推荐影单
+    add_rec_list('sft',[559,1726,10138,19995,36668,127585,76757,99861])
+    #给sft的兄弟姐妹添加浏览记录
+    add_browse_record('sft_brother',[10138,19995,36668,68721,246655])
+    add_browse_record('sft_sister',[10138,246655,158852])
 
 
 
 if __name__ == '__main__':
-    # init_db()
-    # init_tables_base()
+    init_db()
+    init_tables_base()
+    create_check_rec_algo_data() #添加构造数据
     # add_rec_list('a',[254,597,2268])
-    # add_rec_list('a',[102382,597,2268])
 
     # add_browse_record('sadf',[254,597,2268,8487])
     # print(get_browse_list('a'))
-    add_browse_record('a',[58,155,217])
-    print(get_browse_list('a'))
+    # add_browse_record('a',[58,155,217])
+    # print(get_browse_list('a'))
