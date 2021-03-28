@@ -4,9 +4,8 @@
 
   * appfront:前端文件夹
     * <目前仅供测试，之后将真正的前端文件夹接入>
-    * 目前仅修改了/src/components/HelloWorld.vue以进行前端测试
-
-  * movie_rec_sys:后端文件夹
+    
+* movie_rec_sys:后端文件夹
     * settings.py:全局参数
     * urls.py:通过路径'/api'将后端接口转移到app目录——recommend
   * recommend:app文件夹
