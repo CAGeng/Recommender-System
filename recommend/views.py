@@ -82,6 +82,16 @@ def get_moviedic_list(id_list):
         info_list.append(info_dic)
     return info_list
     
+#用户未登录时的基于统计的推荐
+def get_movie_no_user():
+    df = recommend.get_rec_demographic()  #返回的是id的列表
+    movie_id_list=[]
+    for i in range(min(df.shape[0], 20)):
+        mid = df.iloc[i]
+        movie_id_list.append(mid)
+    info_list = get_moviedic_list(movie_id_list)
+    return info_list
+
 #getm 的api响应，返回前端电影信息列表
 def get_movies(request):
     '''
@@ -95,10 +105,15 @@ def get_movies(request):
         
         uid = data['uid']
     else:#debug
-        uid = 'a'
+        uid = 'sft'
+
+    if uid == '':  #没有登录情况的推荐列表
+        info_list = get_movie_no_user()
+        rec_info = info_list[5:15]
+        return JsonResponse(rec_info,safe=False)
 
     df = recommend.get_result(uid)
-    print(df)
+    # print(df)
     movie_id_list=[]
     for i in range(df.shape[0]):
         mid = df['id'].iloc[i]
@@ -114,6 +129,12 @@ def get_movies(request):
 
     
     return JsonResponse(info_list,safe=False)
+
+#最热推荐的函数api
+def get_movie_hottest(request):
+    info_list = get_movie_no_user()
+    rec_info = info_list[0:5]
+    return JsonResponse(rec_info,safe=False)
 
 #searchmv的函数api，用于根据用户输入的title查找电影，支持模糊查找
 def search_movie(request):
@@ -141,7 +162,6 @@ def search_movie(request):
     return JsonResponse(info_list,safe=False)
 
     
-
 #login 的api响应，接收用户名和密码
 def login(request):
     '''
@@ -157,8 +177,8 @@ def login(request):
         name = data['name']
         key = data['key']
     else :#debug
-        name = 'sadfd'
-        key = 'asdfdas'
+        name = 'sft'
+        key = '080090'
 
     err = database.login(name,key)
     if err == 0:
@@ -210,8 +230,14 @@ def get_movies_sim(request):
         data = json.loads(request.body.decode('utf-8'))
         
         name = data['uid']
+        print(name)
     else:#debug
-        name = 'sft_sister'
+        name = 'sft_brother'
+
+    if name == '':  #没有登录情况的推荐列表
+        info_list = get_movie_no_user()
+        rec_info = info_list[15:]
+        return JsonResponse(rec_info,safe=False)
 
     #name 保存了前端请求的用户名
     sim_names = recommend.get_result_sim(name)
@@ -237,6 +263,10 @@ def get_movies_sim(request):
 
     #res_list保存了推荐电影的id列表
     info_list = get_moviedic_list(res_list)
+
+    if len(info_list) < 5:
+        print('sim_rec : not enough')
+        return get_movies(request)
     
     return JsonResponse(info_list,safe=False)
 
@@ -322,7 +352,7 @@ def add_rec(request):
         recom_txt = data['recommend']
 
     else:#debug
-        name = 'aa'
+        name = 'a'
         mid = 597
         rating = 3
         recom_txt = 'Good'
@@ -374,7 +404,7 @@ def add_browse(request):
         mid = data['mid']
 
     else:#debug
-        name = 'adfasdf'
+        name = 'a'
         mid = 597
 
     err = database.add_browse_record(name,[mid])

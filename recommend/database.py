@@ -300,6 +300,9 @@ def get_browse_list(name):
     cursor.close()
     conn.close()
 
+    if data == None:
+        return []
+
     from ast import literal_eval
     data = data[0]
     data = literal_eval(data)
@@ -415,28 +418,30 @@ def init_tables_base():
 
 
     #//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    # 用户
     users = ['a','b', 'c' , 'd', 'e']
     user_con = len(users)
     for i in range(user_con):
         add_user(users[i],'1','1@1.com')
 
     #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    #随机评分
 
-    import random
+    # import random
 
-    movie_con = len(ids)
-    for i in range(user_con):
-        rec = []
-        for j in range(50):   # 每个用户添加大约50条评分
-            m = random.randint(0,movie_con - 1)
-            if m in rec:  #（用户，电影）键 重复的不要
-                continue
-            rec.append(m)
-            s = random.uniform(0,5)
-            # print(i,m,s)
-            add_recommend(ids[m],users[i],s,'')
+    # movie_con = len(ids)
+    # for i in range(user_con):
+    #     rec = []
+    #     for j in range(20):   # 每个用户添加大约50条评分
+    #         m = random.randint(0,movie_con - 1)
+    #         if m in rec:  #（用户，电影）键 重复的不要
+    #             continue
+    #         rec.append(m)
+    #         s = random.uniform(0,5)
+    #         # print(i,m,s)
+    #         add_recommend(ids[m],users[i],s,'')
     
-    # return ids  #返回电影id列表
+    
 
 #用于检验推荐算法的构造样例
 def create_check_rec_algo_data():   
@@ -498,10 +503,47 @@ def create_check_rec_algo_data():
     #添加sft的推荐影单
     add_rec_list('sft',[559,1726,10138,19995,36668,127585,76757,99861])
     #给sft的兄弟姐妹添加浏览记录
+    add_browse_record('sft',[559,1726,10138,19995,36668,127585,76757,99861,102382])
     add_browse_record('sft_brother',[10138,19995,36668,68721,246655])
     add_browse_record('sft_sister',[10138,246655,158852])
+    add_browse_record('sft_enemy',[10138,246655,158852,278927,155])
 
+def create_check_rec_algo_data2():  
+    db = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
 
+    df = pd.read_sql('select id from movie', db)
+
+    size = df.shape[0]
+    halfsiz = int(size/2)
+    #dog 喜欢看前一半电影
+    add_user('dog', '080090', '1@1.com')
+    for i in range(halfsiz):
+        mid = df.iloc[i,0]
+        add_recommend(mid, 'dog', 5, '')
+    #dog 不喜欢看后一半电影
+    for i in range(halfsiz,size):
+        mid = df.iloc[i,0]
+        add_recommend(mid, 'dog', 0, '')
+
+    #dog2 和dog类似
+    add_user('dog2', '080090', '1@1.com')
+    for i in range(halfsiz - 5):
+        mid = df.iloc[i,0]
+        add_recommend(mid, 'dog2', 5, '')
+    #dog2 
+    for i in range(halfsiz - 5,size):
+        mid = df.iloc[i,0]
+        add_recommend(mid, 'dog2', 0, '')
+
+    #dog3 和dog相反
+    add_user('dog3', '080090', '1@1.com')
+    for i in range(halfsiz - 4):
+        mid = df.iloc[i,0]
+        add_recommend(mid, 'dog3', 0, '')
+    #dog2 
+    for i in range(halfsiz - 4,size):
+        mid = df.iloc[i,0]
+        add_recommend(mid, 'dog3', 5, '')
 
 if __name__ == '__main__':
     init_db()

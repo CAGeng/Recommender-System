@@ -13,6 +13,7 @@ urlpatterns = [
     path('getmsim/', view=views.get_movies_sim), #“和你类似的用户还喜欢看”的电影信息
     path('minfo/', view=views.getm_info), #单独电影页面的信息
     path('searchmv/', view=views.search_movie), #模糊查询电影
+    path('gethot/', view=views.get_movie_hottest), #获取最热推荐
 
     #用户信息
     path('login/', view=views.login),  #登录

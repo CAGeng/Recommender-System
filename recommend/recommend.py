@@ -277,7 +277,7 @@ def get_recommendation(userid,title_list):
         if movie_df['title'].iloc[sim_scores[i]] in title_list:
             continue
         movie_indices.append(sim_scores[i])
-        print(scores[sim_scores[i]])
+        # print(scores[sim_scores[i]])
         siz += 1
         if siz >= 10:
             break
@@ -334,7 +334,7 @@ def LFM_ed2(D, k=3, iter_times=1000, alpha=0.01, learn_rate=0.0001):
         ERR,not0_con = subt_with_none(D,D_est)  #对未统计的评分不计算平方误差
         if not0_con == 0:
             return 'subt_with_none error: empty matrix'
-
+        
         U_grad = -2 * np.matmul(ERR, V.transpose()) + 2 * alpha * U
         V_grad = -2 * np.matmul(U.transpose(), ERR) + 2 * alpha * V
         U = U - learn_rate * U_grad
@@ -350,6 +350,7 @@ def LFM_ed2(D, k=3, iter_times=1000, alpha=0.01, learn_rate=0.0001):
 def do_svd(A,k=3):
     U, S, V = np.linalg.svd(A)
     # print(np.dot(U,U.T))
+    # print(S.shape)
     S_1 = np.eye(k) * S[:k]
     U_1 = U[:, :k]
     V_1 = V[:k, :] 
@@ -361,7 +362,7 @@ def do_svd(A,k=3):
     np.savetxt(basepath + "recommend_model/U.txt",U_1)
 
 #下面的函数调用前面两个函数，将上述的W和U保存起来，用于之后的推荐。
-def create_svd_matrix(number_user,number_movie,movie_df, ratings,k=3):
+def create_svd_matrix(number_movie,movie_df, ratings,k=3):
     name2index = {}
     number_user = 0
     data = ratings[['userId', 'movieId', 'rating']]
@@ -372,6 +373,7 @@ def create_svd_matrix(number_user,number_movie,movie_df, ratings,k=3):
             name2index[u] = number_user
             number_user += 1
 
+    print(name2index)
     np.save(basepath + "recommend_model/u_name2index.npy", name2index)
 
     indices = pd.Series(movie_df.index, index=movie_df['id'])
@@ -386,10 +388,27 @@ def create_svd_matrix(number_user,number_movie,movie_df, ratings,k=3):
         rating = data['rating'][i]
         A[uid][m] = rating
 
-    (P,Q,errlist) = LFM_ed2(A,k=k,learn_rate=0.01,alpha=0.01)
-    # print(errlist)
-    A_1 = np.dot(P,Q)
+    #随机梯度下降多次求平均     
+    P_list = []
+    Q_list = []
+    cal_times = 1
+    for i in range(cal_times):
+        (P,Q,errlist) = LFM_ed2(A,k=k,learn_rate=0.01,alpha=0.1,iter_times=400)
+        P_list.append(P)
+        Q_list.append(Q)
+        # print(errlist)
 
+    P = P_list[0]
+    for i in range(1,cal_times):
+        P += P_list[i]
+    P /= cal_times
+
+    Q = Q_list[0]
+    for i in range(1,cal_times):
+        Q += Q_list[i]
+    Q /= cal_times
+
+    A_1 = np.dot(P,Q)
     do_svd(A_1,k=k)
 
 #”过渡“期基于相似度的推荐算法
@@ -457,7 +476,7 @@ def train():
     demographic_filtering(movie_df)# 重新获得model
     content_filtering(movie_df)#重新获得model
     collaborative_filtering(ratings)#重新获得model
-    create_svd_matrix(number_user=99 ,number_movie=movie_df.shape[0], movie_df=movie_df, ratings=ratings,k=3)
+    create_svd_matrix(number_movie=movie_df.shape[0], movie_df=movie_df, ratings=ratings,k=2)
 
 #用户浏览历史记录相关
 #debug 暂时先粘贴过来
@@ -527,9 +546,15 @@ if __name__ == '__main__':
 
 
     # train()
-    print(get_result_sim('sft_sister'))
-    print(get_result_sim('sft_brother'))
-    print(get_result_sim('sft_enemy'))
+    # print(get_result_sim('sft_sister'))
+    # print(get_result_sim('sft_brother'))
+    # print(get_result_sim('sft_enemy'))
+
+    print(get_result('sft_enemy'))
+    # print(get_result_sim('dog'))
+    # print(get_result_sim('dog2'))
+    # print(get_result_sim('dog3'))
+
     # print(get_result('aaaaa'))
     # print(get_result('b'))
     # print(get_result('c'))

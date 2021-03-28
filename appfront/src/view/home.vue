@@ -1,0 +1,411 @@
+<template>
+    <el-container>
+        <el-header style="text-align: right; font-size: 100%">
+            <el-row :gutter="20" style="marginTop:10px">
+                <el-col :span="3" :offset="1">
+                    <el-image :src="url" :fit="'cover'">
+                    </el-image>
+                </el-col>
+                <el-col :span="6" :offset="6">
+                    <el-input placeholder="movie" v-model="input1">
+                    </el-input>
+                </el-col>
+                <el-col :span="1">
+                    <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button> 
+                </el-col>
+                <el-dropdown @command="handlecommand">
+                    <i class="el-icon-s-custom" style="margin-right: 15px"></i>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item command="login" :disabled="edi1">登录</el-dropdown-item>
+                        <el-dropdown-item command="register" :disabled="edi2">注册</el-dropdown-item>
+                        <el-dropdown-item command="change" :disabled="edi3">修改</el-dropdown-item>
+                        <el-dropdown-item command="logout" :disabled="edi4">登出</el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+                <el-avatar icon="el-icon-user"></el-avatar>
+            </el-row>
+        </el-header>
+        <el-main>
+            <el-col :span="18" :offset="3">
+                <el-carousel :height="elh + 'px'" :interval="3000">
+                    <el-carousel-item v-for="item in datalist" :key="item.id">
+                        <el-row class="imfg">
+                            <img id="test" :src="item.urls" class="img"/>
+                        </el-row>
+                        <el-divider></el-divider>
+                        <el-row class="try">
+                            <span class="exp">{{ item.text }}</span>
+                        </el-row>
+                    </el-carousel-item>
+                </el-carousel>
+                <v-container class="wntj">
+                    <v-toolbar dark height="50%" src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
+                        <v-toolbar-title>为您推荐</v-toolbar-title>
+                        <v-spacer></v-spacer>
+                    </v-toolbar>
+                    <v-container class="cc">
+                        <v-card  v-for="item in movielist" :key="item.id" class="crd1" color="#000000">
+                            <v-toolbar dark height="50px" src="https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg">
+                                <v-toolbar-title>{{ item.title }}</v-toolbar-title>
+                                <v-spacer></v-spacer>
+                                <v-btn @click="detail(item.id)">电影详情</v-btn>
+                            </v-toolbar>
+                            <v-container class="cc2">
+                                <el-row class="crd2">
+                                    <img :src="item.urls" class="img1"/>
+                                </el-row>
+                            </v-container>
+                        </v-card>
+                    </v-container>
+                    <v-toolbar dark height="50%" src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg" style="margin-top:50px">
+                        <v-toolbar-title>类似的人还喜欢看</v-toolbar-title>
+                        <v-spacer></v-spacer>
+                    </v-toolbar>
+                    <v-container class="cc">
+                        <v-card  v-for="item in movielist2" :key="item.id" class="crd1" color="#000000">
+                            <v-toolbar dark height="50px" src="https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg">
+                                <v-toolbar-title>{{ item.title }}</v-toolbar-title>
+                                <v-spacer></v-spacer>
+                                <v-btn @click="detail2(item.id)">电影详情</v-btn>
+                            </v-toolbar>
+                            <v-container class="cc2">
+                                <el-row class="crd2">
+                                    <img id="test" :src="item.urls" class="img1"/>
+                                </el-row>
+                            </v-container>
+                        </v-card>
+                    </v-container>
+                </v-container>
+            </el-col>
+            <el-dialog :title="'电影推荐系统登录'" :visible.sync="dialogvisible1" :width="'40%'" :before-close="handleclose" center>
+                <el-row>
+                    <el-col :span="18" :offset="3">
+                        <el-input placeholder="请输入用户名或邮箱" v-model="form.username"></el-input>
+                        <el-input style="marginTop:5%" placeholder="请输入密码" v-model="form.password" show-password></el-input>
+                    </el-col>
+                </el-row>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="register">注册</el-button>
+                    <el-button type="primary" @click="login">登录</el-button>
+                </span>
+            </el-dialog>
+            <el-drawer
+                :title="movietitle"
+                :visible.sync="dialogvisible2"
+                :direction="'rtl'"
+                :before-close="handleclose2">
+                <span>{{content}}</span>
+            </el-drawer>
+        </el-main>
+    </el-container>
+</template>
+
+<script>
+import axiosInstance from '../api/index'
+export default {
+
+    beforeCreate () {
+        document.body.style.background = "#000000"
+    },
+
+    data() {
+        return {
+            input1: '',
+            form:{
+                username: '',
+                password: '',
+            },
+            res_data:{
+                status: '',
+                info: '',
+            },
+            edi1: false,
+            edi2: false,
+            edi3: true,
+            edi4: true,
+            elh: 2000,
+            swh: 0,
+            xs: 0.36,
+            picwidth: 5,
+            picheight: 1,
+            dialogvisible1: false,
+            dialogvisible2: false,
+            content: "",
+            movietitle: "",
+            url: 'https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg',
+            datalist: [
+                {id:0, text: "测试样例1", urls: 'https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg'},
+                {id:1, text: "测试样例2", urls: 'https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg'},
+                {id:2, text: "测试样例3", urls: 'https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg'},
+                {id:3, text: "测试样例4", urls: 'https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg'}
+            ],
+            movielist: [
+                {id:0, title: "测试样例1", urls: 'https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg', introduce:"测试样例1"},
+                {id:1, title: "测试样例2", urls: 'https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg', introduce:"测试样例2"},
+                {id:2, title: "测试样例3", urls: 'https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg', introduce:"测试样例3"},
+                {id:3, title: "测试样例4", urls: 'https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg', introduce:"测试样例4"}
+            ],
+            movielist2: [
+                {id:0, title: "测试样例1", urls: 'https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg', introduce:"测试样例1"},
+                {id:1, title: "测试样例2", urls: 'https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg', introduce:"测试样例2"},
+                {id:2, title: "测试样例3", urls: 'https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg', introduce:"测试样例3"},
+                {id:3, title: "测试样例4", urls: 'https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg', introduce:"测试样例4"}
+            ]
+        }
+    },
+
+    methods: {
+        handlecommand( v ){
+            if(v == "login"){
+                this.dialogvisible1 = true
+            }
+            else if(v == "register"){
+                this.$router.push({ path: '/register' })
+            }
+            else if(v == "logout"){
+                sessionStorage.removeItem('user')
+                window.location.reload()
+            }
+        },
+
+        handleclose(){
+            this.dialogvisible1 = false
+        },
+
+        handleclose2(){
+            this.dialogvisible2 = false
+        },
+
+        login(){
+            
+            // sessionStorage.setItem('user', JSON.stringify(res.data))
+            axiosInstance.post('http://localhost:8000/api/login/',{
+                name: this.form.username,
+                key: this.form.password
+            })
+            .then((response)=>{
+                console.log(response)
+                this.res_data = response.data
+                // console.log(res_data)
+                if(this.res_data['status'] == 'success'){
+                    sessionStorage.setItem('user', JSON.stringify(this.form))
+                    this.$alert('登录成功','Success Message',{
+                        confirmButtonText:'确定'
+                    })
+                    window.location.reload()
+                }
+                else{
+                    if(this.res_data['info'] == 'wrong key'){
+                        this.$alert('密码错误', 'FAIL', {
+                            confirmButtonText:'确定'
+                        })
+                    }
+                    else{
+                        this.$alert('用户不存在', 'FAIL', {
+                            confirmButtonText:'确定'
+                        })
+                    }
+                    this.form.username = ""
+                    this.form.password = ""
+                }
+
+            }).catch((response)=>{
+                console.log(response)
+            })
+            
+        },
+
+        register(){
+            this.$router.push('/register')
+        },
+
+        search(){
+            if(sessionStorage.getItem('user')){
+                this.$router.push({path:'/search',query:{name:this.$Base64.encode(JSON.stringify(this.input1))}})
+            }
+            else{
+                this.$message('请先登录');
+            }
+        },
+
+        setsize(){
+            this.elh = this.swh * this.xs
+        },
+
+        setconfig(){
+            if(sessionStorage.getItem('user')){
+                this.edi1 = true
+                this.edi2 = true
+                this.edi3 = false
+                this.edi4 = false
+            }
+            else{
+                this.edi1 = false
+                this.edi2 = false
+                this.edi3 = true
+                this.edi4 = true
+            }
+        },
+
+        getData(){
+            axiosInstance.post('http://localhost:8000/api/gethot/',{
+            })
+            .then((response)=>{
+                console.log(response)
+                this.datalist = response.data
+            }).catch((response)=>{
+                console.log(response)
+            })
+            
+            if(sessionStorage.getItem('user')){
+                var test = sessionStorage.getItem('user')
+                test = JSON.parse(test)
+                test = test.username
+                console.log(test)
+
+                axiosInstance.post('http://localhost:8000/api/getm/',{
+                    uid: test
+                })
+                .then((response)=>{
+                    console.log(response)
+                    this.movielist = response.data
+                }).catch((response)=>{
+                    console.log(response)
+                })
+
+                axiosInstance.post('http://localhost:8000/api/getmsim/',{
+                    uid: test
+                })
+                .then((response)=>{
+                    console.log(response)
+                    this.movielist2 = response.data
+                }).catch((response)=>{
+                    console.log(response)
+                })
+            }
+            else{
+                axiosInstance.post('http://localhost:8000/api/getm/',{
+                    uid: ''
+                })
+                .then((response)=>{
+                    console.log(response)
+                    this.movielist = response.data
+                }).catch((response)=>{
+                    console.log(response)
+                })
+
+                axiosInstance.post('http://localhost:8000/api/getmsim/',{
+                    uid: ''
+                })
+                .then((response)=>{
+                    console.log(response)
+                    this.movielist2 = response.data
+                }).catch((response)=>{
+                    console.log(response)
+                })
+            }
+        },
+
+        detail( v ){
+            this.dialogvisible2 = true
+            for(var i=0; i<this.movielist.length; i++){
+                if(this.movielist[i].id == v){
+                    this.movietitle = this.movielist[i].title
+                    this.content = this.movielist[i].introduce
+                }
+            }
+        },
+
+        detail2( v ){
+            this.dialogvisible2 = true
+            for(var i=0; i<this.movielist2.length; i++){
+                if(this.movielist2[i].id == v){
+                    this.movietitle = this.movielist2[i].title
+                    this.content = this.movielist2[i].introduce
+                }
+            }
+        }
+        
+    },
+    
+    mounted(){
+        this.swh = window.innerWidth
+        this.setsize()
+    },
+
+    created(){
+        this.setconfig()
+        this.getData()
+    }
+}
+</script>
+
+<style>
+
+    .img{
+        max-height: 100%;
+        max-width: 100%;
+        min-height: 50%;
+        object-fit: contain;
+    }
+
+    .imfg{
+        width:100%;
+        height:80%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .try{
+        width:100%;
+    }
+
+    .exp{
+        font-size:100%;
+        color:white;
+        text-align:center;
+        display:block;
+    }
+
+    .wntj{
+        display: flex;
+        flex-direction: column;
+        margin-top: 20px;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    .crd1{
+        width: 49.5%;
+        height: 300px;
+        margin-top: 10px;
+    }
+
+    .crd2{
+        width:100%;
+        height:250px;
+        display: flex;
+    }
+
+    .cc{
+        padding-left: 0px;
+        padding-right: 0px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        display: flex;
+    }
+    
+    .cc2{
+        padding: 0px;
+    }
+
+    .img1{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+</style>
