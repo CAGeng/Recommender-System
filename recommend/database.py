@@ -446,7 +446,7 @@ def init_tables_base():
 #用于检验推荐算法的构造样例
 def create_check_rec_algo_data():   
     add_user('sft', '080090', 'ohouhou@qq.com')
-    #sft比较喜欢科幻和动作电影，所以他给科幻电影都打了满分
+    #sft比较喜欢科幻和动作电影，所以他给这些电影都打了满分
     add_recommend(559, 'sft', 5, '') #Spider-Man 3
     add_recommend(1726, 'sft', 5, '') #Iron Man
     add_recommend(10138, 'sft', 5, '') #Iron Man 2
@@ -506,7 +506,7 @@ def create_check_rec_algo_data():
     add_browse_record('sft',[559,1726,10138,19995,36668,127585,76757,99861,102382])
     add_browse_record('sft_brother',[10138,19995,36668,68721,246655])
     add_browse_record('sft_sister',[10138,246655,158852])
-    add_browse_record('sft_enemy',[10138,246655,158852,278927,155])
+    add_browse_record('sft_enemy',[597,150540,158852,278927,155,2698,10192])
 
 def create_check_rec_algo_data2():  
     db = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)

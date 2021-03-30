@@ -6,6 +6,7 @@
                     <el-image :src="url" :fit="'cover'">
                     </el-image>
                 </el-col>
+                <!-- 搜索 -->
                 <el-col :span="6" :offset="6">
                     <el-input placeholder="movie" v-model="input1">
                     </el-input>
@@ -13,6 +14,7 @@
                 <el-col :span="1">
                     <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button> 
                 </el-col>
+                <!-- 右上角菜单，登陆注册 -->
                 <el-dropdown @command="handlecommand">
                     <i class="el-icon-s-custom" style="margin-right: 15px"></i>
                     <el-dropdown-menu slot="dropdown">
@@ -28,6 +30,7 @@
         <el-main>
             <el-col :span="18" :offset="3">
                 <el-carousel :height="elh + 'px'" :interval="3000">
+                    <!-- 最热推荐 -->
                     <el-carousel-item v-for="item in datalist" :key="item.id">
                         <el-row class="imfg">
                             <img id="test" :src="item.urls" class="img"/>
@@ -39,6 +42,7 @@
                     </el-carousel-item>
                 </el-carousel>
                 <v-container class="wntj">
+                    <!-- 推荐列表 -->
                     <v-toolbar dark height="50%" src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
                         <v-toolbar-title>为您推荐</v-toolbar-title>
                         <v-spacer></v-spacer>
@@ -48,17 +52,20 @@
                             <v-toolbar dark height="50px" src="https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg">
                                 <v-toolbar-title>{{ item.title }}</v-toolbar-title>
                                 <v-spacer></v-spacer>
+                                <!-- 进入电影详情页 -->
                                 <v-btn @click="detail(item.id)">电影详情</v-btn>
                             </v-toolbar>
                             <v-container class="cc2">
                                 <el-row class="crd2">
+                                    <!-- 图片 -->
                                     <img :src="item.urls" class="img1"/>
                                 </el-row>
                             </v-container>
                         </v-card>
                     </v-container>
+                    <!-- 相似的人还喜欢看 -->
                     <v-toolbar dark height="50%" src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg" style="margin-top:50px">
-                        <v-toolbar-title>类似的人还喜欢看</v-toolbar-title>
+                        <v-toolbar-title>与您类似的人还喜欢看</v-toolbar-title>
                         <v-spacer></v-spacer>
                     </v-toolbar>
                     <v-container class="cc">
@@ -66,10 +73,12 @@
                             <v-toolbar dark height="50px" src="https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg">
                                 <v-toolbar-title>{{ item.title }}</v-toolbar-title>
                                 <v-spacer></v-spacer>
-                                <v-btn @click="detail2(item.id)">电影详情</v-btn>
+                                <!-- 进入电影详情页 -->
+                                <v-btn @click="detail(item.id)">电影详情</v-btn>
                             </v-toolbar>
                             <v-container class="cc2">
                                 <el-row class="crd2">
+                                    <!-- 图片 -->
                                     <img id="test" :src="item.urls" class="img1"/>
                                 </el-row>
                             </v-container>
@@ -77,6 +86,7 @@
                     </v-container>
                 </v-container>
             </el-col>
+            <!-- 登录弹窗 -->
             <el-dialog :title="'电影推荐系统登录'" :visible.sync="dialogvisible1" :width="'40%'" :before-close="handleclose" center>
                 <el-row>
                     <el-col :span="18" :offset="3">
@@ -221,7 +231,12 @@ export default {
 
         search(){
             if(sessionStorage.getItem('user')){
-                this.$router.push({path:'/search',query:{name:this.$Base64.encode(JSON.stringify(this.input1))}})
+                this.$router.push({
+                    path:'/search',
+                    query:{
+                        title:this.input1
+                    }
+                })
             }
             else{
                 this.$message('请先登录');
@@ -306,7 +321,31 @@ export default {
             }
         },
 
+        // 进入电影详情页，如果用户已经登录，要向后端添加浏览记录
         detail( v ){
+            // 如果用户已经登录，要向后端添加浏览记录
+            if(sessionStorage.getItem('user')){
+                var user = sessionStorage.getItem('user')
+                user = JSON.parse(user)
+                var username = user.username
+                axiosInstance.post('http://localhost:8000/api/addbrowse/',{
+                    name: username,
+                    mid: v
+                })
+                .then((response)=>{
+                    var data = response.data
+                    if(data['status'] != 'success'){
+                        console.log('fail: ' + data['info'])
+                    }
+                    else {
+                        console.log("success add browse")
+                    }
+                }).catch((response)=>{
+                    console.log(response)
+                })
+            }
+
+
             this.dialogvisible2 = true
             for(var i=0; i<this.movielist.length; i++){
                 if(this.movielist[i].id == v){
@@ -314,17 +353,26 @@ export default {
                     this.content = this.movielist[i].introduce
                 }
             }
+
+            // 跳转到该电影详情页
+            // this.$router.push({
+            //     path: '/movieinfo',
+            //     query:{
+            //         id: v
+            //     }
+            // })
         },
 
-        detail2( v ){
-            this.dialogvisible2 = true
-            for(var i=0; i<this.movielist2.length; i++){
-                if(this.movielist2[i].id == v){
-                    this.movietitle = this.movielist2[i].title
-                    this.content = this.movielist2[i].introduce
-                }
-            }
-        }
+        // 暂时不需要
+        // detail2( v ){
+        //     this.dialogvisible2 = true
+        //     for(var i=0; i<this.movielist2.length; i++){
+        //         if(this.movielist2[i].id == v){
+        //             this.movietitle = this.movielist2[i].title
+        //             this.content = this.movielist2[i].introduce
+        //         }
+        //     }
+        // }
         
     },
     

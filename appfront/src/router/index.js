@@ -9,7 +9,8 @@ Vue.use(Router)
 export const publicRouter = [
   { path: '/home', component: () => import('@/view/home'), hidden: true},
   { path: '/register', component: () => import('@/view/register'), hidden: true},
-  { path: '/search', component: () => import('@/view/search'), hidden: true}
+  { path: '/search', name:'search',component: () => import('@/view/search'), hidden: true},
+  { path: '/movieinfo', component: () => import('@/view/movieinfo'), hidden: true},
 ]
 
 export const router = new Router({

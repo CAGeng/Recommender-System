@@ -94,12 +94,11 @@ def get_rec_demographic():
 #Content-based filtering
 # Function that takes in movies' title as input and outputs most similar movies
 
-#这是推荐函数，会自动加载之前保存好的cos_similarity矩阵
+#这是基于统计的推荐函数，会自动加载之前保存好的cos_similarity矩阵，返回前十相关的电影
 def get_recommendations_mul(title_list, cosine_sim=None,movie_df=None):
 
     if movie_df is None:
-        print("Err: No loaded movie")
-        return
+        movie_df = pd.read_csv(basepath + "/recommend_model/movie.csv")
 
     indices = pd.Series(movie_df.index, index=movie_df['title'])
 
@@ -550,7 +549,8 @@ if __name__ == '__main__':
     # print(get_result_sim('sft_brother'))
     # print(get_result_sim('sft_enemy'))
 
-    print(get_result('sft_enemy'))
+    # print(get_result('sft_enemy'))
+    print(get_result('new user'))
     # print(get_result_sim('dog'))
     # print(get_result_sim('dog2'))
     # print(get_result_sim('dog3'))

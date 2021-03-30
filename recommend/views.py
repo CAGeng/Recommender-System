@@ -270,6 +270,33 @@ def get_movies_sim(request):
     
     return JsonResponse(info_list,safe=False)
 
+#simlist的函数api，用于在电影页推荐相似电影
+def get_simlist(request):
+    '''
+    para:
+        request:包含
+            m_name: 电影名
+    output:
+        电影信息列表
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        m_name = data['m_name']
+    else:#debug
+        m_name = 'Iron Man'
+
+    m_name = [m_name]
+    df = recommend.get_recommendations_mul(m_name)
+    # print(df)
+    movie_id_list=[]
+    for i in range(df.shape[0]):
+        mid = df['id'].iloc[i]
+        movie_id_list.append(mid)
+
+    info_list = get_moviedic_list(movie_id_list)
+    return JsonResponse(info_list,safe=False)
+
 #将图片以字节流发送到前端  #暂时没有用到，目前只传送url
 def read_img(request):
     try:
