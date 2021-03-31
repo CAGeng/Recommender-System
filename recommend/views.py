@@ -199,6 +199,18 @@ def login(request):
 
     return JsonResponse(dic,safe=False)
 
+#根据电影id，获得该电影的一些用户评论
+def get_movie_comment(mid):
+    df = database.find_recommend_id(mid)
+    res = []
+    for i in range(df.shape[0]):
+        name = df['name'].iloc[i]
+        comment = df['comment'].iloc[i]
+        if comment == '':
+            continue
+        res.append([name,comment])
+    return res
+
 #getm_info的函数api，用于展示一页具体的电影
 def getm_info(request):
     '''
@@ -213,9 +225,10 @@ def getm_info(request):
         
         mid = data['mid']
     else:#debug
-        mid = 597 #Titanic
+        mid = 10138 #Iron Man 2
 
     dic = get_movdic(mid)
+    dic['comment'] = get_movie_comment(mid)
     return JsonResponse(dic,safe=False)
 
 #getm_sim的函数api，用于过渡时期推荐

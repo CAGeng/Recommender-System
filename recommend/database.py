@@ -447,70 +447,70 @@ def init_tables_base():
 def create_check_rec_algo_data():   
     add_user('sft', '080090', 'ohouhou@qq.com')
     #sft比较喜欢科幻和动作电影，所以他给这些电影都打了满分
-    add_recommend(559, 'sft', 5, '') #Spider-Man 3
-    add_recommend(1726, 'sft', 5, '') #Iron Man
-    add_recommend(10138, 'sft', 5, '') #Iron Man 2
-    add_recommend(19995, 'sft', 5, '') #Avatar
-    add_recommend(36668, 'sft', 5, '') #X-Men: The Last Stand
-    add_recommend(68721, 'sft', 5, '') #Iron Man 3
-    add_recommend(102382, 'sft', 5, '') #The Amazing Spider-Man 2
-    add_recommend(99861, 'sft', 5, '') #Avengers: Age of Ultron
-    add_recommend(127585, 'sft', 5, '') #X-Men: Days of Future Past
-    add_recommend(246655, 'sft', 5, '') #X-Men: Apocalypse
-    add_recommend(76757, 'sft', 5, '') #Jupiter Ascending
+    add_recommend(559, 'sft', 5, "Good!It's the best movie I'd ever seen~") #Spider-Man 3
+    add_recommend(1726, 'sft', 5, "The plot is full of ups and downs.Exciting!") #Iron Man
+    add_recommend(10138, 'sft', 5, "Great, the ending is memorable!") #Iron Man 2
+    add_recommend(19995, 'sft', 5, "Good!It's the best movie I'd ever seen~") #Avatar
+    add_recommend(36668, 'sft', 5, "The plot is full of ups and downs.Exciting!") #X-Men: The Last Stand
+    add_recommend(68721, 'sft', 5, "The plot is full of ups and downs.Exciting!") #Iron Man 3
+    add_recommend(102382, 'sft', 5, "The plot is full of ups and downs.Exciting!") #The Amazing Spider-Man 2
+    add_recommend(99861, 'sft', 5, "Good!It's the best movie I'd ever seen~") #Avengers: Age of Ultron
+    add_recommend(127585, 'sft', 5, 'Perfect!') #X-Men: Days of Future Past
+    add_recommend(246655, 'sft', 5, "Great, the ending is memorable!") #X-Men: Apocalypse
+    add_recommend(76757, 'sft', 5, "The plot is full of ups and downs.Exciting!") #Jupiter Ascending
     #sft不喜欢幼稚电影、家庭片和剧情片，所以给他们打了0分
     add_recommend(597, 'sft', 0, '') #Titanic
-    add_recommend(150540, 'sft', 0, '') #Inside Out
-    add_recommend(158852, 'sft', 0, '') #Tomorrowland
-    add_recommend(278927, 'sft', 0, '') #The Jungle Book
-    add_recommend(155, 'sft', 0, '') #The Dark Knight
-    add_recommend(2698, 'sft', 0, '') #Evan Almighty
-    add_recommend(10192, 'sft', 0, '') #Shrek Forever After
+    add_recommend(150540, 'sft', 0, "The plot is a bit boring, but the special effects are OK.") #Inside Out
+    add_recommend(158852, 'sft', 0, "The movie is not interesting at all. I've been sleeping!") #Tomorrowland
+    add_recommend(278927, 'sft', 0, "The movie is not interesting at all. I've been sleeping!") #The Jungle Book
+    add_recommend(155, 'sft', 0, "The movie is not interesting at all. I've been sleeping!") #The Dark Knight
+    add_recommend(2698, 'sft', 0, "The plot is a bit boring, but the special effects are OK.") #Evan Almighty
+    add_recommend(10192, 'sft', 0, "The movie is not interesting at all. I've been sleeping!") #Shrek Forever After
     
     #sft的兄弟和sft志趣相投
     add_user('sft_brother', '080090', 'ohouhou@qq.com')
-    add_recommend(10138, 'sft_brother', 5, '') #Iron Man 2
-    add_recommend(19995, 'sft_brother', 5, '') #Avatar
-    add_recommend(36668, 'sft_brother', 5, '') #X-Men: The Last Stand
-    add_recommend(68721, 'sft_brother', 5, '') #Iron Man 3
-    add_recommend(246655, 'sft_brother', 5, '') #X-Men: Apocalypse
+    add_recommend(10138, 'sft_brother', 5, "The plot is full of ups and downs.Exciting!") #Iron Man 2
+    add_recommend(19995, 'sft_brother', 5, "Good!It's the best movie I'd ever seen~") #Avatar
+    add_recommend(36668, 'sft_brother', 5, "Great, the ending is memorable!") #X-Men: The Last Stand
+    add_recommend(68721, 'sft_brother', 5, "The plot is full of ups and downs.Exciting!") #Iron Man 3
+    add_recommend(246655, 'sft_brother', 5, "Good!It's the best movie I'd ever seen~") #X-Men: Apocalypse
 
-    add_recommend(158852, 'sft_brother', 0, '') #Tomorrowland
-    add_recommend(278927, 'sft_brother', 0, '') #The Jungle Book
-    add_recommend(155, 'sft_brother', 0, '') #The Dark Knight
+    add_recommend(158852, 'sft_brother', 0, "The plot is a bit boring, but the special effects are OK.") #Tomorrowland
+    add_recommend(278927, 'sft_brother', 0, "The movie is not interesting at all. I've been sleeping!") #The Jungle Book
+    add_recommend(155, 'sft_brother', 0, "The movie is not interesting at all. I've been sleeping!") #The Dark Knight
 
     #sft的姐妹和sft志趣相投
     add_user('sft_sister', '080090', 'ohouhou@qq.com')
-    add_recommend(10138, 'sft_sister', 5, '') #Iron Man 2
-    add_recommend(246655, 'sft_sister', 5, '') #X-Men: Apocalypse
-    add_recommend(36668, 'sft_sister', 5, '') #X-Men: The Last Stand
-    add_recommend(68721, 'sft_sister', 5, '') #Iron Man 3
+    add_recommend(10138, 'sft_sister', 5, "The plot is full of ups and downs.Exciting!") #Iron Man 2
+    add_recommend(246655, 'sft_sister', 5, "Great, the ending is memorable!") #X-Men: Apocalypse
+    add_recommend(36668, 'sft_sister', 5, "The plot is full of ups and downs.Exciting!") #X-Men: The Last Stand
+    add_recommend(68721, 'sft_sister', 5, "Good!It's the best movie I'd ever seen~") #Iron Man 3
 
-    add_recommend(158852, 'sft_sister', 0, '') #Tomorrowland
+    add_recommend(158852, 'sft_sister', 0, "The movie is not interesting at all. I've been sleeping!") #Tomorrowland
     
     #sft的敌人和sft兴趣截然相反
     add_user('sft_enemy', '080090', 'ohouhou@qq.com')
-    add_recommend(10138, 'sft_enemy',0, '') #Iron Man 2
-    add_recommend(19995, 'sft_enemy',0, '') #Avatar
-    add_recommend(36668, 'sft_enemy',0, '') #X-Men: The Last Stand
-    add_recommend(68721, 'sft_enemy',0, '') #Iron Man 3
-    add_recommend(246655, 'sft_enemy',0, '') #X-Men: Apocalypse
+    add_recommend(10138, 'sft_enemy',0, "I regret spending money to see the film") #Iron Man 2
+    add_recommend(19995, 'sft_enemy',0, "The plot is a bit boring, but the special effects are OK.") #Avatar
+    add_recommend(36668, 'sft_enemy',0, "I regret spending money to see the film") #X-Men: The Last Stand
+    add_recommend(68721, 'sft_enemy',0, "The plot is a bit boring, but the special effects are OK.") #Iron Man 3
+    add_recommend(246655, 'sft_enemy',0, "I regret spending money to see the film") #X-Men: Apocalypse
 
-    add_recommend(158852, 'sft_enemy',5, '') #Tomorrowland
-    add_recommend(278927, 'sft_enemy',5, '') #The Jungle Book
-    add_recommend(155, 'sft_enemy',5, '') #The Dark Knight
+    add_recommend(158852, 'sft_enemy',5, "Great, the ending is memorable!") #Tomorrowland
+    add_recommend(278927, 'sft_enemy',5, "Good!It's the best movie I'd ever seen~") #The Jungle Book
+    add_recommend(155, 'sft_enemy',5, "The plot is a bit boring, but the special effects are OK.") #The Dark Knight
 
     #sft的另一个敌人和sft兴趣也很不同
     add_user('sft_enemy2', '080090', 'ohouhou@qq.com')
-    add_recommend(10138, 'sft_enemy2',0, '') #Iron Man 2
-    add_recommend(19995, 'sft_enemy2',0, '') #Avatar
-    add_recommend(36668, 'sft_enemy2',0, '') #X-Men: The Last Stand
-    add_recommend(246655, 'sft_enemy2',0, '') #X-Men: Apocalypse
+    add_recommend(10138, 'sft_enemy2',0, "I regret spending money to see the film") #Iron Man 2
+    add_recommend(19995, 'sft_enemy2',0, "The plot is a bit boring, but the special effects are OK.") #Avatar
+    add_recommend(36668, 'sft_enemy2',0, "I regret spending money to see the film") #X-Men: The Last Stand
+    add_recommend(246655, 'sft_enemy2',0, "The plot is a bit boring, but the special effects are OK.") #X-Men: Apocalypse
 
-    add_recommend(158852, 'sft_enemy2',5, '') #Tomorrowland
-    add_recommend(278927, 'sft_enemy2',5, '') #The Jungle Book
-    add_recommend(155, 'sft_enemy2',5, '') #The Dark Knight
-    add_recommend(10192, 'sft_enemy2', 5, '') #Shrek Forever After
+    add_recommend(158852, 'sft_enemy2',5, "The plot is full of ups and downs.Exciting!") #Tomorrowland
+    add_recommend(278927, 'sft_enemy2',5, "Good!It's the best movie I'd ever seen~") #The Jungle Book
+    add_recommend(155, 'sft_enemy2',5,"The plot is full of ups and downs.Exciting!") #The Dark Knight
+    add_recommend(10192, 'sft_enemy2', 5, "The plot is full of ups and downs.Exciting!") #Shrek Forever After
 
     #添加sft的推荐影单
     add_rec_list('sft',[559,1726,10138,19995,36668,127585,76757,99861])
@@ -569,3 +569,22 @@ if __name__ == '__main__':
     # print(get_browse_list('a'))
     # add_browse_record('a',[58,155,217])
     # print(get_browse_list('a'))
+
+#添加评语
+# def add_comment_data():
+#     db = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+
+#     name_df = pd.read_sql('select name from user', db)
+#     name_list = name_df['name'].values.tolist()
+    
+#     comment_list = ["Good!It's the best movie I'd ever seen~",
+#                     "Perfect!",
+#                     "Great, the ending is memorable!",
+#                     "The movie is not interesting at all. I've been sleeping!",
+#                     "The plot is a bit boring, but the special effects are OK.",
+#                     "I regret spending money to see the film",
+#                     "Boring!Wasted two hours of my life",
+#                     "The plot is full of ups and downs.Exciting!"]
+
+#     con1 = len(name_list)
+#     con2 = len(comment_list)
