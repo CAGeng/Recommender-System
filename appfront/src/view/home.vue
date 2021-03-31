@@ -355,12 +355,12 @@ export default {
             }
 
             // 跳转到该电影详情页
-            // this.$router.push({
-            //     path: '/movieinfo',
-            //     query:{
-            //         id: v
-            //     }
-            // })
+            this.$router.push({
+                path: '/movieinfo',
+                query:{
+                    mid : v
+                }
+            })
         },
 
         // 暂时不需要

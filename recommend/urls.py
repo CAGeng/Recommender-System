@@ -11,10 +11,10 @@ urlpatterns = [
     #页面信息
     path('getm/', view=views.get_movies),  #推荐页面  1
     path('getmsim/', view=views.get_movies_sim), #“和你类似的用户还喜欢看”的电影信息  1
-    path('minfo/', view=views.getm_info), #单独电影页面的信息   
+    path('minfo/', view=views.getm_info), #单独电影页面的信息   1
     path('searchmv/', view=views.search_movie), #模糊查询电影   1
     path('gethot/', view=views.get_movie_hottest), #获取最热推荐  1
-    path('simlist/', view=views.get_simlist), #获取相关电影  
+    path('simlist/', view=views.get_simlist), #获取相关电影   1
 
     #用户信息
     path('login/', view=views.login),  #登录  1

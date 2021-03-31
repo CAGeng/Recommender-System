@@ -264,9 +264,9 @@ def get_movies_sim(request):
     #res_list保存了推荐电影的id列表
     info_list = get_moviedic_list(res_list)
 
-    if len(info_list) < 5:
-        print('sim_rec : not enough')
-        return get_movies(request)
+    # if len(info_list) < 5:
+    #     print('sim_rec : not enough')
+    #     return get_movies(request)
     
     return JsonResponse(info_list,safe=False)
 

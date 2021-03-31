@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import store from '@/store'
 import NProgress from 'nprogress' 
 import 'nprogress/nprogress.css'
+import movieinfo from '@/view/movieinfo'
 
 Vue.use(Router)
 
@@ -10,7 +11,7 @@ export const publicRouter = [
   { path: '/home', component: () => import('@/view/home'), hidden: true},
   { path: '/register', component: () => import('@/view/register'), hidden: true},
   { path: '/search', name:'search',component: () => import('@/view/search'), hidden: true},
-  { path: '/movieinfo', component: () => import('@/view/movieinfo'), hidden: true},
+  { path: '/movieinfo', name:'movieinfo',component: movieinfo, hidden: true},
 ]
 
 export const router = new Router({

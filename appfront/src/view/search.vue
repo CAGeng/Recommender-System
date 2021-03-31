@@ -191,6 +191,14 @@ export default {
                     this.content = this.movielist[i].introduce
                 }
             }
+
+            // 跳转到该电影详情页
+            this.$router.push({
+                path: '/movieinfo',
+                query:{
+                    mid : v
+                }
+            })
         },
 
         // detail2( v ){

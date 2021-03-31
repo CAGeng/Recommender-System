@@ -500,9 +500,23 @@ def create_check_rec_algo_data():
     add_recommend(278927, 'sft_enemy',5, '') #The Jungle Book
     add_recommend(155, 'sft_enemy',5, '') #The Dark Knight
 
+    #sft的另一个敌人和sft兴趣也很不同
+    add_user('sft_enemy2', '080090', 'ohouhou@qq.com')
+    add_recommend(10138, 'sft_enemy2',0, '') #Iron Man 2
+    add_recommend(19995, 'sft_enemy2',0, '') #Avatar
+    add_recommend(36668, 'sft_enemy2',0, '') #X-Men: The Last Stand
+    add_recommend(246655, 'sft_enemy2',0, '') #X-Men: Apocalypse
+
+    add_recommend(158852, 'sft_enemy2',5, '') #Tomorrowland
+    add_recommend(278927, 'sft_enemy2',5, '') #The Jungle Book
+    add_recommend(155, 'sft_enemy2',5, '') #The Dark Knight
+    add_recommend(10192, 'sft_enemy2', 5, '') #Shrek Forever After
+
     #添加sft的推荐影单
     add_rec_list('sft',[559,1726,10138,19995,36668,127585,76757,99861])
-    #给sft的兄弟姐妹添加浏览记录
+    #添加sft敌人的推荐影单
+    add_rec_list('sft_enemy',[158852,278927,155,10192,2698])
+    #给sft的兄弟姐妹和敌人添加浏览记录
     add_browse_record('sft',[559,1726,10138,19995,36668,127585,76757,99861,102382])
     add_browse_record('sft_brother',[10138,19995,36668,68721,246655])
     add_browse_record('sft_sister',[10138,246655,158852])
