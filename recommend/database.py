@@ -71,6 +71,14 @@ def create_tables():
     conn.commit()
     # debug
     print('Success create rec_list table!')
+
+    # create VerificationCode table
+    cursor.execute('create table verificationcode(\
+                        email varchar(100) not null,\
+                        code char(6) not null,\
+                        time datetime not null);')
+    conn.commit()
+    print('Success create verificationcode table!')
     cursor.close()
     conn.close()
 
@@ -335,6 +343,67 @@ def add_browse_record(name, mlist):
     conn.close()
     return 0
 
+#邮箱认证相关
+import random
+import time
+import datetime
+from datetime import datetime
+
+#生成验证码
+def generate_VerificationCode(email):
+    VerificationCode = random.random()
+    VerificationCode = (int)(VerificationCode*1000000)
+    VerificationCode = str.rjust(str(VerificationCode),0)
+
+    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    cursor = conn.cursor()
+
+    cursor.execute('select * from verificationcode where email = "{}"'.format(email))
+
+    if len(cursor.fetchall()) == 0:
+        cursor.execute('insert into  verificationcode(email,code,time) values("{}","{}",now())'.format(email,VerificationCode))
+    else:
+        cursor.execute('update verificationcode set code = "{}", time = now() where email = "{}"'.format(VerificationCode,email))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return VerificationCode
+
+#根据输入的邮箱查找对应的验证码，并将其与输入的验证码进行比较
+def verify_Code(email, code):
+    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    cursor = conn.cursor()
+
+    cursor.execute('select code, time from verificationcode where email = "{}"'.format(email))
+    conn.commit()
+
+    data = cursor.fetchone()
+    if data != None:
+        VerificationCode, CodeTime = data
+    else:
+        cursor.close()
+        return 0
+    if VerificationCode != code:
+        cursor.close()
+        return 0
+    else:
+        cursor.execute('delete from verificationcode where email = "{}"'.format(email))
+        conn.commit()
+        cursor.close()
+        if (datetime.now()-CodeTime).seconds > 1800:
+            return 0
+        else:
+            return 1
+
+#更新验证信息，超时的删去
+def update_verificationcode():
+    print("in update_verificationcode")
+    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    cursor = conn.cursor()
+
+    cursor.execute('delete from verificationcode where minute(timediff(time,now())) > 30')
+    conn.commit()
+    cursor.close()
 ##############################################################################################
 ##############################################################################################
 ##############################################################################################

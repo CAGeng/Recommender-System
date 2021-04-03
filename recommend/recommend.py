@@ -94,7 +94,7 @@ def get_rec_demographic():
 #Content-based filtering
 # Function that takes in movies' title as input and outputs most similar movies
 
-#这是基于统计的推荐函数，会自动加载之前保存好的cos_similarity矩阵，返回前十相关的电影
+#这是基于相似度的推荐函数，会自动加载之前保存好的cos_similarity矩阵，返回前十相关的电影
 def get_recommendations_mul(title_list, cosine_sim=None,movie_df=None):
 
     if movie_df is None:
@@ -313,9 +313,9 @@ def subt_with_none(m,m_est):#对未统计的评分不计算平方误差的减法
     # print(con)
     return (ans, con)
 
+#latent factor model——潜在因素模型，用于分解矩阵，实现降维
 def LFM_ed2(D, k=3, iter_times=1000, alpha=0.01, learn_rate=0.0001):
     '''
-    此函数实现的是最简单的 LFM 功能
     :param D: 表示需要分解的评价矩阵, type = np.ndarray
     :param k: 分解的隐变量个数
     :param iter_times: 迭代次数
@@ -545,11 +545,11 @@ if __name__ == '__main__':
 
 
     # train()
-    # print(get_result_sim('sft_sister'))
-    # print(get_result_sim('sft_brother'))
-    # print(get_result_sim('sft_enemy'))
+    print(get_result_sim('sft_sister'))
+    print(get_result_sim('sft_brother'))
+    print(get_result_sim('sft_enemy'))
 
-    print(get_result('sft_enemy'))
+    # print(get_result('sft_enemy'))
     # print(get_result('new user'))
 
     # print(get_result_sim('dog'))

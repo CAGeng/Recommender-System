@@ -346,13 +346,13 @@ export default {
             }
 
 
-            this.dialogvisible2 = true
-            for(var i=0; i<this.movielist.length; i++){
-                if(this.movielist[i].id == v){
-                    this.movietitle = this.movielist[i].title
-                    this.content = this.movielist[i].introduce
-                }
-            }
+            // this.dialogvisible2 = true
+            // for(var i=0; i<this.movielist.length; i++){
+            //     if(this.movielist[i].id == v){
+            //         this.movietitle = this.movielist[i].title
+            //         this.content = this.movielist[i].introduce
+            //     }
+            // }
 
             // 跳转到该电影详情页
             this.$router.push({

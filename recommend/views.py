@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http.response import JsonResponse,HttpResponse
 
 import json
-from . import recommend,database
+from . import recommend,database,SendEmail
 import pandas as pd
 import cv2
 # Create your views here.
@@ -507,3 +507,86 @@ def add_movie_sheet(request):
         }
     return JsonResponse(res,safe=False)
 
+
+#邮箱验证相关
+#从request中获取email, 并为其生成验证码
+def generatecode(request):
+    '''
+    para:
+        request:包含
+            email: 邮箱地址
+    output:
+        若验证码生成成功，返回
+            status: success
+            info: 空
+        若添加失败，返回
+            status: fail
+            info:失败原因 
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        email = data['email']
+
+    else:   #debug
+        email = '1256736926@qq.com'
+    code = database.generate_VerificationCode(email)
+    err = SendEmail.sendEmail(email, code)
+    if err == 0:
+        res = {
+           'status' : 'success',
+            'info' : '' 
+        }
+    else:
+        res = {
+            'status' : 'fail',
+            'info' : 'SMTPException'
+        }
+    return JsonResponse(res,safe=False)
+    
+
+#从request中获取email和code,返回验证结果
+def verifycode(request):
+    '''
+    para:
+        request:包含
+            email: 邮箱地址
+    output:
+        若验证码匹配，返回
+            status: success
+            info: True
+        若验证码不匹配，返回
+            status: success
+            info:False
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        email = data['email']
+        code = data['code']
+    else:   #debug
+        email = '1256736926@qq.com'
+        code = '593523'
+    result = database.verify_Code(email, code)
+    if result == 1:
+        res = {
+           'status' : 'success',
+            'info' : 'True' 
+        }
+    else:
+        res = {
+            'status' : 'success',
+            'info' : 'False'
+        }
+    return JsonResponse(res,safe=False)
+
+
+# from apscheduler.schedulers.background import BackgroundScheduler
+# from django_apscheduler.jobstores import DjangoJobStore, register_events, register_job
+# try:
+#     scheduler = BackgroundScheduler()
+#     scheduler.add_job(database.update_verificationcode, 'interval', hours = 1)
+#     scheduler.start()
+# except Exception as e:
+#     print(e)
+#     scheduler.shutdown()
