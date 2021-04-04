@@ -20,7 +20,7 @@ urlpatterns = [
     path('login/', view=views.login),  #登录  1
     path('regist/',view=views.regist), #注册  1
     path('generatecode/',view=views.generatecode), #生成验证码
-    path('verifycode/',view=views.verifycode),
+    path('verifycode/',view=views.verifycode), #检查验证码正确与否
 
     #用户数据增长
     path('addrec/', view=views.add_rec),  #新增评分
