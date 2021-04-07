@@ -362,6 +362,41 @@ def regist(request):
 
     return JsonResponse(res,safe=False)
 
+#logout的函数api，用户注销
+def logout(request):
+    '''
+    para:
+        request:包含
+            name: 用户名
+    output:
+        若注销成功，返回
+            status: success
+            info: 空
+        若注销失败，返回
+            status: fail
+            info: 空
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        name = data['name']
+
+    else:#debug
+        name = 'd'
+
+    err = database.logout(name)
+    if err == 0:
+        res = {
+            'status' : 'success',
+            'info' : ''
+        }
+    elif err == 1:
+        res = {
+            'status' : 'fail',
+            'info' : ''
+        }
+
+    return JsonResponse(res,safe=False)
 
 #addrec的函数api，用于添加一条评分记录
 def add_rec(request):
@@ -579,6 +614,7 @@ def verifycode(request):
             'info' : 'False'
         }
     return JsonResponse(res,safe=False)
+
 
 
 # from apscheduler.schedulers.background import BackgroundScheduler

@@ -19,6 +19,7 @@ urlpatterns = [
     #用户信息
     path('login/', view=views.login),  #登录  1
     path('regist/',view=views.regist), #注册  1
+    path('logout/',view=views.logout), #注销
     path('generatecode/',view=views.generatecode), #生成验证码
     path('verifycode/',view=views.verifycode), #检查验证码正确与否
 

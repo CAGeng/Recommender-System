@@ -171,6 +171,21 @@ def login(name, key):
         print('Username does not exist!')
         return 2
 
+# 用户注销
+def logout(name):
+    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    cursor = conn.cursor()
+
+    cursor.execute('delete from user where name = "{}"'.format(name))
+    cursor.execute('delete from recommend where name = "{}"'.format(name))
+    cursor.execute('delete from rec_list where name = "{}"'.format(name))
+    conn.commit()
+    
+    cursor.close()
+    conn.close()
+
+    return 0
+
 '''
 # 
 '''
