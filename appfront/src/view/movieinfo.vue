@@ -182,7 +182,7 @@ export default {
                 this.urls1 = mdata.urls
                 this.title1 = mdata.title
                 this.introduce1 = mdata.introduce
-
+                this.value = mdata.rating
                 // 获取评论信息
                 this.commentlist = mdata.comment
 

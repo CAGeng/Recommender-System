@@ -419,6 +419,20 @@ def update_verificationcode():
     cursor.execute('delete from verificationcode where minute(timediff(time,now())) > 30')
     conn.commit()
     cursor.close()
+
+###################################新添加的###########################################################
+#获得电影的平均评分
+def get_avg_rating(id):
+    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    cursor = conn.cursor()
+
+    cursor.execute('select vote_average from movie where id={}'.format(id))
+    data = cursor.fetchone()
+    
+    cursor.close()
+    conn.close()
+    return data
+
 ##############################################################################################
 ##############################################################################################
 ##############################################################################################

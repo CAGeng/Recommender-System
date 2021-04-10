@@ -229,6 +229,11 @@ def getm_info(request):
 
     dic = get_movdic(mid)
     dic['comment'] = get_movie_comment(mid)
+    data = database.get_avg_rating(mid)
+    if len(data) > 0:
+        dic['rating'] = data[0]/2
+    else :
+        dic['rating'] = 0
     return JsonResponse(dic,safe=False)
 
 #getm_sim的函数api，用于过渡时期推荐

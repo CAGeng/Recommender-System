@@ -130,7 +130,7 @@ export default {
             swh: 0,
             xs: 0.36,
             dialogvisible1: false,
-            url: 'https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg',
+            url: 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4181532436,846702450&fm=11&gp=0.jpg',
             datalist: [
                 {id:0, text: "测试样例1", urls: 'https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg'},
                 {id:1, text: "测试样例2", urls: 'https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg'},
