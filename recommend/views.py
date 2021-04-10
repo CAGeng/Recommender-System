@@ -204,11 +204,11 @@ def get_movie_comment(mid):
     df = database.find_recommend_id(mid)
     res = []
     for i in range(df.shape[0]):
-        name = df['name'].iloc[i]
+        # name = df['name'].iloc[i]
         comment = df['comment'].iloc[i]
         if comment == '':
             continue
-        res.append([name,comment])
+        res.append({'comment':comment})
     return res
 
 #getm_info的函数api，用于展示一页具体的电影
@@ -342,14 +342,18 @@ def regist(request):
         name = data['name']
         email = data['email']
         key = data['key']
+        code = data['code']
 
     else:#debug
         name = 'aaaaa'
         email = '1@1.com'
         key = '1'
     
-    err = database.add_user(name,key,email)
-    if err == 0:
+    result = database.verify_Code(email, code)
+    if result == 1:
+        err = database.add_user(name,key,email)
+    # print(err,result)
+    if err == 0 and result == 1:
         res = {
             'status' : 'success',
             'info' : ''
@@ -358,6 +362,11 @@ def regist(request):
         res = {
             'status' : 'fail',
             'info' : 'conflict'
+        }
+    elif result == 0:
+        res = {
+            'status' : 'fail',
+            'info' : 'verifyfail'
         }
 
     return JsonResponse(res,safe=False)
@@ -544,7 +553,7 @@ def add_movie_sheet(request):
 
 
 #邮箱验证相关
-#从request中获取email, 并为其生成验证码
+#generatecode的函数api，从request中获取email, 并为其生成验证码
 def generatecode(request):
     '''
     para:
@@ -579,8 +588,8 @@ def generatecode(request):
         }
     return JsonResponse(res,safe=False)
     
-
-#从request中获取email和code,返回验证结果
+# 现在放在regist里了，没有使用
+#verifycode的函数api，从request中获取email和code,返回验证结果
 def verifycode(request):
     '''
     para:

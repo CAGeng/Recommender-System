@@ -384,7 +384,7 @@ def generate_VerificationCode(email):
     conn.close()
     return VerificationCode
 
-#根据输入的邮箱查找对应的验证码，并将其与输入的验证码进行比较
+#根据输入的邮箱查找对应的验证码，并将其与输入的验证码进行比较 , 成功返回1，失败返回0
 def verify_Code(email, code):
     conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
     cursor = conn.cursor()

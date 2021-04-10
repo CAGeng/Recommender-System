@@ -12,7 +12,7 @@
                     </el-input>
                 </el-col>
                 <el-col :span="1">
-                    <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button> 
+                    <el-button type="primary" icon="el-icon-search" @click="search()">搜索</el-button> 
                 </el-col>
                 <!-- 右上角菜单，登陆注册 -->
                 <el-dropdown @command="handlecommand">
@@ -20,7 +20,7 @@
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command="login" :disabled="edi1">登录</el-dropdown-item>
                         <el-dropdown-item command="register" :disabled="edi2">注册</el-dropdown-item>
-                        <el-dropdown-item command="change" :disabled="edi3">修改</el-dropdown-item>
+                        <el-dropdown-item command="change" :disabled="edi3">注销</el-dropdown-item>
                         <el-dropdown-item command="logout" :disabled="edi4">登出</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
@@ -99,13 +99,6 @@
                     <el-button type="primary" @click="login">登录</el-button>
                 </span>
             </el-dialog>
-            <el-drawer
-                :title="movietitle"
-                :visible.sync="dialogvisible2"
-                :direction="'rtl'"
-                :before-close="handleclose2">
-                <span>{{content}}</span>
-            </el-drawer>
         </el-main>
     </el-container>
 </template>
@@ -136,12 +129,7 @@ export default {
             elh: 2000,
             swh: 0,
             xs: 0.36,
-            picwidth: 5,
-            picheight: 1,
             dialogvisible1: false,
-            dialogvisible2: false,
-            content: "",
-            movietitle: "",
             url: 'https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg',
             datalist: [
                 {id:0, text: "测试样例1", urls: 'https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg'},
@@ -176,14 +164,18 @@ export default {
                 sessionStorage.removeItem('user')
                 window.location.reload()
             }
+            else if(v == "change"){
+                this.sendmsg()
+            }
+        },
+
+        // 注销函数
+        sendmsg(){
+            TODO()
         },
 
         handleclose(){
             this.dialogvisible1 = false
-        },
-
-        handleclose2(){
-            this.dialogvisible2 = false
         },
 
         login(){
@@ -234,7 +226,7 @@ export default {
                 this.$router.push({
                     path:'/search',
                     query:{
-                        title:this.input1
+                        name: this.$Base64.encode(JSON.stringify(this.input1))
                     }
                 })
             }
@@ -345,34 +337,14 @@ export default {
                 })
             }
 
-
-            // this.dialogvisible2 = true
-            // for(var i=0; i<this.movielist.length; i++){
-            //     if(this.movielist[i].id == v){
-            //         this.movietitle = this.movielist[i].title
-            //         this.content = this.movielist[i].introduce
-            //     }
-            // }
-
             // 跳转到该电影详情页
             this.$router.push({
                 path: '/movieinfo',
                 query:{
-                    mid : v
+                    mid : this.$Base64.encode(JSON.stringify(v))
                 }
             })
         },
-
-        // 暂时不需要
-        // detail2( v ){
-        //     this.dialogvisible2 = true
-        //     for(var i=0; i<this.movielist2.length; i++){
-        //         if(this.movielist2[i].id == v){
-        //             this.movietitle = this.movielist2[i].title
-        //             this.content = this.movielist2[i].introduce
-        //         }
-        //     }
-        // }
         
     },
     

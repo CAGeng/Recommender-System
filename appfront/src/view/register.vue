@@ -10,9 +10,11 @@
                 <v-form ref="form">
                     <v-text-field v-model="form.username" label="username" type="text" counter="20"></v-text-field>
                     <v-text-field v-model="form.e_mail" label="e-mail" type="text"></v-text-field>
+                    <v-text-field v-model="form.vericode" label="verify" type="text"></v-text-field>
                     <v-text-field v-model="form.password" label="password" type="password" counter="16"></v-text-field>
                     <v-text-field v-model="form.rpassword" label="repeatpassword" type="password" counter="16"></v-text-field>
                     <v-btn @click="register()">注册</v-btn>
+                    <v-btn absolute right @click="getvericode()">获取邮箱验证码</v-btn>
                 </v-form>
             </v-card-text>
         </v-card>
@@ -33,7 +35,8 @@ export default {
                 username: '',
                 e_mail: '',
                 password: '',
-                rpassword: ''
+                rpassword: '',
+                vericode: ''
             },
         }
     },
@@ -50,7 +53,8 @@ export default {
                 axiosInstance.post('http://localhost:8000/api/regist/',{
                     name: this.form.username,
                     email: this.form.e_mail,
-                    key: this.form.password
+                    key: this.form.password,
+                    code: this.form.vericode
                 })
                 .then((response)=>{
                     console.log(response)
@@ -69,6 +73,11 @@ export default {
                                 confirmButtonText:'确定'
                             })
                         }
+                        else if(this.res_data['info'] == 'verifyfail'){
+                            this.$alert('验证码错误', 'FAIL', {
+                                confirmButtonText:'确定'
+                            })
+                        }
                     }
 
                 }).catch((response)=>{
@@ -80,12 +89,29 @@ export default {
                     confirmButtonText:'确定'
                 })
             }
+        },
+        getvericode(){
+            axiosInstance.post('http://localhost:8000/api/generatecode/',{
+                email: this.form.e_mail,
+            })
+            .then((response)=>{
+                var data = response.data
+                if(data['status'] != "success"){
+                    this.$alert('邮箱错误', 'FAIL', {
+                        confirmButtonText:'确定'
+                    })
+                }
+                else{
+                    this.$alert('已发送', 'SUCCESS', {
+                        confirmButtonText:'确定'
+                    })
+                }
+            }).catch((response)=>{
+                console.log(response)
+            })
         }
-    },
     
-    mounted(){
-        
-    }
+    },
 }
 </script>
 

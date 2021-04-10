@@ -20,11 +20,11 @@ urlpatterns = [
     path('login/', view=views.login),  #登录  1
     path('regist/',view=views.regist), #注册  1
     path('logout/',view=views.logout), #注销
-    path('generatecode/',view=views.generatecode), #生成验证码
-    path('verifycode/',view=views.verifycode), #检查验证码正确与否
+    path('generatecode/',view=views.generatecode), #生成验证码  1
+    path('verifycode/',view=views.verifycode), #检查验证码正确与否，# 现在放在regist里了，没有使用
 
     #用户数据增长
-    path('addrec/', view=views.add_rec),  #新增评分
+    path('addrec/', view=views.add_rec),  #新增评分  1
     path('addbrowse/',view=views.add_browse), #新增浏览记录     1
     path('addmvsheet/',view=views.add_movie_sheet), #新增推荐电影单
 

@@ -1,86 +1,94 @@
 <template>
     <el-container>
-        <el-header style="text-align: right; font-size: 100%">
-            <el-row :gutter="20" style="marginTop:10px">
-                <el-col :span="3" :offset="1">
-                    <el-image :src="url" :fit="'cover'">
-                    </el-image>
-                </el-col>
-                <!-- 从详情页中返回 -->
-                <el-col :span="1">
-                    <el-button type="primary" icon="el-icon-search" @click="back">返回</el-button> 
-                </el-col>
-                <el-dropdown @command="handlecommand">
-                    <i class="el-icon-s-custom" style="margin-right: 15px"></i>
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item command="login" :disabled="edi1">登录</el-dropdown-item>
-                        <el-dropdown-item command="register" :disabled="edi2">注册</el-dropdown-item>
-                        <el-dropdown-item command="change" :disabled="edi3">修改</el-dropdown-item>
-                        <el-dropdown-item command="logout" :disabled="edi4">登出</el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
-                <el-avatar icon="el-icon-user"></el-avatar>
-            </el-row>
-        </el-header>
         <el-main>
-            <el-col :span="18" :offset="3">
-                <v-container class="wntj">
-
-                  <!-- 详情 -->
-                    <v-toolbar dark height="50%" src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
-                        <v-toolbar-title>电影详情</v-toolbar-title>
+            <v-container>
+                <v-toolbar dark height="50%" src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
+                    <v-toolbar-title>电影详情</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-btn @click="goback()">返回</v-btn>
+                </v-toolbar>
+                <v-container class="mcc">
+                    <v-card class="mcco">
+                        <v-toolbar dark height="50px" src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
+                            <v-toolbar-title>{{title1}}</v-toolbar-title>
+                            <v-spacer></v-spacer>
+                            <el-rate
+                                v-model="value"
+                                disabled
+                                show-score
+                                text-color="#ff9900"
+                                score-template="{value}">
+                            </el-rate>
+                        </v-toolbar>
+                        <v-container class="mcc2">
+                            <el-row class="mcrd2">
+                                <!-- 图片 -->
+                                <img :src="urls1" class="mimg1"/>
+                            </el-row>
+                        </v-container>
+                    </v-card>
+                    <v-card class="mcco2">
+                        <v-card-title>
+                            详细介绍
+                        </v-card-title>
+                        <v-divider></v-divider>
+                        {{introduce1}}
+                    </v-card>
+                </v-container>
+                <v-container class="mcc1">
+                    <v-toolbar dark height="50px" src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
+                        <v-toolbar-title>反馈</v-toolbar-title>
                         <v-spacer></v-spacer>
                     </v-toolbar>
-                    <v-container class="cc">
-                      <!-- 标题 -->
-                        <v-toolbar dark height="50px" src="https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg">
-                                <v-toolbar-title>{{ this.movietitle }}</v-toolbar-title>
-                                <v-spacer></v-spacer>
-                        </v-toolbar>
-                        <!-- 图片 -->
-                        <v-card  v-for="item in picturelist" :key="item.id" class="crd1" color="#000000">
-                            <v-container class="cc2">
-                                <el-row class="crd2">
-                                    <img :src="item" class="img1"/>
-                                </el-row>
-                            </v-container>
-                        </v-card>
-                    </v-container>
-
-                    <!-- 类似电影 -->
-                  <v-toolbar dark height="50%" src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg" style="margin-top:50px">
+                    <v-card>
+                        <el-input
+                            type="textarea"
+                            :rows="5"
+                            placeholder="请输入电影评论"
+                            v-model="usercomment">
+                        </el-input>
+                        <el-rate
+                            v-model="uservalue"
+                            show-text>
+                        </el-rate>
+                        <v-divider></v-divider>
+                        <el-button @click="userback()">提交反馈</el-button>
+                    </v-card>
+                </v-container>
+                <v-container class="mcc1">
+                    <v-toolbar dark height="50px" src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
+                        <v-toolbar-title>电影评论</v-toolbar-title>
+                        <v-spacer></v-spacer>
+                    </v-toolbar>
+                    <v-card>
+                        <el-table :data="commentlist" style="width: 100%">
+                            <el-table-column prop="comment" label="评论" class="temp"></el-table-column>
+                        </el-table>
+                    </v-card>
+                </v-container>
+                <v-container class="mcc1">
+                    <v-toolbar dark height="50%" src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
                         <v-toolbar-title>相似影片</v-toolbar-title>
                         <v-spacer></v-spacer>
                     </v-toolbar>
-                    <v-container class="cc">
-                        <v-card  v-for="item in simlist" :key="item.id" class="crd1" color="#000000">
+                    <v-container class="mccc">
+                        <v-card  v-for="item in simlist" :key="item.id" class="mcrd1" color="#000000">
                             <v-toolbar dark height="50px" src="https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg">
                                 <v-toolbar-title>{{ item.title }}</v-toolbar-title>
                                 <v-spacer></v-spacer>
                                 <!-- 进入电影详情页 -->
                                 <v-btn @click="detail(item.id)">电影详情</v-btn>
                             </v-toolbar>
-                            <v-container class="cc2">
-                                <el-row class="crd2">
+                            <v-container class="mcc2">
+                                <el-row class="mcrd2">
                                     <!-- 图片 -->
-                                    <img id="test" :src="item.urls" class="img1"/>
+                                    <img :src="item.urls" class="mimg1"/>
                                 </el-row>
                             </v-container>
                         </v-card>
                     </v-container>
-
-                    <!-- 这里展示介绍和影评 -->
-
                 </v-container>
-            </el-col>                    
-
-            <el-drawer
-                :title="movietitle"
-                :visible.sync="dialogvisible2"
-                :direction="'rtl'"
-                :before-close="handleclose2">
-                <span>{{content}}</span>
-            </el-drawer>
+            </v-container>                
         </el-main>
     </el-container>
 </template>
@@ -93,107 +101,96 @@ export default {
         document.body.style.background = "#000000"
     },
 
+
     data() {
         return {
-            input1: '',
-            form:{
-                username: '',
-                password: '',
-            },
-            res_data:{
-                status: '',
-                info: '',
-            },
-            edi1: false,
-            edi2: false,
-            edi3: true,
-            edi4: true,
-            elh: 2000,
-            swh: 0,
-            xs: 0.36,
-            picwidth: 5,
-            picheight: 1,
-            dialogvisible1: false,
-            dialogvisible2: false,
-            content:'',
-            url: 'https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg',
-
-            movietitle: "",
-            introduce: "",
-            picturelist: [
+            title1: "测试样例1",
+            usercomment: "",
+            value: 3.7,
+            uservalue: null,
+            urls1: "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
+            introduce1: "我就想试试他到底会不会自动换行啊啊啊啊啊啊啊啊啊啊啊啊啊啊看来成功了",
+            commentlist:[
+                {comment:"测试样例1如果太长了怎么办啊兄弟我下啊水电费缴纳数据库的管理asd发射点发航空安徽省看到了发as地方阿十大发射点发士大夫撒旦发射点发阿萨的发士大夫阿萨的法师阿斯蒂芬斯蒂芬"},
+                {comment:"测试样例2"},
+                {comment:"测试样例3"},
+                {comment:"测试样例4"},
+                {comment:"测试样例5"},
             ],
-            simlist:[],
+            simlist:[
+                {id:0, title: "测试样例1", urls: 'https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg', introduce:"测试样例1"},
+                {id:1, title: "测试样例2", urls: 'https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg', introduce:"测试样例2"},
+                {id:2, title: "测试样例3", urls: 'https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg', introduce:"测试样例3"},
+                {id:3, title: "测试样例4", urls: 'https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg', introduce:"测试样例4"}
+            ],
         }
     },
 
     methods: {
-        handlecommand( v ){
-            if(v == "login"){
-                this.dialogvisible1 = true
-            }
-            else if(v == "register"){
-                this.$router.push({ path: '/register' })
-            }
-            else if(v == "logout"){
-                sessionStorage.removeItem('user')
-                window.location.reload()
-            }
-        },
 
-        handleclose(){
-            this.dialogvisible1 = false
-        },
-
-        handleclose2(){
-            this.dialogvisible2 = false
-        },
-
-        login(){     
-        },
-
-        register(){
-        },
-
-        back(){
+        goback(){
             this.$router.push('/home')
         },
 
-        setsize(){
-            this.elh = this.swh * this.xs
-        },
-
-        setconfig(){
-            if(sessionStorage.getItem('user')){
-                this.edi1 = true
-                this.edi2 = true
-                this.edi3 = false
-                this.edi4 = false
-            }
-            else{
-                this.edi1 = false
-                this.edi2 = false
-                this.edi3 = true
-                this.edi4 = true
-            }
+        userback(){
+            var movieid2 = JSON.parse(this.$Base64.decode(this.$route.query.mid))
+            var user = sessionStorage.getItem('user')
+            user = JSON.parse(user)
+            var username = user.username
+            axiosInstance.post('http://localhost:8000/api/addrec/',{
+                mid : movieid2,
+                name:username,
+                recommend:this.usercomment,
+                rating:this.uservalue
+            })
+            .then((response)=>{
+                var data = response.data
+                // console.log(res_data)
+                if(data['status'] == 'success'){
+                    if(data['info'] == 'modify successfully'){
+                        this.$alert("修改评分成功",'Success Message',{
+                            confirmButtonText:'确定'
+                        })
+                    }
+                    else{
+                        this.$alert("评分成功",'Success Message',{
+                            confirmButtonText:'确定'
+                        })
+                    }
+                }
+                else{
+                    // fail
+                    this.$alert("抱歉~我们出了一点错误~",'FAIL',{
+                        confirmButtonText:'确定'
+                    })
+                    console.log(data['info'])
+                }
+            }).catch((response)=>{
+                console.log(response)
+            })
         },
 
         getData(){
-            var movieid = this.$route.query.mid
+            var movieid = JSON.parse(this.$Base64.decode(this.$route.query.mid))
             axiosInstance.post('http://localhost:8000/api/minfo/',{
                 mid : movieid
             })
             .then((response)=>{
                 console.log(response)
                 var mdata = response.data
-                this.picturelist.push(mdata.urls)
-                this.movietitle = mdata.title
+                // this.picturelist.push(mdata.urls)
+                this.urls1 = mdata.urls
+                this.title1 = mdata.title
+                this.introduce1 = mdata.introduce
+
+                // 获取评论信息
+                this.commentlist = mdata.comment
 
                 // 获取相似列表
                 axiosInstance.post('http://localhost:8000/api/simlist/',{
-                    m_name : this.movietitle
+                    m_name : this.title1
                 })
                 .then((response)=>{
-                    console.log(response)
                     this.simlist = response.data
                 }).catch((response)=>{
                     console.log(response)
@@ -229,34 +226,26 @@ export default {
                 })
             }
 
-
-            // this.dialogvisible2 = true
-            // for(var i=0; i<this.movielist.length; i++){
-            //     if(this.movielist[i].id == v){
-            //         this.movietitle = this.movielist[i].title
-            //         this.content = this.movielist[i].introduce
-            //     }
-            // }
-
             // 跳转到该电影详情页
             this.$router.push({
                 path: '/movieinfo',
                 query:{
-                    mid : v
+                    mid :  this.$Base64.encode(JSON.stringify(v))
                 }
             })
         },
 
         
     },
-    
-    mounted(){
-        this.swh = window.innerWidth
-        this.setsize()
+
+    watch:{
+        $route (to, from){
+            this.$router.go(0)
+        }
     },
 
     created(){
-        this.setconfig()
+       
         this.getData()
     }
 }
@@ -264,70 +253,63 @@ export default {
 
 <style>
 
-    .img{
-        max-height: 100%;
-        max-width: 100%;
-        min-height: 50%;
-        object-fit: contain;
-    }
-
-    .imfg{
-        width:100%;
-        height:80%;
+    .mcc{
+        padding-left: 0px;
+        padding-right: 0px;
         display: flex;
-        justify-content: center;
-        flex-direction: column;
-        align-items: center;
     }
 
-    .try{
-        width:100%;
-    }
-
-    .exp{
-        font-size:100%;
-        color:white;
-        text-align:center;
-        display:block;
-    }
-
-    .wntj{
-        display: flex;
-        flex-direction: column;
-        margin-top: 20px;
+    .mcc1{
         padding-left: 0px;
         padding-right: 0px;
     }
 
-    .crd1{
-        width: 49.5%;
-        height: 300px;
-        margin-top: 10px;
+    .mcco{
+        width: 70%;
     }
 
-    .crd2{
-        width:100%;
-        height:250px;
+    .mcco2{
+        width: 30%;
+        height: 350px;
+    }
+
+    .mcco3{
+        width: 100%;
+    }
+
+    .mcc2{
+        padding: 0px;
+    }
+
+    .mcrd2{
+        width: 100%;
+        height: 300px;
         display: flex;
     }
 
-    .cc{
+    .mimg1{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .mcrd1{
+        width: 49.5%;
+        height: 350px;
+        margin-top: 10px;
+    }
+
+    .temp{
+        width: 100%;
+    }
+
+    .mccc{
         padding-left: 0px;
         padding-right: 0px;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: space-between;
         display: flex;
-    }
-    
-    .cc2{
-        padding: 0px;
-    }
-
-    .img1{
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
     }
 
 </style>
