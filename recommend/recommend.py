@@ -213,10 +213,13 @@ def collaborative_filtering(ratings):
 
 #下面的推荐模型用于对已经”稳定“在推荐系统中的用户和电影进行推荐，对于特定的用户，他会按照一定的权重考虑每个电影在
 #上面三种推荐策略中的评分，最终根据总评顺序获得最终的推荐。
-def get_recommendation(userid,title_list):
+#权重系数 a: content  b: demographic c: svd
+def get_recommendation(userid,title_list, a=20,b=0.33,c=0.33):
     movie_df = pd.read_csv(basepath + "/recommend_model/movie.csv")
 
     def get_score_1(x,title_list,cosine_sim,indices): #content based
+        if a == 0:
+            return 0
         score = 0.0
         idx0 = x
         con = 0
@@ -242,15 +245,21 @@ def get_recommendation(userid,title_list):
     indices = pd.Series(movie_df.index, index=movie_df['title'])
     cosine_sim = np.loadtxt(basepath + "recommend_model/cosine_sim.txt")
 
-    a = 20
-    b = 0.33
-    c = 0.33
     def get_score_final(x,userid,title_list,cosine_sim,indices,a,b,c,movie_df):
-        score1 = get_score_1(x,title_list,cosine_sim,indices)
         mid = movie_df.loc[x,'id']
         # print('mid:',mid)
-        score2 = get_score_2(mid)
-        score3 = get_score_3(mid,userid)
+        if a == 0:
+            score1 = 0
+        else:
+            score1 = get_score_1(x,title_list,cosine_sim,indices)
+        if b == 0:
+            score2 = 0
+        else:
+            score2 = get_score_2(mid)
+        if c == 0:
+            score3 = 0
+        else:
+            score3 = get_score_3(mid,userid)
         # print(x)
         # print('----')
         # print(score1 * a)
@@ -508,12 +517,12 @@ def mid_to_title(id):
     df = find_movie_id(id)
     return df['title'].iloc[0]
 
-def get_result(user_id):
+def get_result(user_id,a=20,b=0.33,c=0.33):
     if 1:   #用户处于稳定阶段
         #获得看过的电影列表：waiting to finish
         browse_record = get_browse_list(user_id)
         browse_record = [mid_to_title(x) for x in browse_record]
-        return get_recommendation(user_id,browse_record)
+        return get_recommendation(user_id,browse_record,a,b,c)
     else : #过渡阶段
         return get_recommend_svdsim(user_id)
 
@@ -545,9 +554,12 @@ if __name__ == '__main__':
 
 
     # train()
-    print(get_result_sim('sft_sister'))
-    print(get_result_sim('sft_brother'))
-    print(get_result_sim('sft_enemy'))
+    # print(get_result_sim('sft_sister'))
+    # print(get_result_sim('sft_brother'))
+    print(get_result('sft_enemy'))
+
+    # print(get_result('sss'))
+    # print(get_rec_demographic())
 
     # print(get_result('sft_enemy'))
     # print(get_result('new user'))

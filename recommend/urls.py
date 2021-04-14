@@ -26,9 +26,12 @@ urlpatterns = [
     #用户数据增长
     path('addrec/', view=views.add_rec),  #新增评分  1
     path('addbrowse/',view=views.add_browse), #新增浏览记录     1
-    path('addmvsheet/',view=views.add_movie_sheet), #新增推荐电影单
 
     path('images/', view=views.read_img), #暂时没用
+
+    #电影单相关
+    path('addmvsheet/',view=views.add_movie_sheet), #新增推荐电影单
+    path('addcol/',view=views.add_collection), #为一个用户添加收藏
 ]
 
 

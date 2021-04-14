@@ -48,6 +48,7 @@ def create_tables():
                         password varchar(15) not null,\
                         email varchar(100) not null,\
                         browse_record varchar(3000) default "[]",\
+                        collections varchar(10000) default "", \
                         primary key(name));')
     conn.commit()
     # debug
@@ -66,8 +67,10 @@ def create_tables():
 
     # create rec_list table
     cursor.execute('create table rec_list(\
+                        list_id varchar(50) not null,\
                         name varchar(25) not null,\
-                        movie_list varchar(3000) not null);')
+                        movie_list varchar(3000) not null,\
+                        primary key(list_id));')
     conn.commit()
     # debug
     print('Success create rec_list table!')
@@ -265,6 +268,12 @@ def user_check_decorator(f):
 
     return check_and_f
 
+import time,hashlib
+# 生成id， 目前用于电影单表 
+def create_id():
+    m = hashlib.md5(str(time.perf_counter()).encode('utf-8'))
+    return m.hexdigest()
+
 #推荐列表相关的
 # 向推荐列表（类似歌单的形式）中添加一个条目(name,mlist)，不会合并
 @user_check_decorator
@@ -281,10 +290,14 @@ def add_rec_list(name,mlist):
     if rec == "":
         print('Empty list')
         return 2
+    
+    # 生成id
+    listid = create_id()
+    
     conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
     cursor = conn.cursor()
 
-    cursor.execute('insert into rec_list (name,movie_list) values ("{}", "{}")'.format(name,rec))
+    cursor.execute('insert into rec_list (list_id,name,movie_list) values ("{}", "{}","{}")'.format(listid,name,rec))
     conn.commit()
 
     cursor.close()
@@ -311,6 +324,57 @@ def get_rec_list(name):
             if con >= 10:
                 return target
     return target
+
+#为用户添加一个电影单作为收藏
+def add_collection(name, list_id):
+    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    cursor = conn.cursor()
+
+    cursor.execute('select collections from user where name = "{}"'.format( name))
+    data = cursor.fetchone()
+
+    if data == None:
+        return 1 #用户不存在的错误
+    data = data[0]
+
+    # collections的格式为："//a//b//c"
+    data += "//" + list_id
+    cursor.execute('UPDATE user set collections = "{}" where name = "{}"'.format(data,name))
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 0
+
+#获得一个用户所有收藏电影单的id，返回一个列表
+def get_user_colletions(name):
+    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    cursor = conn.cursor()
+
+    cursor.execute('select collections from user where name = "{}"'.format( name))
+    data = cursor.fetchone()
+    cursor.close()
+    conn.close()
+
+    if data == None:
+        return 1 #用户不存在的错误
+    data = data[0]
+
+    collections = data.split('//')
+    if len(collections) > 0:
+        collections = collections[1:]   #去掉第一个空字符串
+    return collections
+
+#根据电影单的id，获得这个电影单中的电影列表，返回一个列表
+def get_movie_inlist(list_id):
+    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    cursor = conn.cursor()
+
+    cursor.execute('select * from rec_list where list_id = "{}"'.format( list_id))
+    data = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
 
 #用户浏览历史记录相关
 def get_browse_list(name):

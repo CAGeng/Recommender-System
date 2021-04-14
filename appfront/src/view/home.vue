@@ -54,6 +54,10 @@
                                 <v-spacer></v-spacer>
                                 <!-- 进入电影详情页 -->
                                 <v-btn @click="detail(item.id)">电影详情</v-btn>
+
+                                <!--新后端测试用 -->
+                                <!-- <v-btn @click="fttest()">电影详情</v-btn> -->
+
                             </v-toolbar>
                             <v-container class="cc2">
                                 <el-row class="crd2">
@@ -153,6 +157,17 @@ export default {
     },
 
     methods: {
+        // 新后端测试
+        fttest(){
+            axiosInstance.post('http://localhost:9999/',{
+                name: 'sf',
+                key: '111'
+            })
+            .then((response)=>{
+                console.log(response)
+            })
+        },
+
         handlecommand( v ){
             if(v == "login"){
                 this.dialogvisible1 = true
@@ -271,7 +286,8 @@ export default {
                 console.log(test)
 
                 axiosInstance.post('http://localhost:8000/api/getm/',{
-                    uid: test
+                    uid: test,
+                    method:'common'
                 })
                 .then((response)=>{
                     console.log(response)
@@ -292,7 +308,8 @@ export default {
             }
             else{
                 axiosInstance.post('http://localhost:8000/api/getm/',{
-                    uid: ''
+                    uid: '',
+                    method:'demographic'
                 })
                 .then((response)=>{
                     console.log(response)
