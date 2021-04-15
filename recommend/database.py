@@ -497,6 +497,31 @@ def get_avg_rating(id):
     conn.close()
     return data
 
+#orzorz 
+#按照类别搜索
+def search_by_kind(kind):
+    db = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+
+    df = pd.read_sql('select * from movie ', db)
+
+    # 判断是否属于这一类
+    def have_kind(x,kind):
+        from ast import literal_eval
+        x = literal_eval(x)
+        if kind in x:
+            return 1
+        else :
+            return 0
+    
+    ans = []
+    for i in range(df.shape[0]):
+        if have_kind(df['keywords'][i], kind):
+            ans.append(df['id'][i])
+
+    return ans
+
+
+
 ##############################################################################################
 ##############################################################################################
 ##############################################################################################
@@ -602,7 +627,6 @@ def init_tables_base():
     #         s = random.uniform(0,5)
     #         # print(i,m,s)
     #         add_recommend(ids[m],users[i],s,'')
-    
     
 
 #用于检验推荐算法的构造样例

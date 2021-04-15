@@ -554,9 +554,9 @@ if __name__ == '__main__':
 
 
     # train()
-    # print(get_result_sim('sft_sister'))
-    # print(get_result_sim('sft_brother'))
-    print(get_result('sft_enemy'))
+    print(get_result_sim('sft_sister'))
+    print(get_result_sim('sft_brother'))
+    print(get_result_sim('sft_enemy'))
 
     # print(get_result('sss'))
     # print(get_rec_demographic())

@@ -171,6 +171,28 @@ def search_movie(request):
     info_list = get_moviedic_list(movie_id_list)
     return JsonResponse(info_list,safe=False)
 
+#orzorz
+#searchmvbykind的函数api，用于搜索给定类别的电影
+def search_movie_bykind(request):
+    '''
+    para:
+        request:
+            kind: 电影类别
+    output:
+        电影信息的列表（字典表）
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        kind = data['kind']
+    else:#debug
+        kind = 'Drama'
+
+    movie_id_list = database.search_by_kind(kind)
+    if len(movie_id_list) > 8:
+        movie_id_list = movie_id_list[:8]
+    info_list = get_moviedic_list(movie_id_list)
+    return JsonResponse(info_list,safe=False)
     
 #login 的api响应，接收用户名和密码
 def login(request):
