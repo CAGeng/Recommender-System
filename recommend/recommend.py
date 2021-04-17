@@ -517,6 +517,7 @@ def mid_to_title(id):
     df = find_movie_id(id)
     return df['title'].iloc[0]
 
+#不设置abc将采取默认权重
 def get_result(user_id,a=20,b=0.33,c=0.33):
     if 1:   #用户处于稳定阶段
         #获得看过的电影列表：waiting to finish
