@@ -515,7 +515,7 @@ def search_by_kind(kind):
     
     ans = []
     for i in range(df.shape[0]):
-        if have_kind(df['keywords'][i], kind):
+        if have_kind(df['genres'][i], kind):
             ans.append(df['id'][i])
 
     return ans
@@ -601,7 +601,7 @@ def init_tables_base():
         movie = movie_df.loc[i,:]
         ids.append(movie_df.loc[i,'id'])
         # print(movie['id'],movie['title'],movie['cast'],movie['crew'],movie['vote_count'],movie['vote_average'],movie['keywords'],movie['genres'])
-        add_movie(movie['id'],movie['title'],movie['cast'],movie['crew'],movie['keywords'],movie['genres'],movie['vote_count'],movie['vote_average'])
+        add_movie(movie['id'],movie['title'],movie['cast'],movie['crew'],movie['genres'],movie['keywords'],movie['vote_count'],movie['vote_average'])
 
 
     #//////////////////////////////////////////////////////////////////////////////////////////////////////////////

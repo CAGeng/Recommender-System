@@ -55,7 +55,7 @@
                                 <!-- 进入电影详情页 -->
                                 <v-btn @click="detail(item.id)">电影详情</v-btn>
 
-                                <!--新后端测试用 -->
+                                
                                 <!-- <v-btn @click="fttest()">电影详情</v-btn> -->
 
                             </v-toolbar>
