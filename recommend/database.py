@@ -82,6 +82,14 @@ def create_tables():
                         time datetime not null);')
     conn.commit()
     print('Success create verificationcode table!')
+
+    #create Administrators table
+    cursor.execute('create table administrators(\
+                        name varchar(25) not null,\
+                        primary key(name));')
+
+    print('Success create verificationcode table!')
+
     cursor.close()
     conn.close()
 
@@ -104,6 +112,16 @@ def find_movie_title(title):
     df = pd.read_sql('select * from movie where title LIKE "%{}%"'.format(title), db)    
     return df
 
+#获取一个新的电影id
+def getMovieid():
+    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    cursor = conn.cursor()
+    
+    cursor.execute('select max(id) from movie')
+    data = cursor.fetchone()
+    movieid = data[0] + 1
+
+    return movieid
 
 # 添加电影
 def add_movie(id, title, cast, crew, genres, keywords, vote_count, vote_average):
@@ -142,6 +160,35 @@ def find_user(name):
     conn.close()
 
     return data
+
+#添加管理员权限
+#执行add_user后 执行add_administrators
+def add_administrators(name):
+    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    cursor = conn.cursor()
+
+    cursor.execute('select * from administrators where name = "{}"'.format(name))
+    if cursor.fetchone() != None:
+        print('administrator name exists!')
+        return 1
+
+    cursor.execute('insert into administrators (name) values ("{}")'.format(name))
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 0
+
+#获取该用户的访问权限
+def find_admin(name):
+    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    cursor = conn.cursor()
+
+    cursor.execute('select * from administrators where name = "{}"'.format(name))
+    if cursor.fetchone() != None:
+        return True
+    else:
+        return False
 
 # 添加用户
 def add_user(name, key, email):

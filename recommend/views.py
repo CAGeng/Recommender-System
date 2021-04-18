@@ -194,6 +194,7 @@ def search_movie_bykind(request):
     info_list = get_moviedic_list(movie_id_list)
     return JsonResponse(info_list,safe=False)
     
+
 #login 的api响应，接收用户名和密码
 def login(request):
     '''
@@ -213,10 +214,14 @@ def login(request):
         key = '080090'
 
     err = database.login(name,key)
+
+    #获取该用户的访问权限
+    isAdmin = database.find_admin(name)
+
     if err == 0:
         dic = {
             'status':'success',
-            'info': ''
+            'info': 'admin' if isAdmin else 'normal'
         }
     elif err == 1:
         dic = {
@@ -228,7 +233,6 @@ def login(request):
             'status':'fail',
             'info': 'wrong name'
         }
-
     return JsonResponse(dic,safe=False)
 
 #根据电影id，获得该电影的一些用户评论
@@ -729,6 +733,65 @@ def upload_movieImg(request):
     return JsonResponse(res, safe=False)
 
 #电影上传
+# def upload_movie(request):
+#     '''
+#     para:
+#         request:包含
+#             title, cast, crew, keywords, genres
+#     output:
+#         若上传成功匹配，返回
+#             status: success
+#             info: 空
+#         若上传失败，返回
+#             status: fail
+#             info:失败原因
+#     '''
+#     if request.method == 'POST':
+#         data = json.loads(request.body.decode('utf-8'))
+#         movieid = data['movieid']
+#         title = data['title']
+#         cast = data['cast']
+#         crew = data['crew']
+#         keywords = data['keywords']
+#         genres = data['genres']
+#     else:
+#         movieid = 0
+#         title = 'debug'
+#         cast = ['debug','d2','d3']
+#         crew = {'Director': "debug", "direc": "de2"}
+#         keywords = ['debug','d2','d3']
+#         genres = ['debug','d2','d3']
+
+#     def list2string(mylist):
+#         # mylist = [x['value'] for x in mylist]
+#         mylist = "[\'" + '\',\''.join(mylist) + "\']"
+#         return mylist
+    
+#     cast = list2string(cast)
+#     keywords = list2string(keywords)
+#     genres = list2string(genres)
+
+#     crewstr = ''
+#     for x in crew.items():
+#         crewstr += ',' + x[0] + ':' + x[1]
+#     if len(crewstr) >= 1:    
+#         crewstr = crewstr[1:]
+
+#     # print(movieid,title,cast ,crewstr, keywords, genres)
+#     err = database.add_movie(movieid, title, cast, crew, keywords, genres, 0, 0)
+#     if err == 0:
+#         res = {
+#            'status' : 'success',
+#             'info' : '' 
+#         }
+#     else:
+#         res = {
+#             'status' : 'success',
+#             'info' : 'movie exits!'
+#         }
+#     return JsonResponse(res,safe=False)
+   
+#电影上传
 def upload_movie(request):
     '''
     para:
@@ -749,32 +812,36 @@ def upload_movie(request):
         cast = data['cast']
         crew = data['crew']
         keywords = data['keywords']
-        genres = data['genres']
+        genres = data['genres']  #这个是数组，其他是字典表
     else:
         movieid = 0
         title = 'debug'
-        cast = ['debug','d2','d3']
-        crew = {'Director': "debug", "direc": "de2"}
-        keywords = ['debug','d2','d3']
-        genres = ['debug','d2','d3']
+        cast = [{'value':'debug'}]
+        crew = [{'value':'debug'},{'value':'debug2'}]
+        keywords = [{'value':'debug'}]
+        genres = ['g1','g2']
 
     def list2string(mylist):
-        # mylist = [x['value'] for x in mylist]
+        mylist = [x['value'] for x in mylist]
         mylist = "[\'" + '\',\''.join(mylist) + "\']"
         return mylist
     
+    def get_director(crew):
+        crewstr = ''
+        for x in crew:
+            crewstr += ',Director:' + x['value']
+        if len(crewstr) >= 1:    
+            crewstr = crewstr[1:]
+        return crewstr
+
     cast = list2string(cast)
-    keywords = list2string(keywords)
-    genres = list2string(genres)
+    crew = get_director(crew)
+    genres2 = list2string(keywords)
+    # 由于历史原因，genres和keywords要翻过来！
+    keywords2 = "[\'" + '\',\''.join(genres) + "\']"
 
-    crewstr = ''
-    for x in crew.items():
-        crewstr += ',' + x[0] + ':' + x[1]
-    if len(crewstr) >= 1:    
-        crewstr = crewstr[1:]
-
-    # print(movieid,title,cast ,crewstr, keywords, genres)
-    err = database.add_movie(movieid, title, cast, crew, keywords, genres, 0, 0)
+    print(movieid, title, cast, crew, keywords2, genres2, 0, 0)
+    err = database.add_movie(movieid, title, cast, crew, keywords2, genres2, 0, 0)
     if err == 0:
         res = {
            'status' : 'success',
@@ -786,7 +853,6 @@ def upload_movie(request):
             'info' : 'movie exits!'
         }
     return JsonResponse(res,safe=False)
-   
 
 # from apscheduler.schedulers.background import BackgroundScheduler
 # from django_apscheduler.jobstores import DjangoJobStore, register_events, register_job

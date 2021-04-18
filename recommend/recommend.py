@@ -554,7 +554,7 @@ if __name__ == '__main__':
     # print(get_recommend_svdsim(1))
 
 
-    # train()
+    train()
     print(get_result_sim('sft_sister'))
     print(get_result_sim('sft_brother'))
     print(get_result_sim('sft_enemy'))
