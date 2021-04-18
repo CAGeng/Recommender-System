@@ -93,26 +93,36 @@ def get_movie_no_user():
     return info_list
 
 #getm 的api响应，返回前端电影信息列表
+#orzorz sft 加入了不同的排序方式的功能
 def get_movies(request):
     '''
     para:
         request:包含
             uid: 用户名
+            method: 排序方法
     output:信息列表
     '''
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
         
         uid = data['uid']
+        method = data['method']
     else:#debug
         uid = 'sft'
+        # method = 'demographic'
+        method = 'common'
 
     if uid == '':  #没有登录情况的推荐列表
         info_list = get_movie_no_user()
         rec_info = info_list[5:15]
         return JsonResponse(rec_info,safe=False)
 
-    df = recommend.get_result(uid)
+    if method == 'common':
+        df = recommend.get_result(uid) #默认权重
+    elif method == 'demographic':
+        df = recommend.get_result(uid,a=0,b=1,c=0) #纯统计数据模式
+    elif method == 'content':
+        df = recommend.get_result(uid,a=1,b=0,c=0) #纯内容相关度模式
     # print(df)
     movie_id_list=[]
     for i in range(df.shape[0]):
@@ -161,6 +171,28 @@ def search_movie(request):
     info_list = get_moviedic_list(movie_id_list)
     return JsonResponse(info_list,safe=False)
 
+#orzorz
+#searchmvbykind的函数api，用于搜索给定类别的电影
+def search_movie_bykind(request):
+    '''
+    para:
+        request:
+            kind: 电影类别
+    output:
+        电影信息的列表（字典表）
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        kind = data['kind']
+    else:#debug
+        kind = 'Drama'
+
+    movie_id_list = database.search_by_kind(kind)
+    if len(movie_id_list) > 8:
+        movie_id_list = movie_id_list[:8]
+    info_list = get_moviedic_list(movie_id_list)
+    return JsonResponse(info_list,safe=False)
     
 #login 的api响应，接收用户名和密码
 def login(request):
@@ -358,6 +390,7 @@ def regist(request):
         key = '1'
     
     result = database.verify_Code(email, code)
+    err = 0
     if result == 1:
         err = database.add_user(name,key,email)
     else:
@@ -634,7 +667,7 @@ def verifycode(request):
         }
     return JsonResponse(res,safe=False)
 
-#
+
 def upload_movieImg(request):
     '''
     para:
@@ -715,6 +748,45 @@ def upload_movie(request):
             'status' : 'success',
             'info' : 'movie exits!'
         }
+    return JsonResponse(res,safe=False)
+    
+    
+#添加收藏的函数api
+def add_collection(request):
+    '''
+    para:
+        request:包含
+            name: 用户名
+            listid: 列表id
+    output:
+        若添加成功，返回
+            status: success
+            info:
+        否则，返回
+            status: fail
+            info:错误信息
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        name = data['name']
+        listid = data['listid']
+    else:   #debug
+        name = 'a'
+        listid = 'test'
+
+    err = database.add_collection(name,listid)
+    if err == 0:
+        res = {
+           'status' : 'success',
+            'info' : '' 
+        }
+    elif err == 1:
+        res = {
+            'status' : 'fail',
+            'info' : 'user not exists'
+        }
+
     return JsonResponse(res,safe=False)
 
 # from apscheduler.schedulers.background import BackgroundScheduler

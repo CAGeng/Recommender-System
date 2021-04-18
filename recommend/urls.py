@@ -15,6 +15,7 @@ urlpatterns = [
     path('searchmv/', view=views.search_movie), #模糊查询电影   1
     path('gethot/', view=views.get_movie_hottest), #获取最热推荐  1
     path('simlist/', view=views.get_simlist), #获取相关电影   1
+    path('searchmvbykind/', view=views.search_movie_bykind), #按照类别搜索
 
     #用户信息
     path('login/', view=views.login),  #登录  1
@@ -26,13 +27,16 @@ urlpatterns = [
     #用户数据增长
     path('addrec/', view=views.add_rec),  #新增评分  1
     path('addbrowse/',view=views.add_browse), #新增浏览记录     1
-    path('addmvsheet/',view=views.add_movie_sheet), #新增推荐电影单
 
     path('images/', view=views.read_img), #暂时没用
 
     #上传电影
     path('upload_movie/',view=views.upload_movie), #上传基本信息
     path('upload_movieImg/',view=views.upload_movieImg), #上传电影封面
+    #电影单相关
+    path('addmvsheet/',view=views.add_movie_sheet), #新增推荐电影单
+    path('addcol/',view=views.add_collection), #为一个用户添加收藏
+
 ]
 
 
