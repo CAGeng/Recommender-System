@@ -14,6 +14,10 @@
                 <el-col :span="1">
                     <el-button type="primary" icon="el-icon-search" @click="search()">搜索</el-button> 
                 </el-col>
+                <!-- 管理员上传电影 -->
+                <el-col :span="1" :offset="4">
+                    <el-button v-show="isAdmin" type="primary" icon="el-icon-plus" @click="upload_movie()"></el-button> 
+                </el-col>
                 <!-- 右上角菜单，登陆注册 -->
                 <el-dropdown @command="handlecommand">
                     <i class="el-icon-s-custom" style="margin-right: 15px"></i>
@@ -117,6 +121,7 @@ export default {
             form:{
                 username: '',
                 password: '',
+                authority: '',
             },
             res_data:{
                 status: '',
@@ -130,6 +135,7 @@ export default {
             swh: 0,
             xs: 0.36,
             dialogvisible1: false,
+            isAdmin: false,
             url: 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4181532436,846702450&fm=11&gp=0.jpg',
             datalist: [
                 {id:0, text: "测试样例1", urls: 'https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg'},
@@ -163,6 +169,7 @@ export default {
             else if(v == "logout"){
                 sessionStorage.removeItem('user')
                 window.location.reload()
+                this.isAdmin = false
             }
             else if(v == "change"){
                 this.sendmsg()
@@ -188,8 +195,8 @@ export default {
             .then((response)=>{
                 console.log(response)
                 this.res_data = response.data
-                // console.log(res_data)
                 if(this.res_data['status'] == 'success'){
+                    this.form.authority = this.res_data['info'] 
                     sessionStorage.setItem('user', JSON.stringify(this.form))
                     this.$alert('登录成功','Success Message',{
                         confirmButtonText:'确定'
@@ -209,6 +216,7 @@ export default {
                     }
                     this.form.username = ""
                     this.form.password = ""
+                    this.form.authority = ""
                 }
 
             }).catch((response)=>{
@@ -219,6 +227,10 @@ export default {
 
         register(){
             this.$router.push('/register')
+        },
+
+        upload_movie(){
+            this.$router.push('/movieupload')
         },
 
         search(){
@@ -241,6 +253,9 @@ export default {
 
         setconfig(){
             if(sessionStorage.getItem('user')){
+                var temp = sessionStorage.getItem('user')
+                temp = temp.slice(-7,-2)
+                this.isAdmin = temp =='admin' ? true : false
                 this.edi1 = true
                 this.edi2 = true
                 this.edi3 = false

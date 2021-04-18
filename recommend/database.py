@@ -8,7 +8,7 @@ from functools import wraps
 host = 'localhost'
 port = 3306
 user = 'root'
-password = 'sft080090'
+password = ''
 database = 'movie2'
 charset = 'utf8'
 
@@ -76,8 +76,15 @@ def create_tables():
     cursor.execute('create table verificationcode(\
                         email varchar(100) not null,\
                         code char(6) not null,\
-                        time datetime not null);')
+                        time datetime not null,\
+                        primary key(email));')
     conn.commit()
+
+    #create Administrators table
+    cursor.execute('create table administrators(\
+                        name varchar(25) not null,\
+                        primary key(name));')
+
     print('Success create verificationcode table!')
     cursor.close()
     conn.close()
@@ -106,7 +113,7 @@ def find_movie_title(title):
 def add_movie(id, title, cast, crew, genres, keywords, vote_count, vote_average):
     if find_movie_id(id).shape[0] > 0:
         print('movie exists!')
-        return
+        return 1
 
     conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
     cursor = conn.cursor()
@@ -125,6 +132,18 @@ def add_movie(id, title, cast, crew, genres, keywords, vote_count, vote_average)
     
     cursor.close()
     conn.close()
+    return 0
+
+#获取一个新的电影id
+def getMovieid():
+    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    cursor = conn.cursor()
+    
+    cursor.execute('select max(id) from movie')
+    data = cursor.fetchone()
+    movieid = data[0] + 1
+
+    return movieid
 
 # 查找是否存在用户名
 def find_user(name):
@@ -154,6 +173,35 @@ def add_user(name, key, email):
     cursor.close()
     conn.close()
     return 0
+
+#添加管理员权限
+#执行add_user后 执行add_administrators
+def add_administrators(name):
+    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    cursor = conn.cursor()
+
+    cursor.execute('select * from administrators where name = "{}"'.format(name))
+    if cursor.fetchone() != None:
+        print('administrator name exists!')
+        return 1
+
+    cursor.execute('insert into administrators (name) values ("{}")'.format(name))
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 0
+
+#获取该用户的访问权限
+def find_admin(name):
+    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    cursor = conn.cursor()
+
+    cursor.execute('select * from administrators where name = "{}"'.format(name))
+    if cursor.fetchone() != None:
+        return True
+    else:
+        return False
 
 # 登录（用户名，密码）
 def login(name, key):
@@ -443,24 +491,24 @@ def get_avg_rating(id):
 ##############################################################################################
 #下面的不要在后端调用，是用来初始化服务器和数据库的
 def init_tables_base():
-    import pandas as pd
+    # import pandas as pd
     #data for pretraining
-    input_path = "C:/Users/sft/Desktop/数据集/推荐/input/"
-    df1 = pd.read_csv(input_path + 'tmdb_5000_credits.csv')
-    df2 = pd.read_csv(input_path + 'tmdb_5000_movies.csv')
-    df1.columns = ['id','tittle','cast','crew']
-    df2= df2.merge(df1,on='id')
+    # input_path = "input/"
+    # df1 = pd.read_csv(input_path + 'tmdb_5000_credits.csv')
+    # df2 = pd.read_csv(input_path + 'tmdb_5000_movies.csv')
+    # df1.columns = ['id','tittle','cast','crew']
+    # df2= df2.merge(df1,on='id')
     # movie_df = df2  # movie set
     # movie_df = movie_df.head(100)
 
     # Parse the stringified features into their corresponding python objects
-    from ast import literal_eval
-    import numpy as np
+    # from ast import literal_eval
+    # import numpy as np
 
 
-    features = ['cast', 'crew', 'keywords', 'genres']
-    for feature in features:
-        df2[feature] = df2[feature].apply(literal_eval)
+    # features = ['cast', 'crew', 'keywords', 'genres']
+    # for feature in features:
+    #     df2[feature] = df2[feature].apply(literal_eval)
 
 
     # Get the director's name from the crew feature. If director is not listed, return NaN
@@ -483,32 +531,34 @@ def init_tables_base():
         return []
 
     # Define new director, cast, genres and keywords features that are in a suitable form.
-    df2['director'] = df2['crew'].apply(get_director)
+    # df2['director'] = df2['crew'].apply(get_director)
 
-    features = ['cast', 'keywords', 'genres']
-    for feature in features:
-        df2[feature] = df2[feature].apply(get_list)
+    # features = ['cast', 'keywords', 'genres']
+    # for feature in features:
+    #     df2[feature] = df2[feature].apply(get_list)
 
     #/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     #使用前若干条
-    movie_df = df2.head(100)
+    # movie_df = df2.head(100)
 
-    for i in range(0, movie_df.shape[0]):
-        director = movie_df.loc[i,'director']
-        crew = 'Director:' + director
-        movie_df.loc[i,'crew'] = crew
+    # for i in range(0, movie_df.shape[0]):
+    #     director = movie_df.loc[i,'director']
+    #     crew = 'Director:' + director
+    #     movie_df.loc[i,'crew'] = crew
 
-    movie_df = movie_df[['id','title','cast' ,'crew','keywords',  'genres', 'vote_count','vote_average']]
+    # movie_df = movie_df[['id','title','cast' ,'crew','keywords',  'genres', 'vote_count','vote_average']]
 
 
-    movie_df = movie_df.drop(30)
+    # movie_df = movie_df.drop(30)
     ids = []
 
-    for i in range(99):  #用前99个电影
+    movie_df = pd.read_csv('recommend_model/movie.csv')
+
+    for i in range(len(movie_df)):  #用前99个电影
         # print(i)
-        if i == 30 :  #有问题的数据，给删掉，还剩98个电影了
-            continue
+        # if i == 30 :  #有问题的数据，给删掉，还剩98个电影了
+        #     continue
         movie = movie_df.loc[i,:]
         ids.append(movie_df.loc[i,'id'])
         # print(movie['id'],movie['title'],movie['cast'],movie['crew'],movie['vote_count'],movie['vote_average'],movie['keywords'],movie['genres'])
@@ -658,16 +708,23 @@ def create_check_rec_algo_data2():
         add_recommend(mid, 'dog3', 5, '')
 
 if __name__ == '__main__':
-    init_db()
-    init_tables_base()
-    create_check_rec_algo_data() #添加构造数据
+    # init_db()
+    # init_tables_base()
+    # create_check_rec_algo_data() #添加构造数据
+
+    # add_user('yc0','ycyc0','yc0@qq.com')
+    # add_administrators('yc0')
+
+    # add_user('yc1','ycyc1','yc1@qq.com')
+    # add_administrators('yc1')
+
     # add_rec_list('a',[254,597,2268])
 
     # add_browse_record('sadf',[254,597,2268,8487])
     # print(get_browse_list('a'))
     # add_browse_record('a',[58,155,217])
     # print(get_browse_list('a'))
-
+    pass
 #添加评语
 # def add_comment_data():
 #     db = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)

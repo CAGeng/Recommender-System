@@ -29,6 +29,10 @@ urlpatterns = [
     path('addmvsheet/',view=views.add_movie_sheet), #新增推荐电影单
 
     path('images/', view=views.read_img), #暂时没用
+
+    #上传电影
+    path('upload_movie/',view=views.upload_movie), #上传基本信息
+    path('upload_movieImg/',view=views.upload_movieImg), #上传电影封面
 ]
 
 
