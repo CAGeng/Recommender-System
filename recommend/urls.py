@@ -33,6 +33,10 @@ urlpatterns = [
     #电影单相关
     path('addmvsheet/',view=views.add_movie_sheet), #新增推荐电影单
     path('addcol/',view=views.add_collection), #为一个用户添加收藏
+
+    #上传电影
+    path('upload_movie/',view=views.upload_movie), #上传基本信息
+    path('upload_movieImg/',view=views.upload_movieImg), #上传电影封面
 ]
 
 

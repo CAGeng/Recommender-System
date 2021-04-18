@@ -109,7 +109,7 @@ def find_movie_title(title):
 def add_movie(id, title, cast, crew, genres, keywords, vote_count, vote_average):
     if find_movie_id(id).shape[0] > 0:
         print('movie exists!')
-        return
+        return 1
 
     conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
     cursor = conn.cursor()
@@ -128,6 +128,7 @@ def add_movie(id, title, cast, crew, genres, keywords, vote_count, vote_average)
     
     cursor.close()
     conn.close()
+    return 0
 
 # 查找是否存在用户名
 def find_user(name):

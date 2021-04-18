@@ -1,99 +1,99 @@
 id,title,cast,crew,genres,keywords,vote_count,vote_average
-58,Pirates of the Caribbean: Dead Man's Chest,"['Johnny Depp', 'Orlando Bloom', 'Keira Knightley']",Director:Gore Verbinski,"['witch', 'fortune teller', 'bondage']","['Adventure', 'Fantasy', 'Action']",5246,7.0
-155,The Dark Knight,"['Christian Bale', 'Heath Ledger', 'Aaron Eckhart']",Director:Christopher Nolan,"['dc comics', 'crime fighter', 'secret identity']","['Drama', 'Action', 'Crime']",12002,8.2
-217,Indiana Jones and the Kingdom of the Crystal Skull,"['Harrison Ford', 'Cate Blanchett', 'Shia LaBeouf']",Director:Steven Spielberg,"['saving the world', 'riddle', 'whip']","['Adventure', 'Action']",2495,5.7
-254,King Kong,"['Naomi Watts', 'Jack Black', 'Adrien Brody']",Director:Peter Jackson,"['film business', 'screenplay', 'show business']","['Adventure', 'Drama', 'Action']",2337,6.6
-285,Pirates of the Caribbean: At World's End,"['Johnny Depp', 'Orlando Bloom', 'Keira Knightley']",Director:Gore Verbinski,"['ocean', 'drug abuse', 'exotic island']","['Adventure', 'Fantasy', 'Action']",4500,6.9
-296,Terminator 3: Rise of the Machines,"['Arnold Schwarzenegger', 'Nick Stahl', 'Claire Danes']",Director:Jonathan Mostow,"['saving the world', 'artificial intelligence', 'man vs machine']","['Action', 'Thriller', 'Science Fiction']",2143,5.9
-411,"The Chronicles of Narnia: The Lion, the Witch and the Wardrobe","['William Moseley', 'Anna Popplewell', 'Skandar Keynes']",Director:Andrew Adamson,"['saving the world', 'witch', 'based on novel']","['Adventure', 'Family', 'Fantasy']",2629,6.7
-534,Terminator Salvation,"['Christian Bale', 'Sam Worthington', 'Anton Yelchin']",Director:McG,"['saving the world', 'artificial intelligence', 'prophecy']","['Action', 'Science Fiction', 'Thriller']",2463,5.9
-559,Spider-Man 3,"['Tobey Maguire', 'Kirsten Dunst', 'James Franco']",Director:Sam Raimi,"['dual identity', 'amnesia', 'sandstorm']","['Fantasy', 'Action', 'Adventure']",3576,5.9
-597,Titanic,"['Kate Winslet', 'Leonardo DiCaprio', 'Frances Fisher']",Director:James Cameron,"['shipwreck', 'iceberg', 'ship']","['Drama', 'Romance', 'Thriller']",7562,7.5
-767,Harry Potter and the Half-Blood Prince,"['Daniel Radcliffe', 'Rupert Grint', 'Emma Watson']",Director:David Yates,"['witch', 'magic', 'broom']","['Adventure', 'Fantasy', 'Family']",5293,7.4
-1452,Superman Returns,"['Brandon Routh', 'Kevin Spacey', 'Kate Bosworth']",Director:Bryan Singer,"['saving the world', 'dc comics', 'invulnerability']","['Adventure', 'Fantasy', 'Action']",1400,5.4
-1726,Iron Man,"['Robert Downey Jr.', 'Terrence Howard', 'Jeff Bridges']",Director:Jon Favreau,"['middle east', 'arms dealer', 'malibu']","['Action', 'Science Fiction', 'Adventure']",8776,7.4
-1735,The Mummy: Tomb of the Dragon Emperor,"['Brendan Fraser', 'Jet Li', 'John Hannah']",Director:Rob Cohen,[],"['Adventure', 'Action', 'Fantasy']",1387,5.2
-1865,Pirates of the Caribbean: On Stranger Tides,"['Johnny Depp', 'Penélope Cruz', 'Ian McShane']",Director:Rob Marshall,"['sea', 'captain', 'mutiny']","['Adventure', 'Action', 'Fantasy']",4948,6.4
-1930,The Amazing Spider-Man,"['Andrew Garfield', 'Emma Stone', 'Rhys Ifans']",Director:Marc Webb,"['loss of father', 'vigilante', 'serum']","['Action', 'Adventure', 'Fantasy']",6586,6.5
-2268,The Golden Compass,"['Dakota Blue Richards', 'Nicole Kidman', 'Daniel Craig']",Director:Chris Weitz,"['england', 'compass', 'experiment']","['Adventure', 'Fantasy']",1303,5.8
-2454,The Chronicles of Narnia: Prince Caspian,"['Ben Barnes', 'William Moseley', 'Anna Popplewell']",Director:Andrew Adamson,"['based on novel', 'fictional place', 'brother sister relationship']","['Adventure', 'Family', 'Fantasy']",1630,6.3
-2698,Evan Almighty,"['Steve Carell', 'Lauren Graham', 'John Goodman']",Director:Tom Shadyac,"['father son relationship', 'daily life', 'married couple']","['Fantasy', 'Comedy', 'Family']",1151,5.3
-5174,Rush Hour 3,"['Chris Tucker', 'Jackie Chan', 'Hiroyuki Sanada']",Director:Brett Ratner,['ambassador'],"['Action', 'Comedy', 'Crime']",783,6.1
-5255,The Polar Express,"['Tom Hanks', 'Michael Jeter', 'Nona Gaye']",Director:Robert Zemeckis,"['santa claus', 'nerd', 'faith']","['Adventure', 'Animation', 'Family']",1474,6.4
-8373,Transformers: Revenge of the Fallen,"['Shia LaBeouf', 'Megan Fox', 'Josh Duhamel']",Director:Michael Bay,"['egypt', 'sun', 'chaos']","['Science Fiction', 'Action', 'Adventure']",3138,6.0
-8487,Wild Wild West,"['Will Smith', 'Kevin Kline', 'Kenneth Branagh']",Director:Barry Sonnenfeld,"['steampunk', 'based on tv series', 'steam locomotive']","['Action', 'Adventure', 'Comedy']",1020,5.1
-9543,Prince of Persia: The Sands of Time,"['Jake Gyllenhaal', 'Gemma Arterton', 'Ben Kingsley']",Director:Mike Newell,"['persia', 'sandstorm', 'brother against brother']","['Adventure', 'Fantasy', 'Action']",2317,6.2
-9804,Waterworld,"['Kevin Costner', 'Chaim Girafi', 'Rick Aviles']",Director:Kevin Reynolds,"['ocean', 'tattoo', 'mutant']","['Adventure', 'Action']",992,5.9
-10138,Iron Man 2,"['Robert Downey Jr.', 'Gwyneth Paltrow', 'Don Cheadle']",Director:Jon Favreau,"['malibu', 'marvel comic', 'superhero']","['Adventure', 'Action', 'Science Fiction']",6849,6.6
-10191,How to Train Your Dragon,"['Jay Baruchel', 'Gerard Butler', 'Craig Ferguson']",Director:Chris Sanders,"['flying', 'blacksmith', 'arena']","['Fantasy', 'Adventure', 'Animation']",4227,7.5
-10192,Shrek Forever After,"['Mike Myers', 'Eddie Murphy', 'Cameron Diaz']",Director:Mike Mitchell,"['ogre', '3d']","['Comedy', 'Adventure', 'Fantasy']",1959,6.0
-10193,Toy Story 3,"['Tom Hanks', 'Tim Allen', 'Ned Beatty']",Director:Lee Unkrich,"['hostage', 'college', 'toy']","['Animation', 'Family', 'Comedy']",4597,7.6
-10681,WALL·E,"['Ben Burtt', 'Elissa Knight', 'Jeff Garlin']",Director:Andrew Stanton,['romantic comedy'],"['Animation', 'Family']",6296,7.8
-10764,Quantum of Solace,"['Daniel Craig', 'Olga Kurylenko', 'Mathieu Amalric']",Director:Marc Forster,"['killing', 'undercover', 'secret agent']","['Adventure', 'Action', 'Thriller']",2965,6.1
-12155,Alice in Wonderland,"['Mia Wasikowska', 'Johnny Depp', 'Anne Hathaway']",Director:Tim Burton,"['based on novel', 'fictional place', 'queen']","['Family', 'Fantasy', 'Adventure']",4645,6.4
-14160,Up,"['Ed Asner', 'Christopher Plummer', 'Jordan Nagai']",Director:Pete Docter,"['age difference', 'central and south america', 'balloon']","['Animation', 'Comedy', 'Family']",6870,7.7
-14161,2012,"['John Cusack', 'Amanda Peet', 'Chiwetel Ejiofor']",Director:Roland Emmerich,"['civilization', 'natural disaster', 'end of the world']","['Action', 'Adventure', 'Science Fiction']",4903,5.6
-14869,G.I. Joe: The Rise of Cobra,"['Dennis Quaid', 'Channing Tatum', 'Marlon Wayans']",Director:Stephen Sommers,"['terrorist', 'secret', 'hostage']","['Adventure', 'Action', 'Thriller']",1962,5.6
-15512,Monsters vs Aliens,"['Seth Rogen', 'Reese Witherspoon', 'Hugh Laurie']",Director:Conrad Vernon,"['alien', 'giant robot', 'duringcreditsstinger']","['Animation', 'Family', 'Adventure']",1423,6.0
-17979,A Christmas Carol,"['Gary Oldman', 'Jim Carrey', 'Steve Valentine']",Director:Robert Zemeckis,"['holiday', 'based on novel', 'victorian england']","['Animation', 'Drama']",1095,6.6
-19995,Avatar,"['Sam Worthington', 'Zoe Saldana', 'Sigourney Weaver']",Director:James Cameron,"['culture clash', 'future', 'space war']","['Action', 'Adventure', 'Fantasy']",11800,7.2
-20526,TRON: Legacy,"['Garrett Hedlund', 'Jeff Bridges', 'Olivia Wilde']",Director:Joseph Kosinski,"['artificial intelligence', 'secret identity', 'computer program']","['Adventure', 'Action', 'Science Fiction']",2841,6.3
-20662,Robin Hood,"['Russell Crowe', 'Cate Blanchett', 'Max von Sydow']",Director:Ridley Scott,"['robin hood', 'archer', 'knight']","['Action', 'Adventure']",1398,6.2
-24428,The Avengers,"['Robert Downey Jr.', 'Chris Evans', 'Mark Ruffalo']",Director:Joss Whedon,"['new york', 'shield', 'marvel comic']","['Science Fiction', 'Action', 'Adventure']",11776,7.4
-27205,Inception,"['Leonardo DiCaprio', 'Joseph Gordon-Levitt', 'Ellen Page']",Director:Christopher Nolan,"['loss of lover', 'dream', 'kidnapping']","['Action', 'Thriller', 'Science Fiction']",13752,8.1
-36668,X-Men: The Last Stand,"['Hugh Jackman', 'Halle Berry', 'Ian McKellen']",Director:Brett Ratner,"['mutant', 'marvel comic', 'based on comic book']","['Adventure', 'Action', 'Science Fiction']",3525,6.3
-37724,Skyfall,"['Daniel Craig', 'Judi Dench', 'Javier Bardem']",Director:Sam Mendes,"['spy', 'secret agent', 'sociopath']","['Action', 'Adventure', 'Thriller']",7604,6.9
-38356,Transformers: Dark of the Moon,"['Shia LaBeouf', 'John Malkovich', 'Ken Jeong']",Director:Michael Bay,"['moon', 'spacecraft', 'traitor']","['Action', 'Science Fiction', 'Adventure']",3299,6.1
-38757,Tangled,"['Zachary Levi', 'Mandy Moore', 'Donna Murphy']",Director:Byron Howard,"['hostage', 'magic', 'horse']","['Animation', 'Family']",3330,7.4
-41154,Men in Black 3,"['Will Smith', 'Tommy Lee Jones', 'Josh Brolin']",Director:Barry Sonnenfeld,"['time travel', 'time machine', 'alien']","['Action', 'Comedy', 'Science Fiction']",4160,6.2
-44826,Hugo,"['Ben Kingsley', 'Sacha Baron Cohen', 'Asa Butterfield']",Director:Martin Scorsese,"['library', 'clock', 'film director']","['Adventure', 'Drama', 'Family']",2141,7.0
-44833,Battleship,"['Taylor Kitsch', 'Alexander Skarsgård', 'Rihanna']",Director:Peter Berg,"['fight', 'u.s. navy', 'mind reading']","['Thriller', 'Action', 'Adventure']",2114,5.5
-44912,Green Lantern,"['Ryan Reynolds', 'Blake Lively', 'Peter Sarsgaard']",Director:Martin Campbell,"['dc comics', 'transformation', 'superhero']","['Adventure', 'Action', 'Thriller']",2487,5.1
-47933,Independence Day: Resurgence,"['Liam Hemsworth', 'Jeff Goldblum', 'Bill Pullman']",Director:Roland Emmerich,"['alternate history', 'alien invasion']","['Action', 'Adventure', 'Science Fiction']",2491,4.9
-49013,Cars 2,"['Owen Wilson', 'Larry the Cable Guy', 'Michael Caine']",Director:John Lasseter,"['car race', 'sequel', 'comedy']","['Animation', 'Family', 'Adventure']",2033,5.8
-49026,The Dark Knight Rises,"['Christian Bale', 'Michael Caine', 'Gary Oldman']",Director:Christopher Nolan,"['dc comics', 'crime fighter', 'terrorist']","['Action', 'Crime', 'Drama']",9106,7.6
-49051,The Hobbit: An Unexpected Journey,"['Ian McKellen', 'Martin Freeman', 'Richard Armitage']",Director:Peter Jackson,"['riddle', 'elves', 'dwarves']","['Adventure', 'Fantasy', 'Action']",8297,7.0
-49521,Man of Steel,"['Henry Cavill', 'Amy Adams', 'Michael Shannon']",Director:Zack Snyder,"['saving the world', 'dc comics', 'superhero']","['Action', 'Adventure', 'Fantasy']",6359,6.5
-49529,John Carter,"['Taylor Kitsch', 'Lynn Collins', 'Samantha Morton']",Director:Andrew Stanton,"['based on novel', 'mars', 'medallion']","['Action', 'Adventure', 'Science Fiction']",2124,6.1
-54138,Star Trek Into Darkness,"['Chris Pine', 'Zachary Quinto', 'Zoe Saldana']",Director:J.J. Abrams,"['spacecraft', 'friendship', 'sequel']","['Action', 'Adventure', 'Science Fiction']",4418,7.4
-57158,The Hobbit: The Desolation of Smaug,"['Martin Freeman', 'Ian McKellen', 'Richard Armitage']",Director:Peter Jackson,"['elves', 'dwarves', 'orcs']","['Adventure', 'Fantasy']",4524,7.6
-57201,The Lone Ranger,"['Johnny Depp', 'Armie Hammer', 'William Fichtner']",Director:Gore Verbinski,"['texas', 'horse', 'survivor']","['Action', 'Adventure', 'Western']",2311,5.9
-58595,Snow White and the Huntsman,"['Kristen Stewart', 'Charlize Theron', 'Chris Hemsworth']",Director:Rupert Sanders,"['queen', 'magic', 'fairy tale']","['Adventure', 'Fantasy', 'Drama']",3118,5.8
-62177,Brave,"['Kelly Macdonald', 'Julie Walters', 'Billy Connolly']",Director:Brenda Chapman,"['scotland', 'rebel', 'bravery']","['Animation', 'Adventure', 'Comedy']",4641,6.7
-62211,Monsters University,"['Billy Crystal', 'John Goodman', 'Steve Buscemi']",Director:Dan Scanlon,"['monster', 'dormitory', 'games']","['Animation', 'Family']",3528,7.0
-64682,The Great Gatsby,"['Leonardo DiCaprio', 'Tobey Maguire', 'Carey Mulligan']",Director:Baz Luhrmann,"['based on novel', 'infidelity', 'obsession']","['Drama', 'Romance']",3769,7.3
-64686,47 Ronin,"['Keanu Reeves', 'Hiroyuki Sanada', 'Kou Shibasaki']",Director:Carl Rinsch,"['japan', 'suicide', 'samurai']","['Drama', 'Action', 'Adventure']",1326,5.9
-68721,Iron Man 3,"['Robert Downey Jr.', 'Gwyneth Paltrow', 'Don Cheadle']",Director:Shane Black,"['terrorist', 'war on terror', 'tennessee']","['Action', 'Adventure', 'Science Fiction']",8806,6.8
-68726,Pacific Rim,"['Idris Elba', 'Charlie Hunnam', 'Charlie Day']",Director:Guillermo del Toro,"['dystopia', 'giant robot', 'giant monster']","['Action', 'Science Fiction', 'Adventure']",4794,6.7
-68728,Oz: The Great and Powerful,"['James Franco', 'Mila Kunis', 'Rachel Weisz']",Director:Sam Raimi,"['circus', 'witch', 'magic']","['Fantasy', 'Adventure', 'Family']",3530,5.7
-72190,World War Z,"['Brad Pitt', 'Mireille Enos', 'Abigail Hargrove']",Director:Marc Forster,"['dystopia', 'apocalypse', 'zombie']","['Action', 'Drama', 'Horror']",5560,6.7
-76757,Jupiter Ascending,"['Mila Kunis', 'Channing Tatum', 'Sean Bean']",Director:Lilly Wachowski,"['jupiter', 'space', 'woman director']","['Science Fiction', 'Fantasy', 'Action']",2768,5.2
-79698,The Lovers,"['Josh Hartnett', 'Simone Kessell', 'Tamsin Egerton']",Director:Roland Joffé,[],"['Action', 'Adventure', 'Science Fiction']",34,4.8
-81005,Jack the Giant Slayer,"['Nicholas Hoult', 'Eleanor Tomlinson', 'Ewan McGregor']",Director:Bryan Singer,"['based on fairy tale', 'giant']","['Action', 'Family', 'Fantasy']",2598,5.5
-82690,Wreck-It Ralph,"['John C. Reilly', 'Sarah Silverman', 'Jack McBrayer']",Director:Rich Moore,"['support group', 'product placement', 'bullying']","['Family', 'Animation', 'Comedy']",4570,7.1
-91314,Transformers: Age of Extinction,"['Mark Wahlberg', 'Stanley Tucci', 'Kelsey Grammer']",Director:Michael Bay,"['sequel', 'alien', 'transformers']","['Science Fiction', 'Action', 'Adventure']",3095,5.8
-99861,Avengers: Age of Ultron,"['Robert Downey Jr.', 'Chris Hemsworth', 'Mark Ruffalo']",Director:Joss Whedon,"['marvel comic', 'sequel', 'superhero']","['Action', 'Adventure', 'Science Fiction']",6767,7.3
-100402,Captain America: The Winter Soldier,"['Chris Evans', 'Samuel L. Jackson', 'Scarlett Johansson']",Director:Anthony Russo,"['washington d.c.', 'future', 'shield']","['Action', 'Adventure', 'Science Fiction']",5764,7.6
-102382,The Amazing Spider-Man 2,"['Andrew Garfield', 'Emma Stone', 'Jamie Foxx']",Director:Marc Webb,"['obsession', 'marvel comic', 'sequel']","['Action', 'Adventure', 'Fantasy']",4179,6.5
-102651,Maleficent,"['Angelina Jolie', 'Elle Fanning', 'Sharlto Copley']",Director:Robert Stromberg,"['fairy tale', 'villain', 'sleeping beauty']","['Fantasy', 'Adventure', 'Action']",4496,7.0
-105864,The Good Dinosaur,"['Raymond Ochoa', 'Jack Bright', 'Jeffrey Wright']",Director:Peter Sohn,"['tyrannosaurus rex', 'friends', 'alternate history']","['Adventure', 'Animation', 'Family']",1736,6.6
-118340,Guardians of the Galaxy,"['Chris Pratt', 'Zoe Saldana', 'Dave Bautista']",Director:James Gunn,"['marvel comic', 'spaceship', 'space']","['Action', 'Science Fiction', 'Adventure']",9742,7.9
-119450,Dawn of the Planet of the Apes,"['Andy Serkis', 'Jason Clarke', 'Gary Oldman']",Director:Matt Reeves,"['leader', 'colony', 'post-apocalyptic']","['Science Fiction', 'Action', 'Drama']",4410,7.3
-122917,The Hobbit: The Battle of the Five Armies,"['Martin Freeman', 'Ian McKellen', 'Richard Armitage']",Director:Peter Jackson,"['corruption', 'elves', 'dwarves']","['Action', 'Adventure', 'Fantasy']",4760,7.1
-127585,X-Men: Days of Future Past,"['Hugh Jackman', 'James McAvoy', 'Michael Fassbender']",Director:Bryan Singer,"['1970s', 'mutant', 'time travel']","['Action', 'Adventure', 'Fantasy']",6032,7.5
-135397,Jurassic World,"['Chris Pratt', 'Bryce Dallas Howard', 'Irrfan Khan']",Director:Colin Trevorrow,"['monster', 'dna', 'tyrannosaurus rex']","['Action', 'Adventure', 'Science Fiction']",8662,6.5
-137113,Edge of Tomorrow,"['Tom Cruise', 'Emily Blunt', 'Brendan Gleeson']",Director:Doug Liman,"['deja vu', 'time warp', 'restart']","['Action', 'Science Fiction']",4858,7.6
-150540,Inside Out,"['Amy Poehler', 'Phyllis Smith', 'Richard Kind']",Director:Pete Docter,"['dream', 'cartoon', 'imaginary friend']","['Drama', 'Comedy', 'Animation']",6560,8.0
-157336,Interstellar,"['Matthew McConaughey', 'Jessica Chastain', 'Anne Hathaway']",Director:Christopher Nolan,"['saving the world', 'artificial intelligence', 'father son relationship']","['Adventure', 'Drama', 'Science Fiction']",10867,8.1
-158852,Tomorrowland,"['Britt Robertson', 'George Clooney', 'Raffey Cassidy']",Director:Brad Bird,"['inventor', 'apocalypse', 'destiny']","['Adventure', 'Family', 'Mystery']",2846,6.2
-168259,Furious 7,"['Vin Diesel', 'Paul Walker', 'Dwayne Johnson']",Director:James Wan,"['car race', 'speed', 'revenge']",['Action'],4176,7.3
-177572,Big Hero 6,"['Scott Adsit', 'Ryan Potter', 'Daniel Henney']",Director:Chris Williams,"['brother brother relationship', 'hero', 'talent']","['Adventure', 'Family', 'Animation']",6135,7.8
-188927,Star Trek Beyond,"['Chris Pine', 'Zachary Quinto', 'Karl Urban']",Director:Justin Lin,"['sequel', 'stranded', 'hatred']","['Action', 'Adventure', 'Science Fiction']",2568,6.6
-206647,Spectre,"['Daniel Craig', 'Christoph Waltz', 'Léa Seydoux']",Director:Sam Mendes,"['spy', 'based on novel', 'secret agent']","['Action', 'Adventure', 'Crime']",4466,6.3
-209112,Batman v Superman: Dawn of Justice,"['Ben Affleck', 'Henry Cavill', 'Gal Gadot']",Director:Zack Snyder,"['dc comics', 'vigilante', 'superhero']","['Action', 'Adventure', 'Fantasy']",7004,5.7
-246655,X-Men: Apocalypse,"['James McAvoy', 'Michael Fassbender', 'Jennifer Lawrence']",Director:Bryan Singer,"['mutant', 'supernatural powers', 'marvel comic']",['Science Fiction'],4721,6.4
-258489,The Legend of Tarzan,"['Alexander Skarsgård', 'Margot Robbie', 'Christoph Waltz']",Director:David Yates,"['africa', 'feral child', 'tarzan']","['Action', 'Adventure']",2430,5.5
-271110,Captain America: Civil War,"['Chris Evans', 'Robert Downey Jr.', 'Scarlett Johansson']",Director:Anthony Russo,"['civil war', 'war', 'marvel comic']","['Adventure', 'Action', 'Science Fiction']",7241,7.1
-278927,The Jungle Book,"['Neel Sethi', 'Bill Murray', 'Ben Kingsley']",Director:Jon Favreau,"['based on novel', 'snake', 'wolf']","['Family', 'Adventure', 'Drama']",2892,6.7
-297761,Suicide Squad,"['Will Smith', 'Margot Robbie', 'Joel Kinnaman']",Director:David Ayer,"['dc comics', 'shared universe', 'anti hero']","['Action', 'Adventure', 'Crime']",7458,5.9
-315011,Shin Godzilla,"['Hiroki Hasegawa', 'Yutaka Takenouchi', 'Satomi Ishihara']",Director:Hideaki Anno,"['monster', 'godzilla', 'giant monster']","['Action', 'Adventure', 'Drama']",143,6.5
+58,Pirates of the Caribbean: Dead Man's Chest,"['Johnny Depp', 'Orlando Bloom', 'Keira Knightley']",Director:Gore Verbinski,"['Adventure', 'Fantasy', 'Action']","['witch', 'fortune teller', 'bondage']",5246,7.0
+155,The Dark Knight,"['Christian Bale', 'Heath Ledger', 'Aaron Eckhart']",Director:Christopher Nolan,"['Drama', 'Action', 'Crime']","['dc comics', 'crime fighter', 'secret identity']",12002,8.2
+217,Indiana Jones and the Kingdom of the Crystal Skull,"['Harrison Ford', 'Cate Blanchett', 'Shia LaBeouf']",Director:Steven Spielberg,"['Adventure', 'Action']","['saving the world', 'riddle', 'whip']",2495,5.7
+254,King Kong,"['Naomi Watts', 'Jack Black', 'Adrien Brody']",Director:Peter Jackson,"['Adventure', 'Drama', 'Action']","['film business', 'screenplay', 'show business']",2337,6.6
+285,Pirates of the Caribbean: At World's End,"['Johnny Depp', 'Orlando Bloom', 'Keira Knightley']",Director:Gore Verbinski,"['Adventure', 'Fantasy', 'Action']","['ocean', 'drug abuse', 'exotic island']",4500,6.9
+296,Terminator 3: Rise of the Machines,"['Arnold Schwarzenegger', 'Nick Stahl', 'Claire Danes']",Director:Jonathan Mostow,"['Action', 'Thriller', 'Science Fiction']","['saving the world', 'artificial intelligence', 'man vs machine']",2143,5.9
+411,"The Chronicles of Narnia: The Lion, the Witch and the Wardrobe","['William Moseley', 'Anna Popplewell', 'Skandar Keynes']",Director:Andrew Adamson,"['Adventure', 'Family', 'Fantasy']","['saving the world', 'witch', 'based on novel']",2629,6.7
+534,Terminator Salvation,"['Christian Bale', 'Sam Worthington', 'Anton Yelchin']",Director:McG,"['Action', 'Science Fiction', 'Thriller']","['saving the world', 'artificial intelligence', 'prophecy']",2463,5.9
+559,Spider-Man 3,"['Tobey Maguire', 'Kirsten Dunst', 'James Franco']",Director:Sam Raimi,"['Fantasy', 'Action', 'Adventure']","['dual identity', 'amnesia', 'sandstorm']",3576,5.9
+597,Titanic,"['Kate Winslet', 'Leonardo DiCaprio', 'Frances Fisher']",Director:James Cameron,"['Drama', 'Romance', 'Thriller']","['shipwreck', 'iceberg', 'ship']",7562,7.5
+767,Harry Potter and the Half-Blood Prince,"['Daniel Radcliffe', 'Rupert Grint', 'Emma Watson']",Director:David Yates,"['Adventure', 'Fantasy', 'Family']","['witch', 'magic', 'broom']",5293,7.4
+1452,Superman Returns,"['Brandon Routh', 'Kevin Spacey', 'Kate Bosworth']",Director:Bryan Singer,"['Adventure', 'Fantasy', 'Action']","['saving the world', 'dc comics', 'invulnerability']",1400,5.4
+1726,Iron Man,"['Robert Downey Jr.', 'Terrence Howard', 'Jeff Bridges']",Director:Jon Favreau,"['Action', 'Science Fiction', 'Adventure']","['middle east', 'arms dealer', 'malibu']",8776,7.4
+1735,The Mummy: Tomb of the Dragon Emperor,"['Brendan Fraser', 'Jet Li', 'John Hannah']",Director:Rob Cohen,"['Adventure', 'Action', 'Fantasy']",[],1387,5.2
+1865,Pirates of the Caribbean: On Stranger Tides,"['Johnny Depp', 'Penélope Cruz', 'Ian McShane']",Director:Rob Marshall,"['Adventure', 'Action', 'Fantasy']","['sea', 'captain', 'mutiny']",4948,6.4
+1930,The Amazing Spider-Man,"['Andrew Garfield', 'Emma Stone', 'Rhys Ifans']",Director:Marc Webb,"['Action', 'Adventure', 'Fantasy']","['loss of father', 'vigilante', 'serum']",6586,6.5
+2268,The Golden Compass,"['Dakota Blue Richards', 'Nicole Kidman', 'Daniel Craig']",Director:Chris Weitz,"['Adventure', 'Fantasy']","['england', 'compass', 'experiment']",1303,5.8
+2454,The Chronicles of Narnia: Prince Caspian,"['Ben Barnes', 'William Moseley', 'Anna Popplewell']",Director:Andrew Adamson,"['Adventure', 'Family', 'Fantasy']","['based on novel', 'fictional place', 'brother sister relationship']",1630,6.3
+2698,Evan Almighty,"['Steve Carell', 'Lauren Graham', 'John Goodman']",Director:Tom Shadyac,"['Fantasy', 'Comedy', 'Family']","['father son relationship', 'daily life', 'married couple']",1151,5.3
+5174,Rush Hour 3,"['Chris Tucker', 'Jackie Chan', 'Hiroyuki Sanada']",Director:Brett Ratner,"['Action', 'Comedy', 'Crime']",['ambassador'],783,6.1
+5255,The Polar Express,"['Tom Hanks', 'Michael Jeter', 'Nona Gaye']",Director:Robert Zemeckis,"['Adventure', 'Animation', 'Family']","['santa claus', 'nerd', 'faith']",1474,6.4
+8373,Transformers: Revenge of the Fallen,"['Shia LaBeouf', 'Megan Fox', 'Josh Duhamel']",Director:Michael Bay,"['Science Fiction', 'Action', 'Adventure']","['egypt', 'sun', 'chaos']",3138,6.0
+8487,Wild Wild West,"['Will Smith', 'Kevin Kline', 'Kenneth Branagh']",Director:Barry Sonnenfeld,"['Action', 'Adventure', 'Comedy']","['steampunk', 'based on tv series', 'steam locomotive']",1020,5.1
+9543,Prince of Persia: The Sands of Time,"['Jake Gyllenhaal', 'Gemma Arterton', 'Ben Kingsley']",Director:Mike Newell,"['Adventure', 'Fantasy', 'Action']","['persia', 'sandstorm', 'brother against brother']",2317,6.2
+9804,Waterworld,"['Kevin Costner', 'Chaim Girafi', 'Rick Aviles']",Director:Kevin Reynolds,"['Adventure', 'Action']","['ocean', 'tattoo', 'mutant']",992,5.9
+10138,Iron Man 2,"['Robert Downey Jr.', 'Gwyneth Paltrow', 'Don Cheadle']",Director:Jon Favreau,"['Adventure', 'Action', 'Science Fiction']","['malibu', 'marvel comic', 'superhero']",6849,6.6
+10191,How to Train Your Dragon,"['Jay Baruchel', 'Gerard Butler', 'Craig Ferguson']",Director:Chris Sanders,"['Fantasy', 'Adventure', 'Animation']","['flying', 'blacksmith', 'arena']",4227,7.5
+10192,Shrek Forever After,"['Mike Myers', 'Eddie Murphy', 'Cameron Diaz']",Director:Mike Mitchell,"['Comedy', 'Adventure', 'Fantasy']","['ogre', '3d']",1959,6.0
+10193,Toy Story 3,"['Tom Hanks', 'Tim Allen', 'Ned Beatty']",Director:Lee Unkrich,"['Animation', 'Family', 'Comedy']","['hostage', 'college', 'toy']",4597,7.6
+10681,WALL·E,"['Ben Burtt', 'Elissa Knight', 'Jeff Garlin']",Director:Andrew Stanton,"['Animation', 'Family']",['romantic comedy'],6296,7.8
+10764,Quantum of Solace,"['Daniel Craig', 'Olga Kurylenko', 'Mathieu Amalric']",Director:Marc Forster,"['Adventure', 'Action', 'Thriller']","['killing', 'undercover', 'secret agent']",2965,6.1
+12155,Alice in Wonderland,"['Mia Wasikowska', 'Johnny Depp', 'Anne Hathaway']",Director:Tim Burton,"['Family', 'Fantasy', 'Adventure']","['based on novel', 'fictional place', 'queen']",4645,6.4
+14160,Up,"['Ed Asner', 'Christopher Plummer', 'Jordan Nagai']",Director:Pete Docter,"['Animation', 'Comedy', 'Family']","['age difference', 'central and south america', 'balloon']",6870,7.7
+14161,2012,"['John Cusack', 'Amanda Peet', 'Chiwetel Ejiofor']",Director:Roland Emmerich,"['Action', 'Adventure', 'Science Fiction']","['civilization', 'natural disaster', 'end of the world']",4903,5.6
+14869,G.I. Joe: The Rise of Cobra,"['Dennis Quaid', 'Channing Tatum', 'Marlon Wayans']",Director:Stephen Sommers,"['Adventure', 'Action', 'Thriller']","['terrorist', 'secret', 'hostage']",1962,5.6
+15512,Monsters vs Aliens,"['Seth Rogen', 'Reese Witherspoon', 'Hugh Laurie']",Director:Conrad Vernon,"['Animation', 'Family', 'Adventure']","['alien', 'giant robot', 'duringcreditsstinger']",1423,6.0
+17979,A Christmas Carol,"['Gary Oldman', 'Jim Carrey', 'Steve Valentine']",Director:Robert Zemeckis,"['Animation', 'Drama']","['holiday', 'based on novel', 'victorian england']",1095,6.6
+19995,Avatar,"['Sam Worthington', 'Zoe Saldana', 'Sigourney Weaver']",Director:James Cameron,"['Action', 'Adventure', 'Fantasy']","['culture clash', 'future', 'space war']",11800,7.2
+20526,TRON: Legacy,"['Garrett Hedlund', 'Jeff Bridges', 'Olivia Wilde']",Director:Joseph Kosinski,"['Adventure', 'Action', 'Science Fiction']","['artificial intelligence', 'secret identity', 'computer program']",2841,6.3
+20662,Robin Hood,"['Russell Crowe', 'Cate Blanchett', 'Max von Sydow']",Director:Ridley Scott,"['Action', 'Adventure']","['robin hood', 'archer', 'knight']",1398,6.2
+24428,The Avengers,"['Robert Downey Jr.', 'Chris Evans', 'Mark Ruffalo']",Director:Joss Whedon,"['Science Fiction', 'Action', 'Adventure']","['new york', 'shield', 'marvel comic']",11776,7.4
+27205,Inception,"['Leonardo DiCaprio', 'Joseph Gordon-Levitt', 'Ellen Page']",Director:Christopher Nolan,"['Action', 'Thriller', 'Science Fiction']","['loss of lover', 'dream', 'kidnapping']",13752,8.1
+36668,X-Men: The Last Stand,"['Hugh Jackman', 'Halle Berry', 'Ian McKellen']",Director:Brett Ratner,"['Adventure', 'Action', 'Science Fiction']","['mutant', 'marvel comic', 'based on comic book']",3525,6.3
+37724,Skyfall,"['Daniel Craig', 'Judi Dench', 'Javier Bardem']",Director:Sam Mendes,"['Action', 'Adventure', 'Thriller']","['spy', 'secret agent', 'sociopath']",7604,6.9
+38356,Transformers: Dark of the Moon,"['Shia LaBeouf', 'John Malkovich', 'Ken Jeong']",Director:Michael Bay,"['Action', 'Science Fiction', 'Adventure']","['moon', 'spacecraft', 'traitor']",3299,6.1
+38757,Tangled,"['Zachary Levi', 'Mandy Moore', 'Donna Murphy']",Director:Byron Howard,"['Animation', 'Family']","['hostage', 'magic', 'horse']",3330,7.4
+41154,Men in Black 3,"['Will Smith', 'Tommy Lee Jones', 'Josh Brolin']",Director:Barry Sonnenfeld,"['Action', 'Comedy', 'Science Fiction']","['time travel', 'time machine', 'alien']",4160,6.2
+44826,Hugo,"['Ben Kingsley', 'Sacha Baron Cohen', 'Asa Butterfield']",Director:Martin Scorsese,"['Adventure', 'Drama', 'Family']","['library', 'clock', 'film director']",2141,7.0
+44833,Battleship,"['Taylor Kitsch', 'Alexander Skarsgård', 'Rihanna']",Director:Peter Berg,"['Thriller', 'Action', 'Adventure']","['fight', 'u.s. navy', 'mind reading']",2114,5.5
+44912,Green Lantern,"['Ryan Reynolds', 'Blake Lively', 'Peter Sarsgaard']",Director:Martin Campbell,"['Adventure', 'Action', 'Thriller']","['dc comics', 'transformation', 'superhero']",2487,5.1
+47933,Independence Day: Resurgence,"['Liam Hemsworth', 'Jeff Goldblum', 'Bill Pullman']",Director:Roland Emmerich,"['Action', 'Adventure', 'Science Fiction']","['alternate history', 'alien invasion']",2491,4.9
+49013,Cars 2,"['Owen Wilson', 'Larry the Cable Guy', 'Michael Caine']",Director:John Lasseter,"['Animation', 'Family', 'Adventure']","['car race', 'sequel', 'comedy']",2033,5.8
+49026,The Dark Knight Rises,"['Christian Bale', 'Michael Caine', 'Gary Oldman']",Director:Christopher Nolan,"['Action', 'Crime', 'Drama']","['dc comics', 'crime fighter', 'terrorist']",9106,7.6
+49051,The Hobbit: An Unexpected Journey,"['Ian McKellen', 'Martin Freeman', 'Richard Armitage']",Director:Peter Jackson,"['Adventure', 'Fantasy', 'Action']","['riddle', 'elves', 'dwarves']",8297,7.0
+49521,Man of Steel,"['Henry Cavill', 'Amy Adams', 'Michael Shannon']",Director:Zack Snyder,"['Action', 'Adventure', 'Fantasy']","['saving the world', 'dc comics', 'superhero']",6359,6.5
+49529,John Carter,"['Taylor Kitsch', 'Lynn Collins', 'Samantha Morton']",Director:Andrew Stanton,"['Action', 'Adventure', 'Science Fiction']","['based on novel', 'mars', 'medallion']",2124,6.1
+54138,Star Trek Into Darkness,"['Chris Pine', 'Zachary Quinto', 'Zoe Saldana']",Director:J.J. Abrams,"['Action', 'Adventure', 'Science Fiction']","['spacecraft', 'friendship', 'sequel']",4418,7.4
+57158,The Hobbit: The Desolation of Smaug,"['Martin Freeman', 'Ian McKellen', 'Richard Armitage']",Director:Peter Jackson,"['Adventure', 'Fantasy']","['elves', 'dwarves', 'orcs']",4524,7.6
+57201,The Lone Ranger,"['Johnny Depp', 'Armie Hammer', 'William Fichtner']",Director:Gore Verbinski,"['Action', 'Adventure', 'Western']","['texas', 'horse', 'survivor']",2311,5.9
+58595,Snow White and the Huntsman,"['Kristen Stewart', 'Charlize Theron', 'Chris Hemsworth']",Director:Rupert Sanders,"['Adventure', 'Fantasy', 'Drama']","['queen', 'magic', 'fairy tale']",3118,5.8
+62177,Brave,"['Kelly Macdonald', 'Julie Walters', 'Billy Connolly']",Director:Brenda Chapman,"['Animation', 'Adventure', 'Comedy']","['scotland', 'rebel', 'bravery']",4641,6.7
+62211,Monsters University,"['Billy Crystal', 'John Goodman', 'Steve Buscemi']",Director:Dan Scanlon,"['Animation', 'Family']","['monster', 'dormitory', 'games']",3528,7.0
+64682,The Great Gatsby,"['Leonardo DiCaprio', 'Tobey Maguire', 'Carey Mulligan']",Director:Baz Luhrmann,"['Drama', 'Romance']","['based on novel', 'infidelity', 'obsession']",3769,7.3
+64686,47 Ronin,"['Keanu Reeves', 'Hiroyuki Sanada', 'Kou Shibasaki']",Director:Carl Rinsch,"['Drama', 'Action', 'Adventure']","['japan', 'suicide', 'samurai']",1326,5.9
+68721,Iron Man 3,"['Robert Downey Jr.', 'Gwyneth Paltrow', 'Don Cheadle']",Director:Shane Black,"['Action', 'Adventure', 'Science Fiction']","['terrorist', 'war on terror', 'tennessee']",8806,6.8
+68726,Pacific Rim,"['Idris Elba', 'Charlie Hunnam', 'Charlie Day']",Director:Guillermo del Toro,"['Action', 'Science Fiction', 'Adventure']","['dystopia', 'giant robot', 'giant monster']",4794,6.7
+68728,Oz: The Great and Powerful,"['James Franco', 'Mila Kunis', 'Rachel Weisz']",Director:Sam Raimi,"['Fantasy', 'Adventure', 'Family']","['circus', 'witch', 'magic']",3530,5.7
+72190,World War Z,"['Brad Pitt', 'Mireille Enos', 'Abigail Hargrove']",Director:Marc Forster,"['Action', 'Drama', 'Horror']","['dystopia', 'apocalypse', 'zombie']",5560,6.7
+76757,Jupiter Ascending,"['Mila Kunis', 'Channing Tatum', 'Sean Bean']",Director:Lilly Wachowski,"['Science Fiction', 'Fantasy', 'Action']","['jupiter', 'space', 'woman director']",2768,5.2
+79698,The Lovers,"['Josh Hartnett', 'Simone Kessell', 'Tamsin Egerton']",Director:Roland Joffé,"['Action', 'Adventure', 'Science Fiction']",[],34,4.8
+81005,Jack the Giant Slayer,"['Nicholas Hoult', 'Eleanor Tomlinson', 'Ewan McGregor']",Director:Bryan Singer,"['Action', 'Family', 'Fantasy']","['based on fairy tale', 'giant']",2598,5.5
+82690,Wreck-It Ralph,"['John C. Reilly', 'Sarah Silverman', 'Jack McBrayer']",Director:Rich Moore,"['Family', 'Animation', 'Comedy']","['support group', 'product placement', 'bullying']",4570,7.1
+91314,Transformers: Age of Extinction,"['Mark Wahlberg', 'Stanley Tucci', 'Kelsey Grammer']",Director:Michael Bay,"['Science Fiction', 'Action', 'Adventure']","['sequel', 'alien', 'transformers']",3095,5.8
+99861,Avengers: Age of Ultron,"['Robert Downey Jr.', 'Chris Hemsworth', 'Mark Ruffalo']",Director:Joss Whedon,"['Action', 'Adventure', 'Science Fiction']","['marvel comic', 'sequel', 'superhero']",6767,7.3
+100402,Captain America: The Winter Soldier,"['Chris Evans', 'Samuel L. Jackson', 'Scarlett Johansson']",Director:Anthony Russo,"['Action', 'Adventure', 'Science Fiction']","['washington d.c.', 'future', 'shield']",5764,7.6
+102382,The Amazing Spider-Man 2,"['Andrew Garfield', 'Emma Stone', 'Jamie Foxx']",Director:Marc Webb,"['Action', 'Adventure', 'Fantasy']","['obsession', 'marvel comic', 'sequel']",4179,6.5
+102651,Maleficent,"['Angelina Jolie', 'Elle Fanning', 'Sharlto Copley']",Director:Robert Stromberg,"['Fantasy', 'Adventure', 'Action']","['fairy tale', 'villain', 'sleeping beauty']",4496,7.0
+105864,The Good Dinosaur,"['Raymond Ochoa', 'Jack Bright', 'Jeffrey Wright']",Director:Peter Sohn,"['Adventure', 'Animation', 'Family']","['tyrannosaurus rex', 'friends', 'alternate history']",1736,6.6
+118340,Guardians of the Galaxy,"['Chris Pratt', 'Zoe Saldana', 'Dave Bautista']",Director:James Gunn,"['Action', 'Science Fiction', 'Adventure']","['marvel comic', 'spaceship', 'space']",9742,7.9
+119450,Dawn of the Planet of the Apes,"['Andy Serkis', 'Jason Clarke', 'Gary Oldman']",Director:Matt Reeves,"['Science Fiction', 'Action', 'Drama']","['leader', 'colony', 'post-apocalyptic']",4410,7.3
+122917,The Hobbit: The Battle of the Five Armies,"['Martin Freeman', 'Ian McKellen', 'Richard Armitage']",Director:Peter Jackson,"['Action', 'Adventure', 'Fantasy']","['corruption', 'elves', 'dwarves']",4760,7.1
+127585,X-Men: Days of Future Past,"['Hugh Jackman', 'James McAvoy', 'Michael Fassbender']",Director:Bryan Singer,"['Action', 'Adventure', 'Fantasy']","['1970s', 'mutant', 'time travel']",6032,7.5
+135397,Jurassic World,"['Chris Pratt', 'Bryce Dallas Howard', 'Irrfan Khan']",Director:Colin Trevorrow,"['Action', 'Adventure', 'Science Fiction']","['monster', 'dna', 'tyrannosaurus rex']",8662,6.5
+137113,Edge of Tomorrow,"['Tom Cruise', 'Emily Blunt', 'Brendan Gleeson']",Director:Doug Liman,"['Action', 'Science Fiction']","['deja vu', 'time warp', 'restart']",4858,7.6
+150540,Inside Out,"['Amy Poehler', 'Phyllis Smith', 'Richard Kind']",Director:Pete Docter,"['Drama', 'Comedy', 'Animation']","['dream', 'cartoon', 'imaginary friend']",6560,8.0
+157336,Interstellar,"['Matthew McConaughey', 'Jessica Chastain', 'Anne Hathaway']",Director:Christopher Nolan,"['Adventure', 'Drama', 'Science Fiction']","['saving the world', 'artificial intelligence', 'father son relationship']",10867,8.1
+158852,Tomorrowland,"['Britt Robertson', 'George Clooney', 'Raffey Cassidy']",Director:Brad Bird,"['Adventure', 'Family', 'Mystery']","['inventor', 'apocalypse', 'destiny']",2846,6.2
+168259,Furious 7,"['Vin Diesel', 'Paul Walker', 'Dwayne Johnson']",Director:James Wan,['Action'],"['car race', 'speed', 'revenge']",4176,7.3
+177572,Big Hero 6,"['Scott Adsit', 'Ryan Potter', 'Daniel Henney']",Director:Chris Williams,"['Adventure', 'Family', 'Animation']","['brother brother relationship', 'hero', 'talent']",6135,7.8
+188927,Star Trek Beyond,"['Chris Pine', 'Zachary Quinto', 'Karl Urban']",Director:Justin Lin,"['Action', 'Adventure', 'Science Fiction']","['sequel', 'stranded', 'hatred']",2568,6.6
+206647,Spectre,"['Daniel Craig', 'Christoph Waltz', 'Léa Seydoux']",Director:Sam Mendes,"['Action', 'Adventure', 'Crime']","['spy', 'based on novel', 'secret agent']",4466,6.3
+209112,Batman v Superman: Dawn of Justice,"['Ben Affleck', 'Henry Cavill', 'Gal Gadot']",Director:Zack Snyder,"['Action', 'Adventure', 'Fantasy']","['dc comics', 'vigilante', 'superhero']",7004,5.7
+246655,X-Men: Apocalypse,"['James McAvoy', 'Michael Fassbender', 'Jennifer Lawrence']",Director:Bryan Singer,['Science Fiction'],"['mutant', 'supernatural powers', 'marvel comic']",4721,6.4
+258489,The Legend of Tarzan,"['Alexander Skarsgård', 'Margot Robbie', 'Christoph Waltz']",Director:David Yates,"['Action', 'Adventure']","['africa', 'feral child', 'tarzan']",2430,5.5
+271110,Captain America: Civil War,"['Chris Evans', 'Robert Downey Jr.', 'Scarlett Johansson']",Director:Anthony Russo,"['Adventure', 'Action', 'Science Fiction']","['civil war', 'war', 'marvel comic']",7241,7.1
+278927,The Jungle Book,"['Neel Sethi', 'Bill Murray', 'Ben Kingsley']",Director:Jon Favreau,"['Family', 'Adventure', 'Drama']","['based on novel', 'snake', 'wolf']",2892,6.7
+297761,Suicide Squad,"['Will Smith', 'Margot Robbie', 'Joel Kinnaman']",Director:David Ayer,"['Action', 'Adventure', 'Crime']","['dc comics', 'shared universe', 'anti hero']",7458,5.9
+315011,Shin Godzilla,"['Hiroki Hasegawa', 'Yutaka Takenouchi', 'Satomi Ishihara']",Director:Hideaki Anno,"['Action', 'Adventure', 'Drama']","['monster', 'godzilla', 'giant monster']",143,6.5
