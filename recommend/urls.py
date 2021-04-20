@@ -23,6 +23,7 @@ urlpatterns = [
     path('logout/',view=views.logout), #注销
     path('generatecode/',view=views.generatecode), #生成验证码  1
     path('verifycode/',view=views.verifycode), #检查验证码正确与否，# 现在放在regist里了，没有使用
+    path('changepwd/', view=views.change_password),    # 修改密码 #orzorz hyx
 
     #用户数据增长
     path('addrec/', view=views.add_rec),  #新增评分  1

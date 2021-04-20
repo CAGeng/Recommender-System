@@ -26,6 +26,8 @@
                         <el-dropdown-item command="register" :disabled="edi2">注册</el-dropdown-item>
                         <el-dropdown-item command="change" :disabled="edi3">注销</el-dropdown-item>
                         <el-dropdown-item command="logout" :disabled="edi4">登出</el-dropdown-item>
+                        <!-- orzorz hyx -->
+                        <el-dropdown-item command="changepwd" :disabled="edi5">修改密码</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
                 <el-avatar icon="el-icon-user"></el-avatar>
@@ -107,6 +109,22 @@
                     <el-button type="primary" @click="login">登录</el-button>
                 </span>
             </el-dialog>
+
+            <!-- orzorz hyx -->
+            <!-- 修改密码弹窗 -->
+            <el-dialog :title="'修改密码'" :visible.sync="dialogvisible2" :width="'40%'" :before-close="handleclose" center>
+                <el-row>
+                    <el-col :span="18" :offset="3">
+                        <el-input placeholder="请输入旧密码" v-model="form.oldpwd" show-password></el-input>
+                        <el-input style="marginTop:5%" placeholder="请输入新密码" v-model="form.newpwd" show-password></el-input>
+                        <el-input style="marginTop:5%" placeholder="请再次输入新密码" v-model="form.rnewpwd" show-password></el-input>
+                    </el-col>
+                </el-row>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="changepwd">确定</el-button>
+                    <el-button type="primary" @click="handleclose">取消</el-button>
+                </span>
+            </el-dialog>
         </el-main>
     </el-container>
 </template>
@@ -122,6 +140,8 @@ export default {
     data() {
         return {
             input1: '',
+            // orzorz hyx
+            oldpwd: '',
             form:{
                 username: '',
                 password: '',
@@ -135,10 +155,12 @@ export default {
             edi2: false,
             edi3: true,
             edi4: true,
+            edi5: true,// orzorz hyx
             elh: 2000,
             swh: 0,
             xs: 0.36,
             dialogvisible1: false,
+            dialogvisible2: false,// orzorz hyx
             isAdmin: false,
             url: 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4181532436,846702450&fm=11&gp=0.jpg',
             datalist: [
@@ -189,6 +211,9 @@ export default {
             else if(v == "change"){
                 this.sendmsg()
             }
+            else if(v == "changepwd"){// orzorz hyx
+                this.dialogvisible2 = true
+            }
         },
 
         // 注销函数
@@ -198,6 +223,9 @@ export default {
 
         handleclose(){
             this.dialogvisible1 = false
+            this.dialogvisible2 = false// orzorz hyx
+            this.form.newpwd = ""
+            this.form.rnewpwd = ""
         },
 
         login(){
@@ -244,6 +272,61 @@ export default {
             this.$router.push('/register')
         },
 
+        // orzorz hyx
+        changepwd(){
+            if(this.form.oldpwd == ""){
+                this.$alert('请输入旧密码！','FAIL',{
+                    confirmButtonText:'确定'
+                })
+            }
+            else if(this.form.newpwd == ""){
+                this.$alert('请输入新密码！','FAIL',{
+                    confirmButtonText:'确定'
+                })
+            }
+            else if(this.form.rnewpwd == ""){
+                this.$alert('请再次输入新密码！','FAIL',{
+                    confirmButtonText:'确定'
+                })
+            }
+            else if(this.form.newpwd == this.form.rnewpwd){
+                var user = sessionStorage.getItem('user')
+                user = JSON.parse(user)
+                var username = user.username
+                axiosInstance.post('http://localhost:8000/api/changepwd/',{
+                    name: username,
+                    oldpwd: this.form.oldpwd,
+                    newpwd: this.form.newpwd
+                })
+                .then((response)=>{
+                    console.log(response)
+                    this.res_data = response.data
+                    if(this.res_data['status'] == 'success'){
+                        this.form.authority = this.res_data['info']
+                        this.$alert('修改成功，请重新登录','Success Message',{
+                            confirmButtonText:'确定'
+                        })
+                        sessionStorage.removeItem('user')
+                        window.location.reload()
+                        this.isAdmin = false
+                    }
+                    else{
+                        console.log('fail to change password')
+                        this.$alert('旧密码错误','Success Message',{
+                            confirmButtonText:'确定'
+                        })
+                    }
+                }).catch((response)=>{
+                    console.log(response)
+                })
+            }
+            else{
+                this.$alert('两次输入不一致', 'FAIL', {
+                    confirmButtonText:'确定'
+                })
+            }
+        },
+
         upload_movie(){
             this.$router.push('/movieupload')
         },
@@ -275,12 +358,14 @@ export default {
                 this.edi2 = true
                 this.edi3 = false
                 this.edi4 = false
+                this.edi5 = false// orzorz hyx
             }
             else{
                 this.edi1 = false
                 this.edi2 = false
                 this.edi3 = true
                 this.edi4 = true
+                this.edi5 = true// orzorz hyx
             }
         },
 

@@ -568,7 +568,25 @@ def search_by_kind(kind):
 
     return ans
 
+#orzorz hyx
+#修改密码
+def change_password(name, oldpwd, newpwd):
+    data = find_user(name)
 
+    if data:
+        if data[1] == oldpwd:
+            conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+            cursor = conn.cursor()
+            
+            cursor.execute('update user set password="{}" where name = "{}"'.format(newpwd, name))
+            conn.commit()
+            
+            cursor.close()
+            conn.close()
+            return 0
+        else:
+            print('Wrong old password!')
+            return 1
 
 ##############################################################################################
 ##############################################################################################
