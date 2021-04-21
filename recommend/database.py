@@ -415,14 +415,20 @@ def get_user_colletions(name):
 
 #根据电影单的id，获得这个电影单中的电影列表，返回一个列表
 def get_movie_inlist(list_id):
-    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
-    cursor = conn.cursor()
+    db = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
 
-    cursor.execute('select * from rec_list where list_id = "{}"'.format( list_id))
-    data = cursor.fetchone()
-
-    cursor.close()
-    conn.close()
+    df = pd.read_sql('select movie_list from rec_list where list_id = "{}"'.format(list_id), db)
+    if df.shape[0] == 0:
+        return []
+    mlist = df.iloc[0,0]
+    target = []
+    mlist = mlist.split('//')
+    for x in mlist:
+        x = int(x)
+        if x in target:
+            continue
+        target.append(x)
+    return target
 
 #用户浏览历史记录相关
 def get_browse_list(name):

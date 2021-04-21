@@ -218,7 +218,34 @@ export default {
 
         // 注销函数
         sendmsg(){
-            TODO()
+            var test = sessionStorage.getItem('user')
+            test = JSON.parse(test)
+            test = test.username
+            axiosInstance.post('http://localhost:8000/api/logout/',{
+                name: test,
+            })
+            .then((response)=>{
+                var data = response.data
+                if(data['status'] == 'success'){
+                    this.$alert('注销成功','Success Message',{
+                        confirmButtonText:'确定'
+                    })
+                    sessionStorage.removeItem('user')
+                    window.location.reload()
+                    this.isAdmin = false
+                }
+                else{
+                    this.$alert('我们出了点问题~','FAIL',{
+                        confirmButtonText:'确定'
+                    })
+                    sessionStorage.removeItem('user')
+                    window.location.reload()
+                    this.isAdmin = false
+                }
+            })
+            .catch((response)=>{
+                console.log(response)
+            })
         },
 
         handleclose(){

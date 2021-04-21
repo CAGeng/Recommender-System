@@ -1,5 +1,7 @@
 <template>
+
     <v-container fluid class="fill-height">
+            
         <v-card elevation="24" style="marginLeft:25%;width:50%">
             <v-toolbar dark height="80%" src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
                 <v-toolbar-title>电影推荐系统注册</v-toolbar-title>
@@ -19,7 +21,9 @@
             </v-card-text>
         </v-card>
     </v-container>
+
 </template>
+
 
 <script>
 import axiosInstance from '../api/index'
@@ -42,14 +46,57 @@ export default {
     },
 
     methods: {
-        
         goback(){
             this.$router.push('/home')
         },
 
         register(){
-            
-            if(this.form.password == this.form.rpassword){
+            //网上的轮子 , 检查用户名规范性
+            function check_user_name(str)
+            {
+                // 检查是否含有特殊字符
+                function check_other_char(str)
+                {
+                    var arr = ["&", "\\", "/", "*", ">", "<", "@", "!"];
+                    for (var i = 0; i < arr.length; i++)
+                    {
+                        for (var j = 0; j < str.length; j++)
+                        {
+                            if (arr[i] == str.charAt(j))
+                            {
+                                return true;
+                            }
+                        }
+                    }   
+                    return false;
+                }
+
+                var str2 = "该用户名合法";
+                if ("" == str)
+                {
+                    str2 = "用户名为空";
+                    return str2;
+                }
+                else if ((str.length < 5) || (str.length > 20))
+                {
+                    str2 = "用户名必须为5 ~ 20位";
+                    return str2;
+                }
+                else if (check_other_char(str))
+                {
+                    str2 = "不能含有特殊字符";
+                    return str2;
+                }
+                return str2;
+            }
+
+            var checkresult = check_user_name(this.form.username)
+            if(checkresult != "该用户名合法"){
+                this.$alert(checkresult, 'FAIL', {
+                    confirmButtonText:'确定'
+                })
+            }
+            else if(this.form.password == this.form.rpassword){
                 axiosInstance.post('http://localhost:8000/api/regist/',{
                     name: this.form.username,
                     email: this.form.e_mail,
@@ -109,10 +156,12 @@ export default {
             }).catch((response)=>{
                 console.log(response)
             })
-        }
+        },
     
     },
+
 }
+
 </script>
 
 <style>

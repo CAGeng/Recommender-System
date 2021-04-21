@@ -20,24 +20,25 @@ urlpatterns = [
     #用户信息
     path('login/', view=views.login),  #登录  1
     path('regist/',view=views.regist), #注册  1
-    path('logout/',view=views.logout), #注销
+    path('logout/',view=views.logout), #注销 1
     path('generatecode/',view=views.generatecode), #生成验证码  1
-    path('verifycode/',view=views.verifycode), #检查验证码正确与否，# 现在放在regist里了，没有使用
-    path('changepwd/', view=views.change_password),    # 修改密码 #orzorz hyx
+    path('changepwd/', view=views.change_password),    # 修改密码 #orzorz hyx # 1
+    # path('verifycode/',view=views.verifycode), #检查验证码正确与否，# 现在放在regist里了，没有使用
 
     #用户数据增长
     path('addrec/', view=views.add_rec),  #新增评分  1
     path('addbrowse/',view=views.add_browse), #新增浏览记录     1
 
-    path('images/', view=views.read_img), #暂时没用
+    # path('images/', view=views.read_img), #暂时没用
 
     #电影单相关
     path('addmvsheet/',view=views.add_movie_sheet), #新增推荐电影单
     path('addcol/',view=views.add_collection), #为一个用户添加收藏
+    path('mvsheetlist/',view=views.moviesheet_list), #获得一个电影表单中的电影
 
     #上传电影
-    path('upload_movie/',view=views.upload_movie), #上传基本信息
-    path('upload_movieImg/',view=views.upload_movieImg), #上传电影封面
+    path('upload_movie/',view=views.upload_movie), #上传基本信息  1
+    path('upload_movieImg/',view=views.upload_movieImg), #上传电影封面   1
 ]
 
 

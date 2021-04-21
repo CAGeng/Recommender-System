@@ -593,6 +593,26 @@ def add_movie_sheet(request):
         }
     return JsonResponse(res,safe=False)
 
+#mvsheetlist的函数api，用于获得一个表单中的电影列表
+def moviesheet_list(request):
+    '''
+    para:
+        request:
+            list_id: 列表的id
+    output:
+        电影信息的列表（字典表）
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        list_id = data['list_id']
+    else:#debug
+        list_id = '1f13dd8c36cbfe7862e95c69379b6fdb'
+
+    movie_id_list = database.get_movie_inlist(list_id)
+
+    info_list = get_moviedic_list(movie_id_list)
+    return JsonResponse(info_list,safe=False)
 
 #邮箱验证相关
 #generatecode的函数api，从request中获取email, 并为其生成验证码
