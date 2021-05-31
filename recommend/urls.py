@@ -16,6 +16,7 @@ urlpatterns = [
     path('gethot/', view=views.get_movie_hottest), #获取最热推荐  1
     path('simlist/', view=views.get_simlist), #获取相关电影   1
     path('searchmvbykind/', view=views.search_movie_bykind), #按照类别搜索
+    path('get_browse_record/', view=views.get_browse_record), #足迹
 
     #用户信息
     path('login/', view=views.login),  #登录  1

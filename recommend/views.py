@@ -1065,3 +1065,20 @@ def add_admin(request):
             'info' : 'alreay exists'
         }
     return JsonResponse(res,safe=False)
+
+def get_browse_record(request):
+    '''
+    param:
+        request:包含 name 
+    output：
+        电影单
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        name = data['name']
+    else :#debug
+        name = 'sft'
+
+    movieid_list = database.get_browse_list(name)
+    response = get_moviedic_list(movieid_list)
+    return JsonResponse(response,safe=False)
