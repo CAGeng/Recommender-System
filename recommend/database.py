@@ -68,6 +68,7 @@ def create_tables():
     # create rec_list table
     cursor.execute('create table rec_list(\
                         list_id varchar(50) not null,\
+                        list_name varchar(100) not null,\
                         name varchar(25) not null,\
                         movie_list varchar(3000) not null,\
                         primary key(list_id));')
@@ -89,6 +90,13 @@ def create_tables():
                         primary key(name));')
 
     print('Success create verificationcode table!')
+
+    # create rec_cache table
+    cursor.execute('create table rec_cache(\
+                        name varchar(25) not null,\
+                        movie_list varchar(3000) not null,\
+                        primary key(name));')
+    conn.commit()
 
     cursor.close()
     conn.close()
@@ -230,6 +238,8 @@ def logout(name):
     cursor.execute('delete from user where name = "{}"'.format(name))
     cursor.execute('delete from recommend where name = "{}"'.format(name))
     cursor.execute('delete from rec_list where name = "{}"'.format(name))
+    cursor.execute('delete from administrators where name = "{}"'.format(name))
+    cursor.execute('delete from rec_cache where name = "{}"'.format(name))
     conn.commit()
     
     cursor.close()
@@ -324,8 +334,7 @@ def create_id():
 
 #推荐列表相关的
 # 向推荐列表（类似歌单的形式）中添加一个条目(name,mlist)，不会合并
-@user_check_decorator
-def add_rec_list(name,mlist):
+def add_rec_list(name,mlist,sheetname='随便的名字'):
 
     rec = ""
     fl = 1
@@ -345,7 +354,8 @@ def add_rec_list(name,mlist):
     conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
     cursor = conn.cursor()
 
-    cursor.execute('insert into rec_list (list_id,name,movie_list) values ("{}", "{}","{}")'.format(listid,name,rec))
+    cursor.execute('insert into rec_list (list_id,name,movie_list,list_name) \
+                values ("{}", "{}","{}","{}")'.format(listid,name,rec,sheetname))
     conn.commit()
 
     cursor.close()
@@ -373,6 +383,14 @@ def get_rec_list(name):
                 return target
     return target
 
+#获得一个用户的所有推荐影单
+def get_reclist_df(name):
+    db = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+
+    df = pd.read_sql('select * from rec_list where name = "{}"'.format(name), db)
+
+    return df
+
 #为用户添加一个电影单作为收藏
 def add_collection(name, list_id):
     conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
@@ -382,8 +400,15 @@ def add_collection(name, list_id):
     data = cursor.fetchone()
 
     if data == None:
-        return 1 #用户不存在的错误
-    data = data[0]
+        data = ""
+    else:
+        data = data[0]
+
+    datalist = data.split("//")
+    if list_id in datalist:
+        cursor.close()
+        conn.close()
+        return 1
 
     # collections的格式为："//a//b//c"
     data += "//" + list_id
@@ -405,13 +430,19 @@ def get_user_colletions(name):
     conn.close()
 
     if data == None:
-        return 1 #用户不存在的错误
+        return []
     data = data[0]
 
     collections = data.split('//')
     if len(collections) > 0:
         collections = collections[1:]   #去掉第一个空字符串
     return collections
+
+def get_sheet_info(id):
+    db = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+
+    df = pd.read_sql('select * from rec_list where list_id = "{}"'.format(id), db)
+    return df
 
 #根据电影单的id，获得这个电影单中的电影列表，返回一个列表
 def get_movie_inlist(list_id):
@@ -429,6 +460,122 @@ def get_movie_inlist(list_id):
             continue
         target.append(x)
     return target
+
+def get_sheets(count_limit=10):
+    db = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+
+    df = pd.read_sql('select * from rec_list', db)
+
+    con = 0
+    ret = []
+    inds = [i for i in range(len(df))]
+    random.shuffle(inds)
+    for i in range(len(df)):
+        ind = inds[i]
+        username = df['name'][ind]
+        sheet_name = df['list_name'][ind]
+        sheet_id = df['list_id'][ind]
+        ret.append({"author":username,"title":sheet_name,"id":sheet_id})
+        con += 1
+        if con >= count_limit:
+            break
+    return ret
+
+def get_rec_cache(name):
+    db = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+
+    df = pd.read_sql('select movie_list from rec_cache where name = "{}"'.format(name), db)
+    if len(df) == 0:
+        return []
+    movielist = df['movie_list'][0]
+    if movielist == "":
+        return []
+    movielist = movielist.split("//")
+    movielist = [int(x) for x in movielist]
+    return movielist
+
+def add_rec_cache(name,movieid):
+    db = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+
+    df = pd.read_sql('select movie_list from rec_cache where name = "{}"'.format(name), db)
+    if len(df) == 0:
+        conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+        cursor = conn.cursor()
+
+        cursor.execute('insert into rec_cache (name,movie_list) \
+                    values ("{}","{}")'.format(name,str(movieid)))
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+    else:
+        movielist = df['movie_list'][0]
+        mvlist = movielist.split("//")
+        if str(movieid) in mvlist:
+            return 1
+        if movielist=="":
+            movielist = str(movieid)
+        else:
+            movielist += "//" + str(movieid)
+        conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+        cursor = conn.cursor()
+        
+        cursor.execute('update rec_cache set movie_list="{}" where name = "{}"'.format(movielist, name))
+        conn.commit()
+        
+        cursor.close()
+        conn.close()
+    return 0
+
+def del_rec_cache(name,movieid):
+    db = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+
+    df = pd.read_sql('select movie_list from rec_cache where name = "{}"'.format(name), db)
+    if len(df) == 0:
+        return 
+    movielist = df['movie_list'][0]
+    movielist = movielist.split("//")
+    if str(movieid) not in movielist:
+        return 
+    movielist.remove(str(movieid))
+    movielist = "//".join(movielist)
+
+    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    cursor = conn.cursor()
+    
+    cursor.execute('update rec_cache set movie_list="{}" where name = "{}"'.format(movielist, name))
+    conn.commit()
+    
+    cursor.close()
+    conn.close()
+    return 
+
+def add_from_cache(username,listname):
+    db = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+
+    df = pd.read_sql('select movie_list from rec_cache where name = "{}"'.format(username), db)
+    if len(df) == 0:
+        return 1
+    movielist = df['movie_list'][0]
+    if movielist=="":
+        return 1
+    # 生成id
+    listid = create_id()
+
+    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    cursor = conn.cursor()
+
+    cursor.execute('insert into rec_list (list_id,name,movie_list,list_name) \
+                values ("{}", "{}","{}","{}")'.format(listid,username,movielist,listname))
+    conn.commit()
+    cursor.execute('delete from rec_cache where name = "{}"'.format(username))
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 0
+
+
 
 #用户浏览历史记录相关
 def get_browse_list(name):
@@ -449,7 +596,6 @@ def get_browse_list(name):
     data = literal_eval(data)
 
     return data
-
 
 @user_check_decorator
 def add_browse_record(name, mlist):
@@ -606,7 +752,7 @@ def change_password(name, oldpwd, newpwd):
 def init_tables_base():
     import pandas as pd
     #data for pretraining
-    input_path = "C:/Users/sft/Desktop/数据集/推荐/input/"
+    input_path = "C:/Users/sft/Desktop/数据集/RECOMMEND/"
     df1 = pd.read_csv(input_path + 'tmdb_5000_credits.csv')
     df2 = pd.read_csv(input_path + 'tmdb_5000_movies.csv')
     df1.columns = ['id','tittle','cast','crew']

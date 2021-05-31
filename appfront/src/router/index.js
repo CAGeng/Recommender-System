@@ -13,6 +13,8 @@ export const publicRouter = [
   { path: '/search', component: () => import('@/view/search'), hidden: true},
   { path: '/movieinfo', component: () => import('@/view/movieinfo'), hidden: true},
   { path: '/movieupload', component: () => import('@/view/movieupload'), hidden: true},
+  { path: '/recommendlist', component: () => import('@/view/recommendlist'), hidden: true},
+  { path: '/listinfo', component: () => import('@/view/listinfo'), hidden: true},
 ]
 
 export const router = new Router({
@@ -38,6 +40,7 @@ router.beforeEach((to, from, next) => {
     else{
       next()
     }
+    // next()
   }
   NProgress.done()
 })

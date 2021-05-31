@@ -5,6 +5,8 @@
                 <v-toolbar dark height="50%" src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
                     <v-toolbar-title>电影详情</v-toolbar-title>
                     <v-spacer></v-spacer>
+                    <!--update by jbt -->
+                    <v-btn @click="add_to_rlist_this()" class="rec2">加入推荐</v-btn>
                     <v-btn @click="goback()">返回</v-btn>
                 </v-toolbar>
                 <v-container class="mcc">
@@ -76,6 +78,8 @@
                             <v-toolbar dark height="50px" src="https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg">
                                 <v-toolbar-title>{{ item.title }}</v-toolbar-title>
                                 <v-spacer></v-spacer>
+                                <!--update by jbt -->
+                                <v-btn @click="add_to_rlist(item.id)" class="rec2">加入推荐</v-btn>
                                 <!-- 进入电影详情页 -->
                                 <v-btn @click="detail(item.id)">电影详情</v-btn>
                             </v-toolbar>
@@ -104,6 +108,7 @@ export default {
 
     data() {
         return {
+            mid: null,
             title1: "测试样例1",
             usercomment: "",
             value: 3.7,
@@ -172,6 +177,7 @@ export default {
 
         getData(){
             var movieid = JSON.parse(this.$Base64.decode(this.$route.query.mid))
+            this.mid = movieid
             axiosInstance.post('http://localhost:8000/api/minfo/',{
                 mid : movieid
             })
@@ -234,6 +240,31 @@ export default {
                 }
             })
         },
+
+        add_to_rlist( v ){
+            var user = sessionStorage.getItem('user')
+            user = JSON.parse(user)
+            var username = user.username
+            axiosInstance.post('http://localhost:8000/api/add_reclist_cache/',{
+                name: username,
+                movieid: v
+            })
+            .then((response)=>{
+                var data = response.data
+                if(data['info'] == 'already_in'){
+                    this.$message('已经存在');
+                }
+                else {
+                    this.$message('加入清单成功');
+                }
+            }).catch((response)=>{
+                console.log(response)
+            })
+        },
+
+        add_to_rlist_this(){
+            this.add_to_rlist(this.mid)
+        }
 
         
     },
@@ -310,6 +341,11 @@ export default {
         flex-wrap: wrap;
         justify-content: space-between;
         display: flex;
+    }
+
+    /* update by jbt*/
+    .rec2{
+        margin-right: 20px;
     }
 
 </style>

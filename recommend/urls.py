@@ -23,6 +23,7 @@ urlpatterns = [
     path('logout/',view=views.logout), #注销 1
     path('generatecode/',view=views.generatecode), #生成验证码  1
     path('changepwd/', view=views.change_password),    # 修改密码 #orzorz hyx # 1
+    path('add_admin/', view=views.add_admin),     # 1
     # path('verifycode/',view=views.verifycode), #检查验证码正确与否，# 现在放在regist里了，没有使用
 
     #用户数据增长
@@ -33,8 +34,16 @@ urlpatterns = [
 
     #电影单相关
     path('addmvsheet/',view=views.add_movie_sheet), #新增推荐电影单
-    path('addcol/',view=views.add_collection), #为一个用户添加收藏
-    path('mvsheetlist/',view=views.moviesheet_list), #获得一个电影表单中的电影
+    path('addcol/',view=views.add_collection), #为一个用户添加收藏  1
+    path('mvsheetlist/',view=views.moviesheet_list), #获得一个电影表单中的电影  1
+    path('get_already_rec/',view=views.get_already_rec),    #1
+    path('get_collections/',view=views.get_collections),    #1
+    path('get_sheets/',view=views.get_sheets),    #1
+    path('add_reclist_cache/',view=views.add_reclist_cache),    #1
+    path('delete_reclist_cache/',view=views.delete_reclist_cache),    #1
+    path('get_reclist_cache/',view=views.get_reclist_cache),    #1
+    path('add_from_cache/',view=views.add_from_cache),    #1
+    
 
     #上传电影
     path('upload_movie/',view=views.upload_movie), #上传基本信息  1

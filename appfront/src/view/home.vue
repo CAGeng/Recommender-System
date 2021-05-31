@@ -7,12 +7,16 @@
                     </el-image>
                 </el-col>
                 <!-- 搜索 -->
-                <el-col :span="6" :offset="6">
+                <el-col :span="6" :offset="4">
                     <el-input placeholder="movie" v-model="input1">
                     </el-input>
                 </el-col>
                 <el-col :span="1">
                     <el-button type="primary" icon="el-icon-search" @click="search()">搜索</el-button> 
+                </el-col>
+                <!-- 查看自己的推荐列表 -->
+                <el-col :span="1" :offset="1">
+                    <el-button type="primary" icon="el-icon-s-home" @click="show_my_rlist()">我的推荐</el-button> 
                 </el-col>
                 <!-- 管理员上传电影 -->
                 <el-col :span="1" :offset="4">
@@ -28,6 +32,8 @@
                         <el-dropdown-item command="logout" :disabled="edi4">登出</el-dropdown-item>
                         <!-- orzorz hyx -->
                         <el-dropdown-item command="changepwd" :disabled="edi5">修改密码</el-dropdown-item>
+                        <!-- updated by jbt -->
+                        <el-dropdown-item command="beadmin" :disabled="edi6">成为管理员</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
                 <el-avatar icon="el-icon-user"></el-avatar>
@@ -58,6 +64,8 @@
                             <v-toolbar dark height="50px" src="https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg">
                                 <v-toolbar-title>{{ item.title }}</v-toolbar-title>
                                 <v-spacer></v-spacer>
+                                <!--update by jbt -->
+                                <v-btn @click="add_to_rlist(item.id)" class="rec">加入推荐</v-btn>
                                 <!-- 进入电影详情页 -->
                                 <v-btn @click="detail(item.id)">电影详情</v-btn>
 
@@ -83,6 +91,8 @@
                             <v-toolbar dark height="50px" src="https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg">
                                 <v-toolbar-title>{{ item.title }}</v-toolbar-title>
                                 <v-spacer></v-spacer>
+                                <!--update by jbt -->
+                                <v-btn @click="add_to_rlist(item.id)" class="rec">加入推荐</v-btn>
                                 <!-- 进入电影详情页 -->
                                 <v-btn @click="detail(item.id)">电影详情</v-btn>
                             </v-toolbar>
@@ -92,6 +102,21 @@
                                     <img id="test" :src="item.urls" class="img1"/>
                                 </el-row>
                             </v-container>
+                        </v-card>
+                    </v-container>
+                    <v-toolbar class="forhome" dark height="50%" src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
+                        <v-toolbar-title>其他人的推荐影单</v-toolbar-title>
+                        <v-spacer></v-spacer>
+                    </v-toolbar>
+                    <v-container class="scc5">
+                        <v-card  v-for="item in rec_list" :key="item.id" class="scrd5" color="#000000">
+                            <v-toolbar dark height="50px" src="https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg">
+                                <v-toolbar-title>{{ item.title }}( Author: {{ item.author }} )</v-toolbar-title>
+                                <v-spacer></v-spacer>
+                                <!--update by jbt -->
+                                <v-btn @click="star(item.id)" class="rec">收藏影单</v-btn>
+                                <v-btn @click="movielistinfo(item.id)">影单详情</v-btn>
+                            </v-toolbar>
                         </v-card>
                     </v-container>
                 </v-container>
@@ -125,6 +150,19 @@
                     <el-button type="primary" @click="handleclose">取消</el-button>
                 </span>
             </el-dialog>
+
+            <!-- updated by jbt -->
+            <el-dialog :title="'成为管理员'" :visible.sync="dialogvisible3" :width="'40%'" :before-close="handleclose2" center>
+                <el-row>
+                    <el-col :span="18" :offset="3">
+                        <el-input placeholder="请输入口令" v-model="adminpass" show-password></el-input>
+                    </el-col>
+                </el-row>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="adminpermission">确定</el-button>
+                    <el-button type="primary" @click="handleclose2">取消</el-button>
+                </span>
+            </el-dialog>
         </el-main>
     </el-container>
 </template>
@@ -156,11 +194,14 @@ export default {
             edi3: true,
             edi4: true,
             edi5: true,// orzorz hyx
+            edi6: true,
             elh: 2000,
             swh: 0,
             xs: 0.36,
             dialogvisible1: false,
             dialogvisible2: false,// orzorz hyx
+            dialogvisible3: false,
+            adminpass: '',
             isAdmin: false,
             url: 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4181532436,846702450&fm=11&gp=0.jpg',
             datalist: [
@@ -180,7 +221,11 @@ export default {
                 {id:1, title: "测试样例2", urls: 'https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg', introduce:"测试样例2"},
                 {id:2, title: "测试样例3", urls: 'https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg', introduce:"测试样例3"},
                 {id:3, title: "测试样例4", urls: 'https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg', introduce:"测试样例4"}
-            ]
+            ],
+            rec_list: [
+                {id:0, date:"2020/09/02", title:"科幻", author:"test"},
+                {id:1, date:"2021/01/01", title:"爱情", author:"sft"},
+            ],
         }
     },
 
@@ -213,6 +258,9 @@ export default {
             }
             else if(v == "changepwd"){// orzorz hyx
                 this.dialogvisible2 = true
+            }
+            else if(v == "beadmin"){
+                this.dialogvisible3 = true
             }
         },
 
@@ -253,6 +301,50 @@ export default {
             this.dialogvisible2 = false// orzorz hyx
             this.form.newpwd = ""
             this.form.rnewpwd = ""
+        },
+
+        handleclose2(){
+            this.dialogvisible3 = false
+            this.adminpass = ""
+        },
+
+        adminpermission(){
+            var code = "imgly"
+            var user = sessionStorage.getItem('user')
+            user = JSON.parse(user)
+            var username = user.username
+            if(this.adminpass == code){
+                axiosInstance.post('http://localhost:8000/api/add_admin/',{
+                    username: username,
+                })
+                .then((response)=>{
+                    var data = response.data
+                    if(data['info'] == 'alreay exists'){
+                        this.$alert('已经是管理员','Fail',{
+                            confirmButtonText:'确定'
+                        })
+                        this.isAdmin = true
+                        this.form.authority = 'admin'
+                        sessionStorage.setItem('user', JSON.stringify(this.form))
+                    }
+                    else{
+                        this.$alert('恭喜成为管理员','Success',{
+                            confirmButtonText:'确定'
+                        })
+                        this.isAdmin = true
+                        this.form.authority = 'admin'
+                        sessionStorage.setItem('user', JSON.stringify(this.form))
+                    }
+                    window.location.reload()
+                }).catch((response)=>{
+                    console.log(response)
+                })
+            }
+            else{
+                this.$alert('口令错误', 'FAIL', {
+                    confirmButtonText:'确定'
+                })
+            }
         },
 
         login(){
@@ -386,6 +478,7 @@ export default {
                 this.edi3 = false
                 this.edi4 = false
                 this.edi5 = false// orzorz hyx
+                this.edi6 = temp =='admin' ? true : false
             }
             else{
                 this.edi1 = false
@@ -393,6 +486,7 @@ export default {
                 this.edi3 = true
                 this.edi4 = true
                 this.edi5 = true// orzorz hyx
+                this.edi6 = true
             }
         },
 
@@ -455,6 +549,16 @@ export default {
                     console.log(response)
                 })
             }
+            //推荐影单
+            axiosInstance.post('http://localhost:8000/api/get_sheets/',{
+            })
+            .then((response)=>{
+                console.log(response)
+                this.rec_list = response.data
+            }).catch((response)=>{
+                console.log(response)
+            })
+
         },
 
         // 进入电影详情页，如果用户已经登录，要向后端添加浏览记录
@@ -489,6 +593,63 @@ export default {
                 }
             })
         },
+
+        add_to_rlist( v ){
+            var user = sessionStorage.getItem('user')
+            user = JSON.parse(user)
+            var username = user.username
+            axiosInstance.post('http://localhost:8000/api/add_reclist_cache/',{
+                name: username,
+                movieid: v
+            })
+            .then((response)=>{
+                var data = response.data
+                if(data['info'] == 'already_in'){
+                    this.$message('已经存在');
+                }
+                else {
+                    this.$message('加入清单成功');
+                }
+            }).catch((response)=>{
+                console.log(response)
+            })
+        },
+
+        show_my_rlist(){
+            this.$router.push('/recommendlist')
+        },
+
+        star( v ){
+            var user = sessionStorage.getItem('user')
+            user = JSON.parse(user)
+            var username = user.username
+            axiosInstance.post('http://localhost:8000/api/addcol/',{
+                name: username,
+                listid: v
+            })
+            .then((response)=>{
+                var data = response.data
+                if(data['info'] == 'already in'){
+                    this.$message("已经收藏过这个影单了~")
+                }
+                else {
+                    // console.log("success ")
+                    this.$message("收藏成功")
+                }
+            }).catch((response)=>{
+                console.log(response)
+            })
+        },
+
+        movielistinfo( v ){
+            // 跳转到该电影推荐单详情页
+            this.$router.push({
+                path: '/listinfo',
+                query:{
+                    listid : this.$Base64.encode(JSON.stringify(v))
+                }
+            })
+        }
         
     },
     
@@ -570,6 +731,15 @@ export default {
         width: 100%;
         height: 100%;
         object-fit: cover;
+    }
+    
+    /* update by jbt*/
+    .rec{
+        margin-right: 20px;
+    }
+
+    .forhome{
+        margin-top: 30px;
     }
 
 </style>

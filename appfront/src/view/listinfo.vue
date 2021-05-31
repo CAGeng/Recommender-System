@@ -3,7 +3,7 @@
         <el-main>
             <v-container>
                 <v-toolbar dark height="50%" src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
-                    <v-toolbar-title>查询结果</v-toolbar-title>
+                    <v-toolbar-title>影单详情</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-btn @click="goback()">返回</v-btn>
                 </v-toolbar>
@@ -12,8 +12,6 @@
                         <v-toolbar dark height="50px" src="https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg">
                             <v-toolbar-title>{{ item.title }}</v-toolbar-title>
                             <v-spacer></v-spacer>
-                            <!--update by jbt -->
-                            <v-btn @click="add_to_rlist(item.id)" class="rec1">加入推荐</v-btn>
                             <!-- 进入电影详情页 -->
                             <v-btn @click="detail(item.id)">电影详情</v-btn>
                         </v-toolbar>
@@ -52,14 +50,13 @@ export default {
     methods: {
         
         goback(){
-            this.$router.push('/home')
+            this.$router.push('/recommendlist')
         },
 
         getData(){
-            var searchname = JSON.parse(this.$Base64.decode(this.$route.query.name))
-            console.log(searchname)
-            axiosInstance.post('http://localhost:8000/api/searchmv/',{
-                title: searchname
+            var listid = JSON.parse(this.$Base64.decode(this.$route.query.listid))
+            axiosInstance.post('http://localhost:8000/api/mvsheetlist/',{
+                list_id: listid
             })
             .then((response)=>{
                 console.log(response)
@@ -101,27 +98,6 @@ export default {
                 }
             })
         },
-
-        add_to_rlist( v ){
-            var user = sessionStorage.getItem('user')
-            user = JSON.parse(user)
-            var username = user.username
-            axiosInstance.post('http://localhost:8000/api/add_reclist_cache/',{
-                name: username,
-                movieid: v
-            })
-            .then((response)=>{
-                var data = response.data
-                if(data['info'] == 'already_in'){
-                    this.$message('已经存在');
-                }
-                else {
-                    this.$message('加入清单成功');
-                }
-            }).catch((response)=>{
-                console.log(response)
-            })
-        }
     
     },
 

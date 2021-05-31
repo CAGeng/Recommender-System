@@ -1,9 +1,11 @@
+from django.http import response
 from django.shortcuts import render
 from django.http.response import JsonResponse,HttpResponse
 
 import json
 from . import recommend,database,SendEmail
 import pandas as pd
+from random import shuffle
 import cv2
 # Create your views here.
 
@@ -547,6 +549,8 @@ def add_browse(request):
 
     return JsonResponse(res,safe=False)
 
+
+
 #addmvsheet的函数api，用于添加一个用户的推荐电影单
 def add_movie_sheet(request):
     '''
@@ -613,6 +617,220 @@ def moviesheet_list(request):
 
     info_list = get_moviedic_list(movie_id_list)
     return JsonResponse(info_list,safe=False)
+
+#get_already_rec的函数api
+def get_already_rec(request):
+    '''
+    para:
+        request:
+            name:用户名
+    output:
+        电影单表
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        name = data['name']
+    else:#debug
+        name = 'sft'
+
+    moviesheet_df = database.get_reclist_df(name)
+    response = []
+    for i in range(moviesheet_df.shape[0]):
+        username = moviesheet_df['name'][i]
+        sheet_id = moviesheet_df['list_id'][i]
+        sheet_name = moviesheet_df['list_name'][i]
+        print(sheet_name)
+        response.append({"author":username,"title":sheet_name,"id":sheet_id})
+    return JsonResponse(response,safe=False)
+
+#get_collections的函数api
+def get_collections(request):
+    '''
+    para:
+        request:
+            name:用户名
+    output:
+        电影单表
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        name = data['name']
+    else:#debug
+        name = 'sft'
+
+    sheetid_list = database.get_user_colletions(name)
+    response = []
+    for sheetid in sheetid_list:
+        sheetdf = database.get_sheet_info(sheetid)
+        if sheetdf.shape[0] == 0:
+            continue
+        else:
+            username = sheetdf['name'][0]
+            sheet_id = sheetdf['list_id'][0]
+            sheet_name = sheetdf['list_name'][0]
+            response.append({"author":username,"title":sheet_name,"id":sheet_id})
+    return JsonResponse(response,safe=False)
+
+#添加收藏的函数api
+def add_collection(request):
+    '''
+    para:
+        request:包含
+            name: 用户名
+            listid: 列表id
+    output:
+        若添加成功，返回
+            status: success
+            info:
+        否则，返回
+            status: fail
+            info:错误信息
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        name = data['name']
+        listid = data['listid']
+    else:   #debug
+        name = 'a'
+        listid = 'test'
+
+    err = database.add_collection(name,listid)
+    if err == 0:
+        res = {
+           'status' : 'success',
+            'info' : '' 
+        }
+    elif err == 1:
+        res = {
+            'status' : 'success',
+            'info' : 'already in'
+        }
+
+    return JsonResponse(res,safe=False)
+
+def get_sheets(request):
+    '''
+    para:
+        request:
+    output:
+        电影单表
+    '''
+    response = database.get_sheets(count_limit=5)
+    return JsonResponse(response,safe=False)
+
+def add_reclist_cache(request):
+    '''
+    para:
+        request:包含
+            name: 用户名
+            movieid:电影id
+    output:
+        若重复电影，返回
+            status: success
+            info: already_in
+        否则
+            sstatus: success
+            info: finish
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        name = data['name']
+        movieid = data['movieid']
+
+    else:#debug
+        name = 'b'
+        movieid = 2
+    
+    err = database.add_rec_cache(name,movieid)
+    if err == 1:
+        response = {
+            'status': 'success',
+            'info': 'already_in'
+        }
+    else:
+        response = {
+            'status': 'success',
+            'info': 'finish'
+        }
+    return JsonResponse(response,safe=False)
+
+def delete_reclist_cache(request):
+    '''
+    para:
+        request:包含
+            name: 用户名
+            movieid:电影id
+    output:
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        name = data['name']
+        movieid = data['movieid']
+
+    else:#debug
+        name = 'b'
+        movieid = 2
+    database.del_rec_cache(name,movieid)
+    response = {
+        'status': 'success',
+        'info': ''
+    }
+    return JsonResponse(response,safe=False)
+
+def get_reclist_cache(request):
+    '''
+    para:
+        request:包含
+            name: 用户名
+            movieid:电影id
+    output:
+        电影表
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))    
+        name = data['name']
+
+    else:#debug
+        name = 'sft'
+
+    movieidlist = database.get_rec_cache(name)
+    response = get_moviedic_list(movieidlist)
+    return JsonResponse(response,safe=False)
+
+def add_from_cache(request):
+    '''
+    para:
+        request:包含
+            username: 用户名
+            listname:sheet名
+    output:
+        
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))    
+        username = data['username']
+        listname = data['listname']
+
+    else:#debug
+        username = 'sft'
+        listname = '好看的电影随意的名字'
+    
+    err = database.add_from_cache(username,listname)
+    if err == 1:
+        response = {
+            'status': 'success',
+            'info': 'Empty list'
+        }
+    else:
+        response = {
+            'status': 'success',
+            'info': 'finish'
+        }
+    return JsonResponse(response,safe=False)
+
 
 #邮箱验证相关
 #generatecode的函数api，从request中获取email, 并为其生成验证码
@@ -684,44 +902,6 @@ def verifycode(request):
             'status' : 'success',
             'info' : 'False'
         }
-    return JsonResponse(res,safe=False)
-
-#添加收藏的函数api
-def add_collection(request):
-    '''
-    para:
-        request:包含
-            name: 用户名
-            listid: 列表id
-    output:
-        若添加成功，返回
-            status: success
-            info:
-        否则，返回
-            status: fail
-            info:错误信息
-    '''
-    if request.method == 'POST':
-        data = json.loads(request.body.decode('utf-8'))
-        
-        name = data['name']
-        listid = data['listid']
-    else:   #debug
-        name = 'a'
-        listid = 'test'
-
-    err = database.add_collection(name,listid)
-    if err == 0:
-        res = {
-           'status' : 'success',
-            'info' : '' 
-        }
-    elif err == 1:
-        res = {
-            'status' : 'fail',
-            'info' : 'user not exists'
-        }
-
     return JsonResponse(res,safe=False)
 
 #上传电影图片
@@ -858,12 +1038,30 @@ def change_password(request):
 
     return JsonResponse(res,safe=False)
 
-# from apscheduler.schedulers.background import BackgroundScheduler
-# from django_apscheduler.jobstores import DjangoJobStore, register_events, register_job
-# try:
-#     scheduler = BackgroundScheduler()
-#     scheduler.add_job(database.update_verificationcode, 'interval', hours = 1)
-#     scheduler.start()
-# except Exception as e:
-#     print(e)
-#     scheduler.shutdown()
+def add_admin(request):
+    '''
+    para:
+        request:包含
+            username: 用户名
+    output:
+        
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))    
+        username = data['username']
+
+    else:#debug
+        username = 'sft'
+    
+    err = database.add_administrators(username)
+    if err == 0:
+        res = {
+            'status' : 'success',
+            'info' : ''
+        }
+    elif err == 1:
+        res = {
+            'status' : 'success',
+            'info' : 'alreay exists'
+        }
+    return JsonResponse(res,safe=False)
