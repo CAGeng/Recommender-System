@@ -671,6 +671,43 @@ def get_collections(request):
             response.append({"author":username,"title":sheet_name,"id":sheet_id})
     return JsonResponse(response,safe=False)
 
+def del_collection(request):
+    '''
+    para:
+        request:包含
+            name: 用户名
+            listid: 列表id
+    output:
+        若删除成功，返回
+            status: success
+            info:
+        否则，返回
+            status: success
+            info:'not exist'
+    '''
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        name = data['name']
+        listid = data['listid']
+    else:   #debug
+        name = 'sft'
+        listid = '3d828cb53d4ce013832838cfa207824a'
+    
+    err = database.del_collection(name,listid)
+    if err == 0:
+        res = {
+           'status' : 'success',
+            'info' : '' 
+        }
+    elif err == 1:
+        res = {
+            'status' : 'success',
+            'info' : 'not exist'
+        }
+    return JsonResponse(res,safe=False)
+           
+
 #添加收藏的函数api
 def add_collection(request):
     '''

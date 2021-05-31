@@ -44,6 +44,7 @@ urlpatterns = [
     path('delete_reclist_cache/',view=views.delete_reclist_cache),    #1
     path('get_reclist_cache/',view=views.get_reclist_cache),    #1
     path('add_from_cache/',view=views.add_from_cache),    #1
+    path('del_collection/',view=views.del_collection),    
     
 
     #上传电影

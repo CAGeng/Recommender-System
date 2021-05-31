@@ -235,9 +235,9 @@ def logout(name):
     conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
     cursor = conn.cursor()
 
-    cursor.execute('delete from user where name = "{}"'.format(name))
     cursor.execute('delete from recommend where name = "{}"'.format(name))
     cursor.execute('delete from rec_list where name = "{}"'.format(name))
+    cursor.execute('delete from user where name = "{}"'.format(name))
     cursor.execute('delete from administrators where name = "{}"'.format(name))
     cursor.execute('delete from rec_cache where name = "{}"'.format(name))
     conn.commit()
@@ -437,6 +437,35 @@ def get_user_colletions(name):
     if len(collections) > 0:
         collections = collections[1:]   #去掉第一个空字符串
     return collections
+
+def del_collection(name,list_id):
+    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    cursor = conn.cursor()
+
+    cursor.execute('select collections from user where name = "{}"'.format( name))
+    data = cursor.fetchone()
+
+    if data == None:
+        return 1
+    data = data[0]
+    if data == '':
+        return 1
+    collections = data.split('//')
+    if len(collections) > 0:
+        collections = collections[1:]   #去掉第一个空字符串
+    if list_id in collections:
+        collections.remove(list_id)
+    newdata = "//".join(collections)
+    if newdata != '':
+        newdata = "//" + newdata
+
+    cursor.execute('UPDATE user set collections = "{}" where name = "{}"'.format(newdata,name))
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 0
+
 
 def get_sheet_info(id):
     db = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)

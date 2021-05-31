@@ -59,7 +59,7 @@
             <el-dialog :title="'上传推荐影单'" :visible.sync="dialogvisible" :width="'40%'" :before-close="handleclose" center>
                 <el-row>
                     <el-col :span="18" :offset="3">
-                        <el-input placeholder="请输入影单名称" v-model="listname" show-password></el-input>
+                        <el-input placeholder="请输入影单名称" v-model="listname" ></el-input>
                     </el-col>
                 </el-row>
                 <span slot="footer" class="dialog-footer">
