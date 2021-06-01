@@ -221,9 +221,11 @@ def login(request):
     isAdmin = database.find_admin(name)
 
     if err == 0:
+        email = database.get_email(name)
         dic = {
             'status':'success',
-            'info': 'admin' if isAdmin else 'normal'
+            'info': 'admin' if isAdmin else 'normal',
+            'email' : email
         }
     elif err == 1:
         dic = {

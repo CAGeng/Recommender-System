@@ -630,7 +630,9 @@ def get_browse_list(name):
 def add_browse_record(name, mlist):
     data = get_browse_list(name)
     #合并
+    # print(data)
     for mov in mlist:
+        mov = int(mov)
         if mov in data:
             continue
         data.append(mov)
@@ -768,6 +770,17 @@ def change_password(name, oldpwd, newpwd):
         else:
             print('Wrong old password!')
             return 1
+
+def get_email(name):
+    conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset=charset)
+    cursor = conn.cursor()
+
+    cursor.execute('select email from user where name = "{}"'.format( name))
+    data = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+    return data[0]
 
 ##############################################################################################
 ##############################################################################################

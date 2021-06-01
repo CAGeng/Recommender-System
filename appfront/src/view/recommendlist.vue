@@ -27,6 +27,7 @@
                             <v-toolbar-title>{{ item.title }}( Author: {{ item.author }} )</v-toolbar-title>
                             <v-spacer></v-spacer>
                             <!--update by jbt -->
+                            <v-btn @click="deletemovielistinfo(item.id)" class="rec3">删除影单</v-btn>
                             <v-btn @click="movielistinfo(item.id)">影单详情</v-btn>
                         </v-toolbar>
                     </v-card>
@@ -102,6 +103,22 @@ export default {
 
     methods: {
         
+        deletemovielistinfo(v){
+            var user = sessionStorage.getItem('user')
+            user = JSON.parse(user)
+            var username = user.username
+            axiosInstance.post('http://localhost:8000/api/del_collection/',{
+                name: username,
+                listid:v
+            })
+            .then((response)=>{
+                window.location.reload()
+            })
+            .catch((response)=>{
+                console.log(response)
+            })
+        },
+
         goback(){
             this.$router.push('/home')
         },

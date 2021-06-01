@@ -23,6 +23,15 @@
                     <el-button v-show="isAdmin" type="primary" icon="el-icon-plus" @click="upload_movie()"></el-button> 
                 </el-col>
                 <!-- 右上角菜单，登陆注册 -->
+                <el-dropdown @command="handlecommand2">
+                    <i class="el-icon-s-custom" style="margin-right: 15px"></i>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item command="a" :disabled="eddi1">综合</el-dropdown-item>
+                        <el-dropdown-item command="b" :disabled="eddi2">最热门</el-dropdown-item>
+                        <el-dropdown-item command="c" :disabled="eddi3">最相关</el-dropdown-item>
+                        
+                    </el-dropdown-menu>
+                </el-dropdown>
                 <el-dropdown @command="handlecommand">
                     <i class="el-icon-s-custom" style="margin-right: 15px"></i>
                     <el-dropdown-menu slot="dropdown">
@@ -34,6 +43,8 @@
                         <el-dropdown-item command="changepwd" :disabled="edi5">修改密码</el-dropdown-item>
                         <!-- updated by jbt -->
                         <el-dropdown-item command="beadmin" :disabled="edi6">成为管理员</el-dropdown-item>
+                        <el-dropdown-item command="record" :disabled="edi7">查看浏览记录</el-dropdown-item>
+                        <el-dropdown-item command="personalinfo" :disabled="edi8">查看个人信息</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
                 <el-avatar icon="el-icon-user"></el-avatar>
@@ -41,18 +52,16 @@
         </el-header>
         <el-main>
             <el-col :span="18" :offset="3">
-                <el-carousel :height="elh + 'px'" :interval="3000">
-                    <!-- 最热推荐 -->
-                    <el-carousel-item v-for="item in datalist" :key="item.id">
-                        <el-row class="imfg">
-                            <img id="test" :src="item.urls" class="img"/>
-                        </el-row>
-                        <el-divider></el-divider>
-                        <el-row class="try">
-                            <span class="exp">{{ item.text }}</span>
-                        </el-row>
-                    </el-carousel-item>
-                </el-carousel>
+                <el-row class="carousel" align="middle">
+                    <el-carousel :height="elh + 'px'" :interval="3000" type="card" loop="true">
+                        <!-- 最热推荐 -->
+                        <el-carousel-item v-for="item in datalist" :key="item.id" :span="12">
+                            <el-row class="imfg">
+                                <img id="test" :src="item.urls" class="img"/>
+                            </el-row>
+                        </el-carousel-item>
+                    </el-carousel>
+                </el-row>
                 <v-container class="wntj">
                     <!-- 推荐列表 -->
                     <v-toolbar dark height="50%" src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
@@ -163,6 +172,20 @@
                     <el-button type="primary" @click="handleclose2">取消</el-button>
                 </span>
             </el-dialog>
+
+            <el-dialog :title="'个人信息'" :visible.sync="dialogvisible4" :width="'40%'" :before-close="handleclose3" center>
+                <el-row>
+                    <el-col :span="18" :offset="3">
+                        邮箱:{{userinfo.email}}
+                        用户名：{{userinfo.username}}
+                        密码:{{userinfo.password}}
+                    </el-col>
+                </el-row>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="handleclose3">确定</el-button>
+                    <el-button type="primary" @click="handleclose3">取消</el-button>
+                </span>
+            </el-dialog>
         </el-main>
     </el-container>
 </template>
@@ -184,26 +207,40 @@ export default {
                 username: '',
                 password: '',
                 authority: '',
+                email:  '',
             },
             res_data:{
                 status: '',
                 info: '',
             },
+            eddi1: false,
+            eddi2: false,
+            eddi3: false,
             edi1: false,
             edi2: false,
             edi3: true,
             edi4: true,
             edi5: true,// orzorz hyx
             edi6: true,
+            edi7: true,
+            edi8: true,
             elh: 2000,
             swh: 0,
             xs: 0.36,
             dialogvisible1: false,
             dialogvisible2: false,// orzorz hyx
             dialogvisible3: false,
+            dialogvisible4: false,
             adminpass: '',
+            userinfo:{
+                username: '',
+                password: '',
+                authority: '',
+                email:  '',
+            },
+
             isAdmin: false,
-            url: 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4181532436,846702450&fm=11&gp=0.jpg',
+            url: 'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2874029257,2442413353&fm=26&gp=0.jpg',
             datalist: [
                 {id:0, text: "测试样例1", urls: 'https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg'},
                 {id:1, text: "测试样例2", urls: 'https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg'},
@@ -262,6 +299,80 @@ export default {
             else if(v == "beadmin"){
                 this.dialogvisible3 = true
             }
+            else if(v == "record"){
+                this.$router.push({ path: '/record' })
+            }
+            else if(v == "personalinfo"){
+                var user = sessionStorage.getItem('user')
+                user = JSON.parse(user)
+                this.username = user.username
+                this.dialogvisible4 = true
+            }
+        },
+
+        handlecommand2( v ){
+            if(v == "a"){
+                var test = sessionStorage.getItem('user')
+                test = JSON.parse(test)
+                this.userinfo = test
+                test = test.username
+                console.log(test)
+
+                axiosInstance.post('http://localhost:8000/api/getm/',{
+                    uid: test,
+                    method:'common'
+                })
+                .then((response)=>{
+                    console.log(response)
+                    this.movielist = response.data
+                    this.eddi1 = true
+                    this.eddi3 = this.eddi2 = false
+                }).catch((response)=>{
+                    console.log(response)
+                })
+
+            }
+            else if(v == "b"){
+                var test = sessionStorage.getItem('user')
+                test = JSON.parse(test)
+                this.userinfo = test
+                test = test.username
+                console.log(test)
+
+                axiosInstance.post('http://localhost:8000/api/getm/',{
+                    uid: test,
+                    method:'demographic'
+                })
+                .then((response)=>{
+                    console.log(response)
+                    this.movielist = response.data
+                    this.eddi2 = true
+                    this.eddi1 = this.eddi3 = false
+                }).catch((response)=>{
+                    console.log(response)
+                })
+            }
+            else if(v == "c"){
+                var test = sessionStorage.getItem('user')
+                test = JSON.parse(test)
+                this.userinfo = test
+                test = test.username
+                console.log(test)
+
+                axiosInstance.post('http://localhost:8000/api/getm/',{
+                    uid: test,
+                    method:'content'
+                })
+                .then((response)=>{
+                    console.log(response)
+                    this.movielist = response.data
+                    this.eddi3 = true
+                    this.eddi1 = this.eddi2 = false
+                }).catch((response)=>{
+                    console.log(response)
+                })
+            }
+            
         },
 
         // 注销函数
@@ -308,8 +419,13 @@ export default {
             this.adminpass = ""
         },
 
+        handleclose3(){
+            this.username = ""
+            this.dialogvisible4 = false
+        },
+
         adminpermission(){
-            var code = "imgly"
+            var code = "18csxypnb"
             var user = sessionStorage.getItem('user')
             user = JSON.parse(user)
             var username = user.username
@@ -359,7 +475,10 @@ export default {
                 this.res_data = response.data
                 if(this.res_data['status'] == 'success'){
                     this.form.authority = this.res_data['info'] 
+                    this.form.email = this.res_data['email']
                     sessionStorage.setItem('user', JSON.stringify(this.form))
+                    this.userinfo = this.form
+                    console.log(this.userinfo)
                     this.$alert('登录成功','Success Message',{
                         confirmButtonText:'确定'
                     })
@@ -479,6 +598,8 @@ export default {
                 this.edi4 = false
                 this.edi5 = false// orzorz hyx
                 this.edi6 = temp =='admin' ? true : false
+                this.edi7 = false
+                this.edi8 = false
             }
             else{
                 this.edi1 = false
@@ -487,6 +608,8 @@ export default {
                 this.edi4 = true
                 this.edi5 = true// orzorz hyx
                 this.edi6 = true
+                this.edi7 = true
+                this.edi8 = true
             }
         },
 
@@ -503,6 +626,7 @@ export default {
             if(sessionStorage.getItem('user')){
                 var test = sessionStorage.getItem('user')
                 test = JSON.parse(test)
+                this.userinfo = test
                 test = test.username
                 console.log(test)
 
@@ -667,10 +791,14 @@ export default {
 
 <style>
 
+    .carousel{
+        width: 75%;
+        margin-left: 15%;
+        
+    }
     .img{
-        max-height: 100%;
-        max-width: 100%;
-        min-height: 50%;
+        width: 150%;
+        height: 150%;
         object-fit: contain;
     }
 

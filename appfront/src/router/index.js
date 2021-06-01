@@ -15,6 +15,7 @@ export const publicRouter = [
   { path: '/movieupload', component: () => import('@/view/movieupload'), hidden: true},
   { path: '/recommendlist', component: () => import('@/view/recommendlist'), hidden: true},
   { path: '/listinfo', component: () => import('@/view/listinfo'), hidden: true},
+  { path: '/record', component: () => import('@/view/record'), hidden: true}
 ]
 
 export const router = new Router({

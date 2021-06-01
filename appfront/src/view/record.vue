@@ -3,38 +3,12 @@
         <el-main>
             <v-container>
                 <v-toolbar dark height="50%" src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
-                    <v-toolbar-title>查询结果</v-toolbar-title>
+                    <v-toolbar-title>你的足迹</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-btn @click="goback()">返回</v-btn>
                 </v-toolbar>
                 <v-container class="scc">
                     <v-card  v-for="item in movielist" :key="item.id" class="scrd1" color="#000000">
-                        <v-toolbar dark height="50px" src="https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg">
-                            <v-toolbar-title>{{ item.title }}</v-toolbar-title>
-                            <v-spacer></v-spacer>
-                            <!--update by jbt -->
-                            <v-btn @click="add_to_rlist(item.id)" class="rec1">加入推荐</v-btn>
-                            <!-- 进入电影详情页 -->
-                            <v-btn @click="detail(item.id)">电影详情</v-btn>
-                        </v-toolbar>
-                        <v-container class="scc2">
-                            <el-row class="scrd2">
-                                <!-- 图片 -->
-                                <img :src="item.urls" class="simg1"/>
-                            </el-row>
-                        </v-container>
-                    </v-card>
-                </v-container>
-            </v-container>
-
-            <v-container>
-                <v-toolbar dark height="50%" src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
-                    <v-toolbar-title>类别结果</v-toolbar-title>
-                    <v-spacer></v-spacer>
-                    <!-- <v-btn @click="goback()">返回</v-btn> -->
-                </v-toolbar>
-                <v-container class="scc">
-                    <v-card  v-for="item in movielist2" :key="item.id" class="scrd1" color="#000000">
                         <v-toolbar dark height="50px" src="https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg">
                             <v-toolbar-title>{{ item.title }}</v-toolbar-title>
                             <v-spacer></v-spacer>
@@ -72,12 +46,6 @@ export default {
                 {id:2, title: "测试样例3", urls: 'https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg', introduce:"测试样例3"},
                 {id:3, title: "测试样例4", urls: 'https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg', introduce:"测试样例4"}
             ],
-            movielist2: [
-                {id:0, title: "测试样例1", urls: 'https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg', introduce:"测试样例1"},
-                {id:1, title: "测试样例2", urls: 'https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg', introduce:"测试样例2"},
-                {id:2, title: "测试样例3", urls: 'https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg', introduce:"测试样例3"},
-                {id:3, title: "测试样例4", urls: 'https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg', introduce:"测试样例4"}
-            ],
         }
     },
 
@@ -88,24 +56,15 @@ export default {
         },
 
         getData(){
-            var searchname = JSON.parse(this.$Base64.decode(this.$route.query.name))
-            console.log(searchname)
-            axiosInstance.post('http://localhost:8000/api/searchmv/',{
-                title: searchname
+            var user = sessionStorage.getItem('user')
+            user = JSON.parse(user)
+            var username = user.username
+            axiosInstance.post('http://localhost:8000/api/get_browse_record/',{
+                name : username
             })
             .then((response)=>{
                 console.log(response)
                 this.movielist = response.data
-            }).catch((response)=>{
-                console.log(response)
-            })
-
-            axiosInstance.post('http://localhost:8000/api/searchmvbykind/',{
-                kind: searchname
-            })
-            .then((response)=>{
-                console.log(response)
-                this.movielist2 = response.data
             }).catch((response)=>{
                 console.log(response)
             })

@@ -170,6 +170,7 @@ export default {
                     })
                     console.log(data['info'])
                 }
+                window.location.reload()
             }).catch((response)=>{
                 console.log(response)
             })

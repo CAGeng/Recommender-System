@@ -42,6 +42,12 @@ export default {
                 rpassword: '',
                 vericode: ''
             },
+            form2:{
+                username: '',
+                password: '',
+                authority: '',
+                email:  '',
+            },
         }
     },
 
@@ -108,7 +114,11 @@ export default {
                     this.res_data = response.data
                     // console.log(res_data)
                     if(this.res_data['status'] == 'success'){
-                        sessionStorage.setItem('user', JSON.stringify(this.form))
+                        this.form2.password = this.form.password
+                        this.form2.username = this.form.username
+                        this.form2.email = this.form.e_mail
+                        this.form2.authority = 'normal'
+                        sessionStorage.setItem('user', JSON.stringify(this.form2))
                         this.$alert('注册成功','Success Message',{
                             confirmButtonText:'确定'
                         })

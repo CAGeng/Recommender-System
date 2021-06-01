@@ -15,8 +15,8 @@ urlpatterns = [
     path('searchmv/', view=views.search_movie), #模糊查询电影   1
     path('gethot/', view=views.get_movie_hottest), #获取最热推荐  1
     path('simlist/', view=views.get_simlist), #获取相关电影   1
-    path('searchmvbykind/', view=views.search_movie_bykind), #按照类别搜索
-    path('get_browse_record/', view=views.get_browse_record), #足迹
+    path('searchmvbykind/', view=views.search_movie_bykind), #按照类别搜索 1
+    path('get_browse_record/', view=views.get_browse_record), #足迹   1
 
     #用户信息
     path('login/', view=views.login),  #登录  1
@@ -34,7 +34,7 @@ urlpatterns = [
     # path('images/', view=views.read_img), #暂时没用
 
     #电影单相关
-    path('addmvsheet/',view=views.add_movie_sheet), #新增推荐电影单
+    path('addmvsheet/',view=views.add_movie_sheet), #新增推荐电影单 
     path('addcol/',view=views.add_collection), #为一个用户添加收藏  1
     path('mvsheetlist/',view=views.moviesheet_list), #获得一个电影表单中的电影  1
     path('get_already_rec/',view=views.get_already_rec),    #1
@@ -44,7 +44,7 @@ urlpatterns = [
     path('delete_reclist_cache/',view=views.delete_reclist_cache),    #1
     path('get_reclist_cache/',view=views.get_reclist_cache),    #1
     path('add_from_cache/',view=views.add_from_cache),    #1
-    path('del_collection/',view=views.del_collection),    
+    path('del_collection/',view=views.del_collection),       #1
     
 
     #上传电影
