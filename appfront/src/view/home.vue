@@ -24,7 +24,7 @@
                 </el-col>
                 <!-- 右上角菜单，登陆注册 -->
                 <el-dropdown @command="handlecommand2">
-                    <i class="el-icon-s-custom" style="margin-right: 15px"></i>
+                    <i class="el-icon-plus" style="margin-right: 15px"></i>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command="a" :disabled="eddi1">综合</el-dropdown-item>
                         <el-dropdown-item command="b" :disabled="eddi2">最热门</el-dropdown-item>
