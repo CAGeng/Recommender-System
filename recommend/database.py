@@ -412,6 +412,8 @@ def add_collection(name, list_id):
 
     # collections的格式为："//a//b//c"
     data += "//" + list_id
+    print(data)
+    print(name)
     cursor.execute('UPDATE user set collections = "{}" where name = "{}"'.format(data,name))
     conn.commit()
 

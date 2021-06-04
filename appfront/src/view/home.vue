@@ -589,8 +589,9 @@ export default {
 
         setconfig(){
             if(sessionStorage.getItem('user')){
-                var temp = sessionStorage.getItem('user')
-                temp = temp.slice(-7,-2)
+                var user = sessionStorage.getItem('user')
+                user = JSON.parse(user)
+                var temp = user.authority
                 this.isAdmin = temp =='admin' ? true : false
                 this.edi1 = true
                 this.edi2 = true
@@ -747,6 +748,7 @@ export default {
             var user = sessionStorage.getItem('user')
             user = JSON.parse(user)
             var username = user.username
+            console.log(username)
             axiosInstance.post('http://localhost:8000/api/addcol/',{
                 name: username,
                 listid: v
@@ -767,12 +769,18 @@ export default {
 
         movielistinfo( v ){
             // 跳转到该电影推荐单详情页
-            this.$router.push({
-                path: '/listinfo',
-                query:{
-                    listid : this.$Base64.encode(JSON.stringify(v))
-                }
-            })
+            if(sessionStorage.getItem('user')){
+                this.$router.push({
+                    path: '/listinfo',
+                    query:{
+                        listid : this.$Base64.encode(JSON.stringify(v))
+                    }
+                })
+            }
+            else{
+                this.$message('请先登录');
+            }
+            
         }
         
     },
