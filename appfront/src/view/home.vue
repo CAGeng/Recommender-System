@@ -53,7 +53,7 @@
         <el-main>
             <el-col :span="18" :offset="3">
                 <el-row class="carousel" align="middle">
-                    <el-carousel :height="elh + 'px'" :interval="3000" type="card" loop="true">
+                    <el-carousel :height="elh + 'px'" :interval="3000" type="card" :loop="true">
                         <!-- 最热推荐 -->
                         <el-carousel-item v-for="item in datalist" :key="item.id" :span="12">
                             <el-row class="imfg">
